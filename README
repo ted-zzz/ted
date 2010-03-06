@@ -1,0 +1,8 @@
+These libraries are currently needed manually (or versions close to these):
+
+
+junit-4.8.1.jar
+slf4j-api-1.5.8.jar
+commons-lang-2.4.jar
+libthrift.jar
+slf4j-simple-1.5.8.jar

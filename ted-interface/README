@@ -1,0 +1,3 @@
+Run ./ted.thrift to generate Java and Python code.
+
+Java code is currently copied by hand to the ted-server project.
