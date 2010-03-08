@@ -31,9 +31,8 @@ public class Series
 		this.uid = uid;
 	}
 
+
 	public String getName() {
 		return name;
 	}
-
-
 }

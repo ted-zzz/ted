@@ -1,8 +1,10 @@
 package nu.ted.service;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.thrift.TException;
 
@@ -16,12 +18,12 @@ import nu.ted.gen.TedService.Iface;
 public class TedServiceImpl implements Iface
 {
 	SeriesDB seriesSource;
-	List<WatchedSeries> watched;
-		
+	List<Series> watched;
+	
 	// TODO: watched needs to be a singleton, or in another class
 	public TedServiceImpl(SeriesDB seriesSource) {
 		this.seriesSource = seriesSource;
-		watched = new LinkedList<WatchedSeries>();
+		watched = new LinkedList<Series>();
 	}
 
 	public List<SeriesSearchResult> search(String name) throws TException
@@ -39,18 +41,37 @@ public class TedServiceImpl implements Iface
 		return results;
 	}
 
-	public List<WatchedSeries> getWatched() throws TException
+	public List<WatchedSeries> getWatching() throws TException
 	{
-		return Collections.unmodifiableList(watched);
+		List<WatchedSeries> results = new LinkedList<WatchedSeries>();
+		for (Series s : watched) {
+			// TODO: gen <--> domain translation
+			// TODO: season/episode wrong
+			// TODO: UID may be wrong is translating to SearchSource
+			WatchedSeries ws = new WatchedSeries(s.getUid(), s.getName(), (short)1, (short)1);
+			results.add(ws);
+		}
+		return results;
 	}
 
-	public boolean watch(String uid) throws TException
+	public boolean startWatching(String uid) throws TException
 	{
 		// TODO: do UID->internalUID translation
 		// TODO: handle NAME, Season, Episode
-		// TODO: we'll probably keep track of something other then the UI version
-		watched.add(new WatchedSeries(uid, "NAME", (short)1, (short)1));
+		Series s = seriesSource.getSeriesFromUID(uid);
+		// TODO: check null UID
+		// TODO: check null result
+		watched.add(s);
 		return true;
+	}
+	
+	public boolean stopWatching(String uid) throws TException
+	{
+		for (Series s : watched) {
+			if (s.getName().equals(uid))
+				return watched.remove(s);
+		}
+		return false;
 	}
 
 }

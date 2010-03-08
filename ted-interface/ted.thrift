@@ -29,11 +29,15 @@ service TedService
 		# TODO: throws?
 
 	# subscribe to the show
-	bool watch(1: string uid);
-		# TODO: throws?
+	bool startWatching(1: string uid);
+		# TODO: throws? should be void and just throw?
+	
+	# unsubscribe to a show
+	bool stopWatching(1: string uid);
+		# TODO: throws? should be void and just throw?
 
 	# get a list of what you're currently subscribed to.
-	list<WatchedSeries> getWatched();
+	list<WatchedSeries> getWatching();
 		# TODO: throws?
 
 }
