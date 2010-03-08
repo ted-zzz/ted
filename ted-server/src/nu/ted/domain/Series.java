@@ -26,8 +26,9 @@ public class Series
 		this.uid = uid;
 	}
 
-	public Series(String name) {
+	public Series(String name, String uid) {
 		this.name = name;
+		this.uid = uid;
 	}
 
 	public String getName() {
