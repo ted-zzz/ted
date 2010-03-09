@@ -68,7 +68,7 @@ public class TedServiceImpl implements Iface
 	public boolean stopWatching(String uid) throws TException
 	{
 		for (Series s : watched) {
-			if (s.getName().equals(uid))
+			if (s.getUid().equals(uid))
 				return watched.remove(s);
 		}
 		return false;

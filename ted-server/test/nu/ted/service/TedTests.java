@@ -99,15 +99,18 @@ public class TedTests
 	}
 	
 
-//    @Test
-//    public void shouldBeAbleToStopWatchingAShowYourWatching() throws TException {
-//        TedServiceImpl ted = new TedServiceImpl(new TestSeriesDB());
-//        boolean result = ted.startWatching("E");
-//        assertTrue(result);
-//
-//        result = ted.stopWatching("E");
-//        assertTrue(result);
-//    }
+    @Test
+    public void shouldBeAbleToStopWatchingAShowYourWatching() throws TException {
+        TedServiceImpl ted = new TedServiceImpl(new TestSeriesDB());
+        boolean result = ted.startWatching("E");
+        assertTrue(result);
+
+        result = ted.stopWatching("E");
+        assertTrue(result);
+        
+        List<WatchedSeries> watched = ted.getWatching();
+        assertEquals(0, watched.size());
+    }
 
 	// Not yet @Test
 //	public void testMoreInfoAboutSeries()
