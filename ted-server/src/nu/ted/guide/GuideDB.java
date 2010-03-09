@@ -1,8 +1,10 @@
-package nu.ted.domain;
+package nu.ted.guide;
 
 import java.util.List;
 
-public interface SeriesDB
+import nu.ted.domain.Series;
+
+public interface GuideDB
 {
 	List<Series> search(String name);
 	

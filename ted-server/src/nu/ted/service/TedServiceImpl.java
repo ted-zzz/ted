@@ -10,18 +10,18 @@ import org.apache.thrift.TException;
 
 
 import nu.ted.domain.Series;
-import nu.ted.domain.SeriesDB;
 import nu.ted.gen.SeriesSearchResult;
 import nu.ted.gen.WatchedSeries;
 import nu.ted.gen.TedService.Iface;
+import nu.ted.guide.GuideDB;
 
 public class TedServiceImpl implements Iface
 {
-	SeriesDB seriesSource;
+	GuideDB seriesSource;
 	List<Series> watched;
 	
 	// TODO: watched needs to be a singleton, or in another class
-	public TedServiceImpl(SeriesDB seriesSource) {
+	public TedServiceImpl(GuideDB seriesSource) {
 		this.seriesSource = seriesSource;
 		watched = new LinkedList<Series>();
 	}
