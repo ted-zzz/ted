@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to='gwtted'>
+  <!-- Inherit the core Web Toolkit stuff.                        -->
+  <inherits name='com.google.gwt.user.User'/>
+
+  <!-- Inherit the default GWT style sheet.  You can change       -->
+  <!-- the theme of your GWT application by uncommenting          -->
+  <!-- any one of the following lines.                            -->
+  <inherits name='com.google.gwt.user.theme.standard.Standard'/>
+  <!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
+  <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
+
+  <!-- Other module inherits                                      -->
+  <inherits name='net.bugsquat.gwtsite.GwtSite'/>
+
+
+  <!-- Deferred binding rule to load the Pages file for TED. -->
+  <replace-with class="nu.ted.ui.gwt.client.TedPages">
+    <when-type-is class="net.bugsquat.gwtsite.client.page.Pages"/>
+  </replace-with>
+  
+  <!-- Deferred binding rule to load the layout for the page container. -->
+  <replace-with class="net.bugsquat.gwtsite.client.layout.DefaultPageContainerLayout">
+    <when-type-is class="net.bugsquat.gwtsite.client.PageContainerLayout"/>
+  </replace-with>
+  
+
+  <!-- Specify the app entry point class.                         -->
+  <entry-point class='nu.ted.ui.gwt.client.GwtTed'/>
+
+  <!-- Specify the paths for translatable code                    -->
+  <source path='client'/>
+  <source path='shared'/>
+
+</module>
