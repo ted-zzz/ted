@@ -6,7 +6,16 @@
 <web-app>
   
   <!-- Servlets -->
-
+  <servlet>
+    <servlet-name>searchService</servlet-name>
+    <servlet-class>
+      nu.ted.ui.gwt.server.page.SearchServiceImpl
+    </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>searchService</servlet-name>
+    <url-pattern>/gwtted/search</url-pattern>
+  </servlet-mapping>
   
   <!-- Default page to serve -->
   <welcome-file-list>
