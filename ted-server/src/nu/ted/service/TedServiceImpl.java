@@ -16,6 +16,8 @@ public class TedServiceImpl implements Iface
 	GuideDB seriesSource;
 	List<Series> watched;
 	
+	static short nextUID = 1; // TODO: static across restarts
+	
 	// TODO: watched needs to be a singleton, or in another class
 	public TedServiceImpl(GuideDB seriesSource) {
 		this.seriesSource = seriesSource;
@@ -40,24 +42,30 @@ public class TedServiceImpl implements Iface
 		return results;
 	}
 
-	public boolean startWatching(String uid) throws TException
+	public short startWatching(String searchUID) throws TException
 	{
 		// TODO: do UID->internalUID translation
 		// TODO: handle NAME, Season, Episode
-		Series s = seriesSource.getSeriesFromUID(uid);
+		Series s = seriesSource.getSeriesFromUID(searchUID);
+		s.setUID(nextUID);
+		nextUID++;
 		// TODO: check null UID
 		// TODO: check null result
 		watched.add(s);
-		return true;
+		return s.getUid();
 	}
 	
-	public boolean stopWatching(String uid) throws TException
+	public void stopWatching(short uid) throws TException
 	{
 		for (Series s : watched) {
-			if (s.getUid().equals(uid))
-				return watched.remove(s);
+			if (s.getUid() == uid) {
+				if (!watched.remove(s)) {
+					// TODO: throw exception;
+				}
+				return;
+			}
+			
 		}
-		return false;
+		// TODO: throw exception
 	}
-
 }

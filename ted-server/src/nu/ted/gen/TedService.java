@@ -29,9 +29,9 @@ public class TedService {
 
     public List<SeriesSearchResult> search(String name) throws TException;
 
-    public boolean startWatching(String searchUID) throws TException;
+    public short startWatching(String searchUID) throws TException;
 
-    public boolean stopWatching(String uid) throws TException;
+    public void stopWatching(short uID) throws TException;
 
     public List<WatchedSeries> getWatching() throws TException;
 
@@ -97,7 +97,7 @@ public class TedService {
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "search failed: unknown result");
     }
 
-    public boolean startWatching(String searchUID) throws TException
+    public short startWatching(String searchUID) throws TException
     {
       send_startWatching(searchUID);
       return recv_startWatching();
@@ -113,7 +113,7 @@ public class TedService {
       oprot_.getTransport().flush();
     }
 
-    public boolean recv_startWatching() throws TException
+    public short recv_startWatching() throws TException
     {
       TMessage msg = iprot_.readMessageBegin();
       if (msg.type == TMessageType.EXCEPTION) {
@@ -130,23 +130,23 @@ public class TedService {
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "startWatching failed: unknown result");
     }
 
-    public boolean stopWatching(String uid) throws TException
+    public void stopWatching(short uID) throws TException
     {
-      send_stopWatching(uid);
-      return recv_stopWatching();
+      send_stopWatching(uID);
+      recv_stopWatching();
     }
 
-    public void send_stopWatching(String uid) throws TException
+    public void send_stopWatching(short uID) throws TException
     {
       oprot_.writeMessageBegin(new TMessage("stopWatching", TMessageType.CALL, seqid_));
       stopWatching_args args = new stopWatching_args();
-      args.uid = uid;
+      args.uID = uID;
       args.write(oprot_);
       oprot_.writeMessageEnd();
       oprot_.getTransport().flush();
     }
 
-    public boolean recv_stopWatching() throws TException
+    public void recv_stopWatching() throws TException
     {
       TMessage msg = iprot_.readMessageBegin();
       if (msg.type == TMessageType.EXCEPTION) {
@@ -157,10 +157,7 @@ public class TedService {
       stopWatching_result result = new stopWatching_result();
       result.read(iprot_);
       iprot_.readMessageEnd();
-      if (result.isSetSuccess()) {
-        return result.success;
-      }
-      throw new TApplicationException(TApplicationException.MISSING_RESULT, "stopWatching failed: unknown result");
+      return;
     }
 
     public List<WatchedSeries> getWatching() throws TException
@@ -272,8 +269,7 @@ public class TedService {
         args.read(iprot);
         iprot.readMessageEnd();
         stopWatching_result result = new stopWatching_result();
-        result.success = iface_.stopWatching(args.uid);
-        result.setSuccessIsSet(true);
+        iface_.stopWatching(args.uID);
         oprot.writeMessageBegin(new TMessage("stopWatching", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
@@ -1183,9 +1179,9 @@ public class TedService {
   public static class startWatching_result implements TBase<startWatching_result._Fields>, java.io.Serializable, Cloneable, Comparable<startWatching_result>   {
     private static final TStruct STRUCT_DESC = new TStruct("startWatching_result");
 
-    private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.BOOL, (short)0);
+    private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.I16, (short)0);
 
-    private boolean success;
+    private short success;
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements TFieldIdEnum {
@@ -1248,7 +1244,7 @@ public class TedService {
 
     public static final Map<_Fields, FieldMetaData> metaDataMap = Collections.unmodifiableMap(new EnumMap<_Fields, FieldMetaData>(_Fields.class) {{
       put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT, 
-          new FieldValueMetaData(TType.BOOL)));
+          new FieldValueMetaData(TType.I16)));
     }});
 
     static {
@@ -1259,7 +1255,7 @@ public class TedService {
     }
 
     public startWatching_result(
-      boolean success)
+      short success)
     {
       this();
       this.success = success;
@@ -1284,11 +1280,11 @@ public class TedService {
       return new startWatching_result(this);
     }
 
-    public boolean isSuccess() {
+    public short getSuccess() {
       return this.success;
     }
 
-    public startWatching_result setSuccess(boolean success) {
+    public startWatching_result setSuccess(short success) {
       this.success = success;
       setSuccessIsSet(true);
       return this;
@@ -1313,7 +1309,7 @@ public class TedService {
         if (value == null) {
           unsetSuccess();
         } else {
-          setSuccess((Boolean)value);
+          setSuccess((Short)value);
         }
         break;
 
@@ -1327,7 +1323,7 @@ public class TedService {
     public Object getFieldValue(_Fields field) {
       switch (field) {
       case SUCCESS:
-        return new Boolean(isSuccess());
+        return new Short(getSuccess());
 
       }
       throw new IllegalStateException();
@@ -1414,8 +1410,8 @@ public class TedService {
         } else {
           switch (fieldId) {
             case SUCCESS:
-              if (field.type == TType.BOOL) {
-                this.success = iprot.readBool();
+              if (field.type == TType.I16) {
+                this.success = iprot.readI16();
                 setSuccessIsSet(true);
               } else { 
                 TProtocolUtil.skip(iprot, field.type);
@@ -1434,7 +1430,7 @@ public class TedService {
 
       if (this.isSetSuccess()) {
         oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
-        oprot.writeBool(this.success);
+        oprot.writeI16(this.success);
         oprot.writeFieldEnd();
       }
       oprot.writeFieldStop();
@@ -1462,13 +1458,13 @@ public class TedService {
   public static class stopWatching_args implements TBase<stopWatching_args._Fields>, java.io.Serializable, Cloneable, Comparable<stopWatching_args>   {
     private static final TStruct STRUCT_DESC = new TStruct("stopWatching_args");
 
-    private static final TField UID_FIELD_DESC = new TField("uid", TType.STRING, (short)1);
+    private static final TField U_ID_FIELD_DESC = new TField("uID", TType.I16, (short)1);
 
-    private String uid;
+    private short uID;
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements TFieldIdEnum {
-      UID((short)1, "uid");
+      U_ID((short)1, "uID");
 
       private static final Map<Integer, _Fields> byId = new HashMap<Integer, _Fields>();
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
@@ -1522,10 +1518,12 @@ public class TedService {
     }
 
     // isset id assignments
+    private static final int __UID_ISSET_ID = 0;
+    private BitSet __isset_bit_vector = new BitSet(1);
 
     public static final Map<_Fields, FieldMetaData> metaDataMap = Collections.unmodifiableMap(new EnumMap<_Fields, FieldMetaData>(_Fields.class) {{
-      put(_Fields.UID, new FieldMetaData("uid", TFieldRequirementType.DEFAULT, 
-          new FieldValueMetaData(TType.STRING)));
+      put(_Fields.U_ID, new FieldMetaData("uID", TFieldRequirementType.DEFAULT, 
+          new FieldValueMetaData(TType.I16)));
     }});
 
     static {
@@ -1536,19 +1534,20 @@ public class TedService {
     }
 
     public stopWatching_args(
-      String uid)
+      short uID)
     {
       this();
-      this.uid = uid;
+      this.uID = uID;
+      setUIDIsSet(true);
     }
 
     /**
      * Performs a deep copy on <i>other</i>.
      */
     public stopWatching_args(stopWatching_args other) {
-      if (other.isSetUid()) {
-        this.uid = other.uid;
-      }
+      __isset_bit_vector.clear();
+      __isset_bit_vector.or(other.__isset_bit_vector);
+      this.uID = other.uID;
     }
 
     public stopWatching_args deepCopy() {
@@ -1560,37 +1559,36 @@ public class TedService {
       return new stopWatching_args(this);
     }
 
-    public String getUid() {
-      return this.uid;
+    public short getUID() {
+      return this.uID;
     }
 
-    public stopWatching_args setUid(String uid) {
-      this.uid = uid;
+    public stopWatching_args setUID(short uID) {
+      this.uID = uID;
+      setUIDIsSet(true);
       return this;
     }
 
-    public void unsetUid() {
-      this.uid = null;
+    public void unsetUID() {
+      __isset_bit_vector.clear(__UID_ISSET_ID);
     }
 
-    /** Returns true if field uid is set (has been asigned a value) and false otherwise */
-    public boolean isSetUid() {
-      return this.uid != null;
+    /** Returns true if field uID is set (has been asigned a value) and false otherwise */
+    public boolean isSetUID() {
+      return __isset_bit_vector.get(__UID_ISSET_ID);
     }
 
-    public void setUidIsSet(boolean value) {
-      if (!value) {
-        this.uid = null;
-      }
+    public void setUIDIsSet(boolean value) {
+      __isset_bit_vector.set(__UID_ISSET_ID, value);
     }
 
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
-      case UID:
+      case U_ID:
         if (value == null) {
-          unsetUid();
+          unsetUID();
         } else {
-          setUid((String)value);
+          setUID((Short)value);
         }
         break;
 
@@ -1603,8 +1601,8 @@ public class TedService {
 
     public Object getFieldValue(_Fields field) {
       switch (field) {
-      case UID:
-        return getUid();
+      case U_ID:
+        return new Short(getUID());
 
       }
       throw new IllegalStateException();
@@ -1617,8 +1615,8 @@ public class TedService {
     /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
     public boolean isSet(_Fields field) {
       switch (field) {
-      case UID:
-        return isSetUid();
+      case U_ID:
+        return isSetUID();
       }
       throw new IllegalStateException();
     }
@@ -1640,12 +1638,12 @@ public class TedService {
       if (that == null)
         return false;
 
-      boolean this_present_uid = true && this.isSetUid();
-      boolean that_present_uid = true && that.isSetUid();
-      if (this_present_uid || that_present_uid) {
-        if (!(this_present_uid && that_present_uid))
+      boolean this_present_uID = true;
+      boolean that_present_uID = true;
+      if (this_present_uID || that_present_uID) {
+        if (!(this_present_uID && that_present_uID))
           return false;
-        if (!this.uid.equals(that.uid))
+        if (this.uID != that.uID)
           return false;
       }
 
@@ -1665,11 +1663,11 @@ public class TedService {
       int lastComparison = 0;
       stopWatching_args typedOther = (stopWatching_args)other;
 
-      lastComparison = Boolean.valueOf(isSetUid()).compareTo(isSetUid());
+      lastComparison = Boolean.valueOf(isSetUID()).compareTo(isSetUID());
       if (lastComparison != 0) {
         return lastComparison;
       }
-      lastComparison = TBaseHelper.compareTo(uid, typedOther.uid);
+      lastComparison = TBaseHelper.compareTo(uID, typedOther.uID);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -1690,9 +1688,10 @@ public class TedService {
           TProtocolUtil.skip(iprot, field.type);
         } else {
           switch (fieldId) {
-            case UID:
-              if (field.type == TType.STRING) {
-                this.uid = iprot.readString();
+            case U_ID:
+              if (field.type == TType.I16) {
+                this.uID = iprot.readI16();
+                setUIDIsSet(true);
               } else { 
                 TProtocolUtil.skip(iprot, field.type);
               }
@@ -1709,11 +1708,9 @@ public class TedService {
       validate();
 
       oprot.writeStructBegin(STRUCT_DESC);
-      if (this.uid != null) {
-        oprot.writeFieldBegin(UID_FIELD_DESC);
-        oprot.writeString(this.uid);
-        oprot.writeFieldEnd();
-      }
+      oprot.writeFieldBegin(U_ID_FIELD_DESC);
+      oprot.writeI16(this.uID);
+      oprot.writeFieldEnd();
       oprot.writeFieldStop();
       oprot.writeStructEnd();
     }
@@ -1723,12 +1720,8 @@ public class TedService {
       StringBuilder sb = new StringBuilder("stopWatching_args(");
       boolean first = true;
 
-      sb.append("uid:");
-      if (this.uid == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.uid);
-      }
+      sb.append("uID:");
+      sb.append(this.uID);
       first = false;
       sb.append(")");
       return sb.toString();
@@ -1743,13 +1736,11 @@ public class TedService {
   public static class stopWatching_result implements TBase<stopWatching_result._Fields>, java.io.Serializable, Cloneable, Comparable<stopWatching_result>   {
     private static final TStruct STRUCT_DESC = new TStruct("stopWatching_result");
 
-    private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.BOOL, (short)0);
 
-    private boolean success;
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements TFieldIdEnum {
-      SUCCESS((short)0, "success");
+;
 
       private static final Map<Integer, _Fields> byId = new HashMap<Integer, _Fields>();
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
@@ -1801,14 +1792,7 @@ public class TedService {
         return _fieldName;
       }
     }
-
-    // isset id assignments
-    private static final int __SUCCESS_ISSET_ID = 0;
-    private BitSet __isset_bit_vector = new BitSet(1);
-
     public static final Map<_Fields, FieldMetaData> metaDataMap = Collections.unmodifiableMap(new EnumMap<_Fields, FieldMetaData>(_Fields.class) {{
-      put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT, 
-          new FieldValueMetaData(TType.BOOL)));
     }});
 
     static {
@@ -1818,21 +1802,10 @@ public class TedService {
     public stopWatching_result() {
     }
 
-    public stopWatching_result(
-      boolean success)
-    {
-      this();
-      this.success = success;
-      setSuccessIsSet(true);
-    }
-
     /**
      * Performs a deep copy on <i>other</i>.
      */
     public stopWatching_result(stopWatching_result other) {
-      __isset_bit_vector.clear();
-      __isset_bit_vector.or(other.__isset_bit_vector);
-      this.success = other.success;
     }
 
     public stopWatching_result deepCopy() {
@@ -1844,39 +1817,8 @@ public class TedService {
       return new stopWatching_result(this);
     }
 
-    public boolean isSuccess() {
-      return this.success;
-    }
-
-    public stopWatching_result setSuccess(boolean success) {
-      this.success = success;
-      setSuccessIsSet(true);
-      return this;
-    }
-
-    public void unsetSuccess() {
-      __isset_bit_vector.clear(__SUCCESS_ISSET_ID);
-    }
-
-    /** Returns true if field success is set (has been asigned a value) and false otherwise */
-    public boolean isSetSuccess() {
-      return __isset_bit_vector.get(__SUCCESS_ISSET_ID);
-    }
-
-    public void setSuccessIsSet(boolean value) {
-      __isset_bit_vector.set(__SUCCESS_ISSET_ID, value);
-    }
-
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
-      case SUCCESS:
-        if (value == null) {
-          unsetSuccess();
-        } else {
-          setSuccess((Boolean)value);
-        }
-        break;
-
       }
     }
 
@@ -1886,9 +1828,6 @@ public class TedService {
 
     public Object getFieldValue(_Fields field) {
       switch (field) {
-      case SUCCESS:
-        return new Boolean(isSuccess());
-
       }
       throw new IllegalStateException();
     }
@@ -1900,8 +1839,6 @@ public class TedService {
     /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
     public boolean isSet(_Fields field) {
       switch (field) {
-      case SUCCESS:
-        return isSetSuccess();
       }
       throw new IllegalStateException();
     }
@@ -1923,15 +1860,6 @@ public class TedService {
       if (that == null)
         return false;
 
-      boolean this_present_success = true;
-      boolean that_present_success = true;
-      if (this_present_success || that_present_success) {
-        if (!(this_present_success && that_present_success))
-          return false;
-        if (this.success != that.success)
-          return false;
-      }
-
       return true;
     }
 
@@ -1948,14 +1876,6 @@ public class TedService {
       int lastComparison = 0;
       stopWatching_result typedOther = (stopWatching_result)other;
 
-      lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(isSetSuccess());
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-      lastComparison = TBaseHelper.compareTo(success, typedOther.success);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
       return 0;
     }
 
@@ -1973,14 +1893,6 @@ public class TedService {
           TProtocolUtil.skip(iprot, field.type);
         } else {
           switch (fieldId) {
-            case SUCCESS:
-              if (field.type == TType.BOOL) {
-                this.success = iprot.readBool();
-                setSuccessIsSet(true);
-              } else { 
-                TProtocolUtil.skip(iprot, field.type);
-              }
-              break;
           }
           iprot.readFieldEnd();
         }
@@ -1992,11 +1904,6 @@ public class TedService {
     public void write(TProtocol oprot) throws TException {
       oprot.writeStructBegin(STRUCT_DESC);
 
-      if (this.isSetSuccess()) {
-        oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
-        oprot.writeBool(this.success);
-        oprot.writeFieldEnd();
-      }
       oprot.writeFieldStop();
       oprot.writeStructEnd();
     }
@@ -2006,9 +1913,6 @@ public class TedService {
       StringBuilder sb = new StringBuilder("stopWatching_result(");
       boolean first = true;
 
-      sb.append("success:");
-      sb.append(this.success);
-      first = false;
       sb.append(")");
       return sb.toString();
     }

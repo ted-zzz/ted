@@ -34,11 +34,11 @@ public class TedTests
 		public Series getSeriesFromUID(String id)
 		{
 			if (id.equals("E")) {
-				return new Series("E", "Exactly");
+				return new Series((short)1, "Exactly");
 			}
 			throw new RuntimeException("Bad TestSeriesDB, unknown UID");
 		}
-		
+
 	}
 
 	// TODO: Don't like TException bleeding into other code, can if be avoided?
@@ -87,30 +87,27 @@ public class TedTests
 	public void shouldBeAbleToWatchOneValidShow() throws TException {
 		TedServiceImpl ted = new TedServiceImpl(new TestSeriesDB());
 
-		boolean result = ted.startWatching("E");
-		assertTrue(result);
+		ted.startWatching("E");
 
 		List<WatchedSeries> watched = ted.getWatching();
 		assertEquals(1, watched.size());
-		
+
 		WatchedSeries series = watched.get(0);
 		assertEquals("Exactly", series.getName());
 		// NB: returned UID may not match Search UID
 	}
-	
 
-    @Test
-    public void shouldBeAbleToStopWatchingAShowYourWatching() throws TException {
-        TedServiceImpl ted = new TedServiceImpl(new TestSeriesDB());
-        boolean result = ted.startWatching("E");
-        assertTrue(result);
 
-        result = ted.stopWatching("E");
-        assertTrue(result);
-        
-        List<WatchedSeries> watched = ted.getWatching();
-        assertEquals(0, watched.size());
-    }
+	@Test
+	public void shouldBeAbleToStopWatchingAShowYourWatching() throws TException {
+		TedServiceImpl ted = new TedServiceImpl(new TestSeriesDB());
+		short id = ted.startWatching("E");
+
+		ted.stopWatching(id);
+
+		List<WatchedSeries> watched = ted.getWatching();
+		assertEquals(0, watched.size());
+	}
 
 	// Not yet @Test
 //	public void testMoreInfoAboutSeries()

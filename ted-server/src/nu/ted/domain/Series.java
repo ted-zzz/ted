@@ -14,22 +14,23 @@ public class Series
 	private String name;
 
 	@XmlElement
-	private String uid;
+	private short uid;
 
 	@XmlElement
 	private Episode lastAired;
 
-	public String getUid()
-	{
-		return uid;
-	}
-
-	public void setUid(String uid)
+	// TODO: this should only be settable in constructor
+	public void setUID(short uid)
 	{
 		this.uid = uid;
 	}
 
-	public Series(String uid, String name) {
+	public short getUid()
+	{
+		return uid;
+	}
+
+	public Series(short uid, String name) {
 		this.name = name;
 		this.uid = uid;
 	}
