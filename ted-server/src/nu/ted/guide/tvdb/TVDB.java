@@ -9,6 +9,7 @@ import java.net.URLEncoder;
 import java.util.LinkedList;
 import java.util.List;
 
+import nu.ted.gen.SeriesSearchResult;
 import nu.ted.guide.tvdb.Mirrors;
 import nu.ted.guide.tvdb.Mirrors.NoMirrorException;
 import nu.ted.guide.tvdb.SearchResults.TVDBSeries;
@@ -68,12 +69,12 @@ public class TVDB implements GuideDB
 		// TODO Auto-generated method stub
 	}
 
-	public List<Series> search(String name)
+	public List<SeriesSearchResult> search(String name)
 	{
 		URL searchUrl;
 		String nameEncoded;
 		String location;
-		List<Series> returner = new LinkedList<Series>();
+		List<SeriesSearchResult> returner = new LinkedList<SeriesSearchResult>();
 		try
 		{
 			nameEncoded = URLEncoder.encode(name, "UTF-8");
@@ -85,7 +86,7 @@ public class TVDB implements GuideDB
 			SearchResults searchResults =  SearchResults.create(searchConnection.getInputStream());
 			for (TVDBSeries result : searchResults.getSeriesList()) {
 				// TODO: TVDBSeries <--> Series conversion should be moved somewhere.
-				Series s = new Series(result.getName(), result.getId());
+				SeriesSearchResult s = new SeriesSearchResult(result.getName(), result.getId());
 				returner.add(s);
 			}
 		}

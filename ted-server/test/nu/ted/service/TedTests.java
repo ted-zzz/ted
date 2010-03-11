@@ -19,14 +19,14 @@ public class TedTests
 
 	private class TestSeriesDB implements GuideDB
 	{
-		public List<Series> search(String name) {
-			List<Series> results = new LinkedList<Series>();
+		public List<SeriesSearchResult> search(String name) {
+			List<SeriesSearchResult> results = new LinkedList<SeriesSearchResult>();
 			if (name.equalsIgnoreCase("Exactly")) {
-				results.add(new Series("Exactly", "E"));
+				results.add(new SeriesSearchResult("E", "Exactly"));
 			} else if (name.equalsIgnoreCase("General")) {
-				results.add(new Series("General1", "1"));
-				results.add(new Series("General2", "2"));
-				results.add(new Series("General3", "3"));
+				results.add(new SeriesSearchResult("1", "General1"));
+				results.add(new SeriesSearchResult("2", "General2"));
+				results.add(new SeriesSearchResult("3", "General3"));
 			}
 			return results;
 		}
@@ -34,7 +34,7 @@ public class TedTests
 		public Series getSeriesFromUID(String id)
 		{
 			if (id.equals("E")) {
-				return new Series("Exactly", "E");
+				return new Series("E", "Exactly");
 			}
 			throw new RuntimeException("Bad TestSeriesDB, unknown UID");
 		}

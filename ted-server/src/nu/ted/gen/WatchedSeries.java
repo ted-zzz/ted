@@ -26,19 +26,19 @@ import org.apache.thrift.protocol.*;
 public class WatchedSeries implements TBase<WatchedSeries._Fields>, java.io.Serializable, Cloneable, Comparable<WatchedSeries> {
   private static final TStruct STRUCT_DESC = new TStruct("WatchedSeries");
 
-  private static final TField UID_FIELD_DESC = new TField("uid", TType.STRING, (short)1);
+  private static final TField U_ID_FIELD_DESC = new TField("uID", TType.STRING, (short)1);
   private static final TField NAME_FIELD_DESC = new TField("name", TType.STRING, (short)2);
   private static final TField SEASON_FIELD_DESC = new TField("season", TType.I16, (short)3);
   private static final TField EPISODE_FIELD_DESC = new TField("episode", TType.I16, (short)4);
 
-  private String uid;
+  private String uID;
   private String name;
   private short season;
   private short episode;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
-    UID((short)1, "uid"),
+    U_ID((short)1, "uID"),
     NAME((short)2, "name"),
     SEASON((short)3, "season"),
     EPISODE((short)4, "episode");
@@ -100,7 +100,7 @@ public class WatchedSeries implements TBase<WatchedSeries._Fields>, java.io.Seri
   private BitSet __isset_bit_vector = new BitSet(2);
 
   public static final Map<_Fields, FieldMetaData> metaDataMap = Collections.unmodifiableMap(new EnumMap<_Fields, FieldMetaData>(_Fields.class) {{
-    put(_Fields.UID, new FieldMetaData("uid", TFieldRequirementType.DEFAULT, 
+    put(_Fields.U_ID, new FieldMetaData("uID", TFieldRequirementType.DEFAULT, 
         new FieldValueMetaData(TType.STRING)));
     put(_Fields.NAME, new FieldMetaData("name", TFieldRequirementType.DEFAULT, 
         new FieldValueMetaData(TType.STRING)));
@@ -118,13 +118,13 @@ public class WatchedSeries implements TBase<WatchedSeries._Fields>, java.io.Seri
   }
 
   public WatchedSeries(
-    String uid,
+    String uID,
     String name,
     short season,
     short episode)
   {
     this();
-    this.uid = uid;
+    this.uID = uID;
     this.name = name;
     this.season = season;
     setSeasonIsSet(true);
@@ -138,8 +138,8 @@ public class WatchedSeries implements TBase<WatchedSeries._Fields>, java.io.Seri
   public WatchedSeries(WatchedSeries other) {
     __isset_bit_vector.clear();
     __isset_bit_vector.or(other.__isset_bit_vector);
-    if (other.isSetUid()) {
-      this.uid = other.uid;
+    if (other.isSetUID()) {
+      this.uID = other.uID;
     }
     if (other.isSetName()) {
       this.name = other.name;
@@ -157,27 +157,27 @@ public class WatchedSeries implements TBase<WatchedSeries._Fields>, java.io.Seri
     return new WatchedSeries(this);
   }
 
-  public String getUid() {
-    return this.uid;
+  public String getUID() {
+    return this.uID;
   }
 
-  public WatchedSeries setUid(String uid) {
-    this.uid = uid;
+  public WatchedSeries setUID(String uID) {
+    this.uID = uID;
     return this;
   }
 
-  public void unsetUid() {
-    this.uid = null;
+  public void unsetUID() {
+    this.uID = null;
   }
 
-  /** Returns true if field uid is set (has been asigned a value) and false otherwise */
-  public boolean isSetUid() {
-    return this.uid != null;
+  /** Returns true if field uID is set (has been asigned a value) and false otherwise */
+  public boolean isSetUID() {
+    return this.uID != null;
   }
 
-  public void setUidIsSet(boolean value) {
+  public void setUIDIsSet(boolean value) {
     if (!value) {
-      this.uid = null;
+      this.uID = null;
     }
   }
 
@@ -253,11 +253,11 @@ public class WatchedSeries implements TBase<WatchedSeries._Fields>, java.io.Seri
 
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
-    case UID:
+    case U_ID:
       if (value == null) {
-        unsetUid();
+        unsetUID();
       } else {
-        setUid((String)value);
+        setUID((String)value);
       }
       break;
 
@@ -294,8 +294,8 @@ public class WatchedSeries implements TBase<WatchedSeries._Fields>, java.io.Seri
 
   public Object getFieldValue(_Fields field) {
     switch (field) {
-    case UID:
-      return getUid();
+    case U_ID:
+      return getUID();
 
     case NAME:
       return getName();
@@ -317,8 +317,8 @@ public class WatchedSeries implements TBase<WatchedSeries._Fields>, java.io.Seri
   /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
   public boolean isSet(_Fields field) {
     switch (field) {
-    case UID:
-      return isSetUid();
+    case U_ID:
+      return isSetUID();
     case NAME:
       return isSetName();
     case SEASON:
@@ -346,12 +346,12 @@ public class WatchedSeries implements TBase<WatchedSeries._Fields>, java.io.Seri
     if (that == null)
       return false;
 
-    boolean this_present_uid = true && this.isSetUid();
-    boolean that_present_uid = true && that.isSetUid();
-    if (this_present_uid || that_present_uid) {
-      if (!(this_present_uid && that_present_uid))
+    boolean this_present_uID = true && this.isSetUID();
+    boolean that_present_uID = true && that.isSetUID();
+    if (this_present_uID || that_present_uID) {
+      if (!(this_present_uID && that_present_uID))
         return false;
-      if (!this.uid.equals(that.uid))
+      if (!this.uID.equals(that.uID))
         return false;
     }
 
@@ -398,11 +398,11 @@ public class WatchedSeries implements TBase<WatchedSeries._Fields>, java.io.Seri
     int lastComparison = 0;
     WatchedSeries typedOther = (WatchedSeries)other;
 
-    lastComparison = Boolean.valueOf(isSetUid()).compareTo(isSetUid());
+    lastComparison = Boolean.valueOf(isSetUID()).compareTo(isSetUID());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    lastComparison = TBaseHelper.compareTo(uid, typedOther.uid);
+    lastComparison = TBaseHelper.compareTo(uID, typedOther.uID);
     if (lastComparison != 0) {
       return lastComparison;
     }
@@ -447,9 +447,9 @@ public class WatchedSeries implements TBase<WatchedSeries._Fields>, java.io.Seri
         TProtocolUtil.skip(iprot, field.type);
       } else {
         switch (fieldId) {
-          case UID:
+          case U_ID:
             if (field.type == TType.STRING) {
-              this.uid = iprot.readString();
+              this.uID = iprot.readString();
             } else { 
               TProtocolUtil.skip(iprot, field.type);
             }
@@ -489,9 +489,9 @@ public class WatchedSeries implements TBase<WatchedSeries._Fields>, java.io.Seri
     validate();
 
     oprot.writeStructBegin(STRUCT_DESC);
-    if (this.uid != null) {
-      oprot.writeFieldBegin(UID_FIELD_DESC);
-      oprot.writeString(this.uid);
+    if (this.uID != null) {
+      oprot.writeFieldBegin(U_ID_FIELD_DESC);
+      oprot.writeString(this.uID);
       oprot.writeFieldEnd();
     }
     if (this.name != null) {
@@ -514,11 +514,11 @@ public class WatchedSeries implements TBase<WatchedSeries._Fields>, java.io.Seri
     StringBuilder sb = new StringBuilder("WatchedSeries(");
     boolean first = true;
 
-    sb.append("uid:");
-    if (this.uid == null) {
+    sb.append("uID:");
+    if (this.uID == null) {
       sb.append("null");
     } else {
-      sb.append(this.uid);
+      sb.append(this.uID);
     }
     first = false;
     if (!first) sb.append(", ");

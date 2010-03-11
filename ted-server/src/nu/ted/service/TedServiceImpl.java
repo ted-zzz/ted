@@ -1,13 +1,9 @@
 package nu.ted.service;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.thrift.TException;
-
 
 import nu.ted.domain.Series;
 import nu.ted.gen.SeriesSearchResult;
@@ -28,17 +24,7 @@ public class TedServiceImpl implements Iface
 
 	public List<SeriesSearchResult> search(String name) throws TException
 	{
-		List<SeriesSearchResult> results = new LinkedList<SeriesSearchResult>();
-		for (Series series : seriesSource.search(name)) {
-			SeriesSearchResult result = new SeriesSearchResult();
-			
-			// TODO: will need a factory for the gen <--> domain translations
-			result.setUid(series.getUid());
-			result.setName(series.getName());
-			results.add(result);
-			
-		}
-		return results;
+		return seriesSource.search(name);
 	}
 
 	public List<WatchedSeries> getWatching() throws TException

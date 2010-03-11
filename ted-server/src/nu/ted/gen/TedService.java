@@ -29,7 +29,7 @@ public class TedService {
 
     public List<SeriesSearchResult> search(String name) throws TException;
 
-    public boolean startWatching(String uid) throws TException;
+    public boolean startWatching(String searchUID) throws TException;
 
     public boolean stopWatching(String uid) throws TException;
 
@@ -97,17 +97,17 @@ public class TedService {
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "search failed: unknown result");
     }
 
-    public boolean startWatching(String uid) throws TException
+    public boolean startWatching(String searchUID) throws TException
     {
-      send_startWatching(uid);
+      send_startWatching(searchUID);
       return recv_startWatching();
     }
 
-    public void send_startWatching(String uid) throws TException
+    public void send_startWatching(String searchUID) throws TException
     {
       oprot_.writeMessageBegin(new TMessage("startWatching", TMessageType.CALL, seqid_));
       startWatching_args args = new startWatching_args();
-      args.uid = uid;
+      args.searchUID = searchUID;
       args.write(oprot_);
       oprot_.writeMessageEnd();
       oprot_.getTransport().flush();
@@ -255,7 +255,7 @@ public class TedService {
         args.read(iprot);
         iprot.readMessageEnd();
         startWatching_result result = new startWatching_result();
-        result.success = iface_.startWatching(args.uid);
+        result.success = iface_.startWatching(args.searchUID);
         result.setSuccessIsSet(true);
         oprot.writeMessageBegin(new TMessage("startWatching", TMessageType.REPLY, seqid));
         result.write(oprot);
@@ -902,13 +902,13 @@ public class TedService {
   public static class startWatching_args implements TBase<startWatching_args._Fields>, java.io.Serializable, Cloneable, Comparable<startWatching_args>   {
     private static final TStruct STRUCT_DESC = new TStruct("startWatching_args");
 
-    private static final TField UID_FIELD_DESC = new TField("uid", TType.STRING, (short)1);
+    private static final TField SEARCH_UID_FIELD_DESC = new TField("searchUID", TType.STRING, (short)1);
 
-    private String uid;
+    private String searchUID;
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements TFieldIdEnum {
-      UID((short)1, "uid");
+      SEARCH_UID((short)1, "searchUID");
 
       private static final Map<Integer, _Fields> byId = new HashMap<Integer, _Fields>();
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
@@ -964,7 +964,7 @@ public class TedService {
     // isset id assignments
 
     public static final Map<_Fields, FieldMetaData> metaDataMap = Collections.unmodifiableMap(new EnumMap<_Fields, FieldMetaData>(_Fields.class) {{
-      put(_Fields.UID, new FieldMetaData("uid", TFieldRequirementType.DEFAULT, 
+      put(_Fields.SEARCH_UID, new FieldMetaData("searchUID", TFieldRequirementType.DEFAULT, 
           new FieldValueMetaData(TType.STRING)));
     }});
 
@@ -976,18 +976,18 @@ public class TedService {
     }
 
     public startWatching_args(
-      String uid)
+      String searchUID)
     {
       this();
-      this.uid = uid;
+      this.searchUID = searchUID;
     }
 
     /**
      * Performs a deep copy on <i>other</i>.
      */
     public startWatching_args(startWatching_args other) {
-      if (other.isSetUid()) {
-        this.uid = other.uid;
+      if (other.isSetSearchUID()) {
+        this.searchUID = other.searchUID;
       }
     }
 
@@ -1000,37 +1000,37 @@ public class TedService {
       return new startWatching_args(this);
     }
 
-    public String getUid() {
-      return this.uid;
+    public String getSearchUID() {
+      return this.searchUID;
     }
 
-    public startWatching_args setUid(String uid) {
-      this.uid = uid;
+    public startWatching_args setSearchUID(String searchUID) {
+      this.searchUID = searchUID;
       return this;
     }
 
-    public void unsetUid() {
-      this.uid = null;
+    public void unsetSearchUID() {
+      this.searchUID = null;
     }
 
-    /** Returns true if field uid is set (has been asigned a value) and false otherwise */
-    public boolean isSetUid() {
-      return this.uid != null;
+    /** Returns true if field searchUID is set (has been asigned a value) and false otherwise */
+    public boolean isSetSearchUID() {
+      return this.searchUID != null;
     }
 
-    public void setUidIsSet(boolean value) {
+    public void setSearchUIDIsSet(boolean value) {
       if (!value) {
-        this.uid = null;
+        this.searchUID = null;
       }
     }
 
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
-      case UID:
+      case SEARCH_UID:
         if (value == null) {
-          unsetUid();
+          unsetSearchUID();
         } else {
-          setUid((String)value);
+          setSearchUID((String)value);
         }
         break;
 
@@ -1043,8 +1043,8 @@ public class TedService {
 
     public Object getFieldValue(_Fields field) {
       switch (field) {
-      case UID:
-        return getUid();
+      case SEARCH_UID:
+        return getSearchUID();
 
       }
       throw new IllegalStateException();
@@ -1057,8 +1057,8 @@ public class TedService {
     /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
     public boolean isSet(_Fields field) {
       switch (field) {
-      case UID:
-        return isSetUid();
+      case SEARCH_UID:
+        return isSetSearchUID();
       }
       throw new IllegalStateException();
     }
@@ -1080,12 +1080,12 @@ public class TedService {
       if (that == null)
         return false;
 
-      boolean this_present_uid = true && this.isSetUid();
-      boolean that_present_uid = true && that.isSetUid();
-      if (this_present_uid || that_present_uid) {
-        if (!(this_present_uid && that_present_uid))
+      boolean this_present_searchUID = true && this.isSetSearchUID();
+      boolean that_present_searchUID = true && that.isSetSearchUID();
+      if (this_present_searchUID || that_present_searchUID) {
+        if (!(this_present_searchUID && that_present_searchUID))
           return false;
-        if (!this.uid.equals(that.uid))
+        if (!this.searchUID.equals(that.searchUID))
           return false;
       }
 
@@ -1105,11 +1105,11 @@ public class TedService {
       int lastComparison = 0;
       startWatching_args typedOther = (startWatching_args)other;
 
-      lastComparison = Boolean.valueOf(isSetUid()).compareTo(isSetUid());
+      lastComparison = Boolean.valueOf(isSetSearchUID()).compareTo(isSetSearchUID());
       if (lastComparison != 0) {
         return lastComparison;
       }
-      lastComparison = TBaseHelper.compareTo(uid, typedOther.uid);
+      lastComparison = TBaseHelper.compareTo(searchUID, typedOther.searchUID);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -1130,9 +1130,9 @@ public class TedService {
           TProtocolUtil.skip(iprot, field.type);
         } else {
           switch (fieldId) {
-            case UID:
+            case SEARCH_UID:
               if (field.type == TType.STRING) {
-                this.uid = iprot.readString();
+                this.searchUID = iprot.readString();
               } else { 
                 TProtocolUtil.skip(iprot, field.type);
               }
@@ -1149,9 +1149,9 @@ public class TedService {
       validate();
 
       oprot.writeStructBegin(STRUCT_DESC);
-      if (this.uid != null) {
-        oprot.writeFieldBegin(UID_FIELD_DESC);
-        oprot.writeString(this.uid);
+      if (this.searchUID != null) {
+        oprot.writeFieldBegin(SEARCH_UID_FIELD_DESC);
+        oprot.writeString(this.searchUID);
         oprot.writeFieldEnd();
       }
       oprot.writeFieldStop();
@@ -1163,11 +1163,11 @@ public class TedService {
       StringBuilder sb = new StringBuilder("startWatching_args(");
       boolean first = true;
 
-      sb.append("uid:");
-      if (this.uid == null) {
+      sb.append("searchUID:");
+      if (this.searchUID == null) {
         sb.append("null");
       } else {
-        sb.append(this.uid);
+        sb.append(this.searchUID);
       }
       first = false;
       sb.append(")");

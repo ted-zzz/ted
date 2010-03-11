@@ -26,15 +26,15 @@ import org.apache.thrift.protocol.*;
 public class SeriesSearchResult implements TBase<SeriesSearchResult._Fields>, java.io.Serializable, Cloneable, Comparable<SeriesSearchResult> {
   private static final TStruct STRUCT_DESC = new TStruct("SeriesSearchResult");
 
-  private static final TField UID_FIELD_DESC = new TField("uid", TType.STRING, (short)1);
+  private static final TField SEARCH_UID_FIELD_DESC = new TField("searchUID", TType.STRING, (short)1);
   private static final TField NAME_FIELD_DESC = new TField("name", TType.STRING, (short)2);
 
-  private String uid;
+  private String searchUID;
   private String name;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
-    UID((short)1, "uid"),
+    SEARCH_UID((short)1, "searchUID"),
     NAME((short)2, "name");
 
     private static final Map<Integer, _Fields> byId = new HashMap<Integer, _Fields>();
@@ -91,7 +91,7 @@ public class SeriesSearchResult implements TBase<SeriesSearchResult._Fields>, ja
   // isset id assignments
 
   public static final Map<_Fields, FieldMetaData> metaDataMap = Collections.unmodifiableMap(new EnumMap<_Fields, FieldMetaData>(_Fields.class) {{
-    put(_Fields.UID, new FieldMetaData("uid", TFieldRequirementType.DEFAULT, 
+    put(_Fields.SEARCH_UID, new FieldMetaData("searchUID", TFieldRequirementType.DEFAULT, 
         new FieldValueMetaData(TType.STRING)));
     put(_Fields.NAME, new FieldMetaData("name", TFieldRequirementType.DEFAULT, 
         new FieldValueMetaData(TType.STRING)));
@@ -105,11 +105,11 @@ public class SeriesSearchResult implements TBase<SeriesSearchResult._Fields>, ja
   }
 
   public SeriesSearchResult(
-    String uid,
+    String searchUID,
     String name)
   {
     this();
-    this.uid = uid;
+    this.searchUID = searchUID;
     this.name = name;
   }
 
@@ -117,8 +117,8 @@ public class SeriesSearchResult implements TBase<SeriesSearchResult._Fields>, ja
    * Performs a deep copy on <i>other</i>.
    */
   public SeriesSearchResult(SeriesSearchResult other) {
-    if (other.isSetUid()) {
-      this.uid = other.uid;
+    if (other.isSetSearchUID()) {
+      this.searchUID = other.searchUID;
     }
     if (other.isSetName()) {
       this.name = other.name;
@@ -134,27 +134,27 @@ public class SeriesSearchResult implements TBase<SeriesSearchResult._Fields>, ja
     return new SeriesSearchResult(this);
   }
 
-  public String getUid() {
-    return this.uid;
+  public String getSearchUID() {
+    return this.searchUID;
   }
 
-  public SeriesSearchResult setUid(String uid) {
-    this.uid = uid;
+  public SeriesSearchResult setSearchUID(String searchUID) {
+    this.searchUID = searchUID;
     return this;
   }
 
-  public void unsetUid() {
-    this.uid = null;
+  public void unsetSearchUID() {
+    this.searchUID = null;
   }
 
-  /** Returns true if field uid is set (has been asigned a value) and false otherwise */
-  public boolean isSetUid() {
-    return this.uid != null;
+  /** Returns true if field searchUID is set (has been asigned a value) and false otherwise */
+  public boolean isSetSearchUID() {
+    return this.searchUID != null;
   }
 
-  public void setUidIsSet(boolean value) {
+  public void setSearchUIDIsSet(boolean value) {
     if (!value) {
-      this.uid = null;
+      this.searchUID = null;
     }
   }
 
@@ -184,11 +184,11 @@ public class SeriesSearchResult implements TBase<SeriesSearchResult._Fields>, ja
 
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
-    case UID:
+    case SEARCH_UID:
       if (value == null) {
-        unsetUid();
+        unsetSearchUID();
       } else {
-        setUid((String)value);
+        setSearchUID((String)value);
       }
       break;
 
@@ -209,8 +209,8 @@ public class SeriesSearchResult implements TBase<SeriesSearchResult._Fields>, ja
 
   public Object getFieldValue(_Fields field) {
     switch (field) {
-    case UID:
-      return getUid();
+    case SEARCH_UID:
+      return getSearchUID();
 
     case NAME:
       return getName();
@@ -226,8 +226,8 @@ public class SeriesSearchResult implements TBase<SeriesSearchResult._Fields>, ja
   /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
   public boolean isSet(_Fields field) {
     switch (field) {
-    case UID:
-      return isSetUid();
+    case SEARCH_UID:
+      return isSetSearchUID();
     case NAME:
       return isSetName();
     }
@@ -251,12 +251,12 @@ public class SeriesSearchResult implements TBase<SeriesSearchResult._Fields>, ja
     if (that == null)
       return false;
 
-    boolean this_present_uid = true && this.isSetUid();
-    boolean that_present_uid = true && that.isSetUid();
-    if (this_present_uid || that_present_uid) {
-      if (!(this_present_uid && that_present_uid))
+    boolean this_present_searchUID = true && this.isSetSearchUID();
+    boolean that_present_searchUID = true && that.isSetSearchUID();
+    if (this_present_searchUID || that_present_searchUID) {
+      if (!(this_present_searchUID && that_present_searchUID))
         return false;
-      if (!this.uid.equals(that.uid))
+      if (!this.searchUID.equals(that.searchUID))
         return false;
     }
 
@@ -285,11 +285,11 @@ public class SeriesSearchResult implements TBase<SeriesSearchResult._Fields>, ja
     int lastComparison = 0;
     SeriesSearchResult typedOther = (SeriesSearchResult)other;
 
-    lastComparison = Boolean.valueOf(isSetUid()).compareTo(isSetUid());
+    lastComparison = Boolean.valueOf(isSetSearchUID()).compareTo(isSetSearchUID());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    lastComparison = TBaseHelper.compareTo(uid, typedOther.uid);
+    lastComparison = TBaseHelper.compareTo(searchUID, typedOther.searchUID);
     if (lastComparison != 0) {
       return lastComparison;
     }
@@ -318,9 +318,9 @@ public class SeriesSearchResult implements TBase<SeriesSearchResult._Fields>, ja
         TProtocolUtil.skip(iprot, field.type);
       } else {
         switch (fieldId) {
-          case UID:
+          case SEARCH_UID:
             if (field.type == TType.STRING) {
-              this.uid = iprot.readString();
+              this.searchUID = iprot.readString();
             } else { 
               TProtocolUtil.skip(iprot, field.type);
             }
@@ -344,9 +344,9 @@ public class SeriesSearchResult implements TBase<SeriesSearchResult._Fields>, ja
     validate();
 
     oprot.writeStructBegin(STRUCT_DESC);
-    if (this.uid != null) {
-      oprot.writeFieldBegin(UID_FIELD_DESC);
-      oprot.writeString(this.uid);
+    if (this.searchUID != null) {
+      oprot.writeFieldBegin(SEARCH_UID_FIELD_DESC);
+      oprot.writeString(this.searchUID);
       oprot.writeFieldEnd();
     }
     if (this.name != null) {
@@ -363,11 +363,11 @@ public class SeriesSearchResult implements TBase<SeriesSearchResult._Fields>, ja
     StringBuilder sb = new StringBuilder("SeriesSearchResult(");
     boolean first = true;
 
-    sb.append("uid:");
-    if (this.uid == null) {
+    sb.append("searchUID:");
+    if (this.searchUID == null) {
       sb.append("null");
     } else {
-      sb.append(this.uid);
+      sb.append(this.searchUID);
     }
     first = false;
     if (!first) sb.append(", ");

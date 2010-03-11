@@ -4,7 +4,7 @@ namespace java nu.ted.gen
 
 struct SeriesSearchResult
 {
-	1: string uid,
+	1: string searchUID,
 	2: string name
 }
 
@@ -16,7 +16,7 @@ struct WatchedSeries
 	# UID from search result is the ID used to re-find the
 	# Series and add it. The UID here _may_ be a unique mapping
 	# to Ted, and translated between the DB serach.
-	1: string uid,
+	1: string uID,
 	2: string name,
 	3: i16 season,
 	4: i16 episode
@@ -29,7 +29,7 @@ service TedService
 		# TODO: throws?
 
 	# subscribe to the show
-	bool startWatching(1: string uid);
+	bool startWatching(1: string searchUID);
 		# TODO: throws? should be void and just throw?
 	
 	# unsubscribe to a show

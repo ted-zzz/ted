@@ -2,13 +2,42 @@ package nu.ted.domain;
 
 import java.util.Date;
 
-// TODO: this will eventually replace SeasonEpisode
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
-public interface Episode
+@XmlRootElement
+public class Episode
 {
-    public String getTitle();
-    public int getSeason();
-    public int getNumber();
-    public Date getFirstAired();
+	@XmlElement
+	private int seasonNum;
+
+	@XmlElement
+	private int number;
+
+	@XmlElement
+	private Date aired;
+
+	public Episode(int seasonNum, int number, Date aired)
+	{
+		super();
+		this.seasonNum = seasonNum;
+		this.number = number;
+		this.aired = aired;
+	}
+
+	public int getSeasonNum()
+	{
+		return seasonNum;
+	}
+
+	public int getNumber()
+	{
+		return number;
+	}
+
+	public Date getAired()
+	{
+		return aired;
+	}
 
 }

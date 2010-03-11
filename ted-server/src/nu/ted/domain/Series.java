@@ -16,6 +16,9 @@ public class Series
 	@XmlElement
 	private String uid;
 
+	@XmlElement
+	private Episode lastAired;
+
 	public String getUid()
 	{
 		return uid;
@@ -26,11 +29,10 @@ public class Series
 		this.uid = uid;
 	}
 
-	public Series(String name, String uid) {
+	public Series(String uid, String name) {
 		this.name = name;
 		this.uid = uid;
 	}
-
 
 	public String getName() {
 		return name;
