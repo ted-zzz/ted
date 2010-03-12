@@ -86,7 +86,7 @@ public class TVDB implements GuideDB
 			SearchResults searchResults =  SearchResults.create(searchConnection.getInputStream());
 			for (TVDBSeries result : searchResults.getSeriesList()) {
 				// TODO: TVDBSeries <--> Series conversion should be moved somewhere.
-				SeriesSearchResult s = new SeriesSearchResult(result.getName(), result.getId());
+				SeriesSearchResult s = new SeriesSearchResult(result.getId(), result.getName());
 				returner.add(s);
 			}
 		}
