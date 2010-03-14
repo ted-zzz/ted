@@ -1,0 +1,19 @@
+<ivysettings> 
+	<settings defaultResolver="libraries"/>
+	<include url="${ivy.default.settings.dir}/ivysettings-public.xml" />
+	<include url="${ivy.default.settings.dir}/ivysettings-shared.xml"/>
+	<include url="${ivy.default.settings.dir}/ivysettings-local.xml" />
+	<include url="${ivy.default.settings.dir}/ivysettings-main-chain.xml"/>
+
+	<resolvers> 
+		<ibiblio name="artifactory" m2compatible="true"
+			root="http://code.kmdconsulting.ca/artifactory/repo/"/> 
+	</resolvers> 
+
+	<resolvers>
+		<chain name="libraries" returnFirst="false">
+			<resolver ref="public"/>
+			<resolver ref="artifactory" />
+		</chain>
+	</resolvers>
+</ivysettings>
