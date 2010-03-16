@@ -27,7 +27,7 @@ public class SearchServiceImpl extends RemoteServiceServlet implements
 			public void run(Client client) throws TException {
 				List<SeriesSearchResult> found = client.search(filter);
 				for (SeriesSearchResult serie : found) {
-					shows.add("(" + serie.getUid() + ") " + serie.getName());
+					shows.add("(" + serie.getSearchUID() + ") " + serie.getName());
 				}
 			}
 		});
