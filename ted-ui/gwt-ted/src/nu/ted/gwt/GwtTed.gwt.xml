@@ -15,7 +15,7 @@
 
 
   <!-- Deferred binding rule to load the Pages file for TED. -->
-  <replace-with class="nu.ted.ui.gwt.client.TedPages">
+  <replace-with class="nu.ted.gwt.client.TedPages">
     <when-type-is class="net.bugsquat.gwtsite.client.page.Pages"/>
   </replace-with>
   
@@ -26,7 +26,7 @@
   
 
   <!-- Specify the app entry point class.                         -->
-  <entry-point class='nu.ted.ui.gwt.client.GwtTed'/>
+  <entry-point class='nu.ted.gwt.client.GwtTed'/>
 
   <!-- Specify the paths for translatable code                    -->
   <source path='client'/>

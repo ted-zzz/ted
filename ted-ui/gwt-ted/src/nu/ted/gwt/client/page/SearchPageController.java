@@ -1,4 +1,4 @@
-package nu.ted.ui.gwt.client.page;
+package nu.ted.gwt.client.page;
 
 import java.util.ArrayList;
 import java.util.List;

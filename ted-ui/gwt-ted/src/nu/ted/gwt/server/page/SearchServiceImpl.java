@@ -1,4 +1,4 @@
-package nu.ted.ui.gwt.server.page;
+package nu.ted.gwt.server.page;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ import nu.ted.client.JavaClient;
 import nu.ted.gen.SeriesSearchResult;
 import nu.ted.gen.WatchedSeries;
 import nu.ted.gen.TedService.Client;
-import nu.ted.ui.gwt.client.page.SearchService;
+import nu.ted.gwt.client.page.SearchService;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 

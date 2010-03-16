@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="TED_LIB_DIR/commons-lang-2.4.jar"/>
+	<classpathentry kind="var" path="TED_LIB_DIR/junit-4.8.1-sources.jar"/>
+	<classpathentry kind="var" path="TED_LIB_DIR/junit-4.8.1.jar"/>
+	<classpathentry kind="var" path="TED_LIB_DIR/slf4j-api-1.5.8.jar"/>
+	<classpathentry kind="var" path="TED_LIB_DIR/slf4j-simple-1.5.8.jar"/>
+	<classpathentry kind="var" path="TED_LIB_DIR/thrift-0.2.0.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

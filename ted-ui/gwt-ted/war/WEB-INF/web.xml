@@ -9,7 +9,7 @@
   <servlet>
     <servlet-name>searchService</servlet-name>
     <servlet-class>
-      nu.ted.ui.gwt.server.page.SearchServiceImpl
+      nu.ted.gwt.server.page.SearchServiceImpl
     </servlet-class>
   </servlet>
   <servlet-mapping>

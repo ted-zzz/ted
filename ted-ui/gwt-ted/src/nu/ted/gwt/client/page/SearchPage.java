@@ -1,10 +1,10 @@
-package nu.ted.ui.gwt.client.page;
+package nu.ted.gwt.client.page;
 
 import java.util.List;
 
 import net.bugsquat.gwtsite.client.page.Page;
 import net.bugsquat.gwtsite.client.page.PageId;
-import nu.ted.ui.gwt.client.TedPageId;
+import nu.ted.gwt.client.TedPageId;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;

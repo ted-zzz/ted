@@ -1,4 +1,4 @@
-package nu.ted.ui.gwt.client;
+package nu.ted.gwt.client;
 
 import net.bugsquat.gwtsite.client.PageLoader;
 import net.bugsquat.gwtsite.client.page.PageId;

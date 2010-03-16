@@ -1,8 +1,8 @@
-package nu.ted.ui.gwt.client;
+package nu.ted.gwt.client;
 
 import net.bugsquat.gwtsite.client.page.Pages;
-import nu.ted.ui.gwt.client.page.SearchPage;
-import nu.ted.ui.gwt.client.page.SearchPageController;
+import nu.ted.gwt.client.page.SearchPage;
+import nu.ted.gwt.client.page.SearchPageController;
 
 public class TedPages extends Pages {
 
