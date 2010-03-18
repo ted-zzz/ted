@@ -1,34 +1,62 @@
 /** Add css rules here for your application. */
+body { /* text-align: center; !important */
+  margin: 0px;
+  height: 100%;
+  vertical-align: top;
+  background-color: #EEEEEE;
+}
 
+#loading-container {
+  /*width: 100%;
+  height: 100%;
+  background-color: red;*/
+  position: fixed;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  z-index: 1001;
+  -moz-opacity: 0.5;
+  opacity: .50;
+  filter: alpha(opacity = 50);
+}
 
-/** Example rules used by the template application (remove for your app) */
-h1 {
-  font-size: 2em;
-  font-weight: bold;
-  color: #777777;
-  margin: 40px 0px 70px;
+#loading-outer {
+  position: absolute;
+  top: 50%;
+  left: 0px;
+  width: 100%;
+  height: 1px;
+  overflow: visible;
+}
+
+#loading-inner {
+  background-color: white;
+  position: absolute;
+  top: -30px; /* half of the height to make it centered */
+  left: 50%;
+  width: 100px; /* width of the centered content */
+  height: 60px; /* height of the centered content */
+  margin-left: -50px; /* half of the width to make it centered */
+  font: bold 13px tahoma, arial, helvetica;
   text-align: center;
+  padding: 6px;
+
 }
 
-.sendButton {
-  display: block;
-  font-size: 16pt;
+.ted-content {
+  margin: auto;
+  width: 800px;
+  border: 1px solid black;
 }
 
-/** Most GWT widgets already have a style name defined */
-.gwt-DialogBox {
-  width: 400px;
+.ted-header {
+  width: 100%;
+  background-color: #EEEEEE;
 }
 
-.dialogVPanel {
-  margin: 5px;
-}
-
-.serverResponseLabelError {
-  color: red;
-}
-
-/** Set ids using widget.getElement().setId("idOfElement") */
-#closeButton {
-  margin: 15px 6px 6px;
+.ted-header .ted-header-title {
+  margin-top: 22px;
+  font-size: 32px;
 }

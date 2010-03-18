@@ -20,7 +20,7 @@
   </replace-with>
   
   <!-- Deferred binding rule to load the layout for the page container. -->
-  <replace-with class="net.bugsquat.gwtsite.client.layout.DefaultPageContainerLayout">
+  <replace-with class="nu.ted.gwt.client.PageContainerLayout">
     <when-type-is class="net.bugsquat.gwtsite.client.PageContainerLayout"/>
   </replace-with>
   

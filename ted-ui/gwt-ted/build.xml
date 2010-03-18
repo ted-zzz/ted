@@ -1,10 +1,12 @@
-<project name="gwt-ted" default="copy-libs" basedir="../../">
+<project name="gwt-ted" default="update-libs" basedir="../../">
   <import file="${basedir}/build.xml" />
   
   <property name="war.dir" value="${project.dir.gwt}/war" />
   <property name="webinf.dir" value="${war.dir}/WEB-INF" />
 
-  <target name="copy-libs" depends="resolve">
+  <target name="update-libs" depends="resolve, copy-libs" />
+	
+  <target name="copy-libs">
     <echo>Copying required libs for webapp...</echo> 
     <copy todir="${webinf.dir}/lib">
       <fileset dir="${basedir}/lib" casesensitive="yes">
