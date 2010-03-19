@@ -9,5 +9,7 @@ public interface GuideDB
 {
 	List<SeriesSearchResult> search(String name);
 
+	public byte[] getBanner(String searchId);
+
 	Series getSeriesFromUID(String searchId);
 }

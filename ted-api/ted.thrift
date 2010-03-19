@@ -40,4 +40,7 @@ service TedService
 	list<WatchedSeries> getWatching();
 		# TODO: throws?
 
+	binary getBanner(1: string searchUID);
+		# TODO: throws?
+
 }

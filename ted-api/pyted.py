@@ -21,4 +21,14 @@ results = client.search("chuck")
 for series in results:
     print series.name
 
+print "First Series: " + results[0].name
+
+id = results[0].searchUID
+
+print "First Search ID: " + id
+
+banner = client.getBanner(id)
+
+print "Banner length: " + str(len(banner))
+
 

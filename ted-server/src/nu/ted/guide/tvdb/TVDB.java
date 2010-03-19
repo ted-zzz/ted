@@ -1,6 +1,9 @@
 package nu.ted.guide.tvdb;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -19,7 +22,6 @@ import nu.ted.guide.GuideDB;
 
 public class TVDB implements GuideDB
 {
-	// TODO: add logger
 	private static final String apikey = "0D513FDFA9D09C21";
 
 	private Mirrors mirrors;
@@ -67,6 +69,48 @@ public class TVDB implements GuideDB
 	{
 		throw new UnsupportedOperationException("Not yet implemented");
 		// TODO Auto-generated method stub
+	}
+
+	public byte[] getBanner(String id)
+	{
+		URL seriesURL;
+		String location;
+		
+		try {
+			location = mirrors.getXMLMirror() + "/api/" + apikey + "/series/" + id + "/all/";
+			seriesURL = new URL(location);
+			URLConnection seriesConnection = seriesURL.openConnection();
+			
+			FullSeriesRecord record = FullSeriesRecord.create(seriesConnection.getInputStream());
+			
+			String banner = record.getBanner();
+			if (banner != null) {
+				location = mirrors.getBannerMirror() + "/banners/" + banner;
+				URL bannerURL = new URL(location);
+				InputStream iStream = new BufferedInputStream(bannerURL.openStream());
+				ByteArrayOutputStream out = new ByteArrayOutputStream();
+				byte[] buf = new byte[1024];
+				int n = 0;
+				while ((n = iStream.read(buf)) != -1) {
+					out.write(buf, 0, n);
+				}
+				out.close();
+				iStream.close();
+				return out.toByteArray();
+			}
+		} catch (NoMirrorException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		// TODO: return null? throw exception?
+		return new byte[0];
 	}
 
 	public List<SeriesSearchResult> search(String name)

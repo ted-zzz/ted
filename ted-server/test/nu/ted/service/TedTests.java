@@ -39,6 +39,10 @@ public class TedTests
 			throw new RuntimeException("Bad TestSeriesDB, unknown UID");
 		}
 
+		public byte[] getBanner(String searchId) {
+			return new byte[0];
+		}
+
 	}
 
 	// TODO: Don't like TException bleeding into other code, can if be avoided?

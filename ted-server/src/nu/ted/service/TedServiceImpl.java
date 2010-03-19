@@ -68,4 +68,9 @@ public class TedServiceImpl implements Iface
 		}
 		// TODO: throw exception
 	}
+
+	public byte[] getBanner(String searchUID) throws TException
+	{
+		return seriesSource.getBanner(searchUID);
+	}
 }
