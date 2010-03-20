@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.thrift.TException;
 
 import nu.ted.domain.Series;
+import nu.ted.generated.ImageFile;
 import nu.ted.generated.SeriesSearchResult;
 import nu.ted.generated.WatchedSeries;
 import nu.ted.generated.TedService.Iface;
@@ -69,7 +70,7 @@ public class TedServiceImpl implements Iface
 		// TODO: throw exception
 	}
 
-	public byte[] getBanner(String searchUID) throws TException
+	public ImageFile getBanner(String searchUID) throws TException
 	{
 		return seriesSource.getBanner(searchUID);
 	}

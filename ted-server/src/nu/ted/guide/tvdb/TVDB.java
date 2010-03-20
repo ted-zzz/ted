@@ -12,6 +12,7 @@ import java.net.URLEncoder;
 import java.util.LinkedList;
 import java.util.List;
 
+import nu.ted.generated.ImageFile;
 import nu.ted.generated.SeriesSearchResult;
 import nu.ted.guide.tvdb.Mirrors;
 import nu.ted.guide.tvdb.Mirrors.NoMirrorException;
@@ -71,10 +72,12 @@ public class TVDB implements GuideDB
 		// TODO Auto-generated method stub
 	}
 
-	public byte[] getBanner(String id)
+	public ImageFile getBanner(String id)
 	{
 		URL seriesURL;
 		String location;
+		String mimetype;
+		ImageFile file = new ImageFile();
 		
 		try {
 			location = mirrors.getXMLMirror() + "/api/" + apikey + "/series/" + id + "/all/";
@@ -87,7 +90,9 @@ public class TVDB implements GuideDB
 			if (banner != null) {
 				location = mirrors.getBannerMirror() + "/banners/" + banner;
 				URL bannerURL = new URL(location);
-				InputStream iStream = new BufferedInputStream(bannerURL.openStream());
+				URLConnection bannerURLConnection = bannerURL.openConnection();
+				InputStream iStream = new BufferedInputStream(bannerURLConnection.getInputStream());
+				mimetype = bannerURLConnection.getContentType();
 				ByteArrayOutputStream out = new ByteArrayOutputStream();
 				byte[] buf = new byte[1024];
 				int n = 0;
@@ -96,7 +101,9 @@ public class TVDB implements GuideDB
 				}
 				out.close();
 				iStream.close();
-				return out.toByteArray();
+				file.setData(out.toByteArray());
+				file.setMimetype(mimetype);
+				return file;
 			}
 		} catch (NoMirrorException e) {
 			// TODO Auto-generated catch block
@@ -110,7 +117,7 @@ public class TVDB implements GuideDB
 		}
 		
 		// TODO: return null? throw exception?
-		return new byte[0];
+		return file;
 	}
 
 	public List<SeriesSearchResult> search(String name)

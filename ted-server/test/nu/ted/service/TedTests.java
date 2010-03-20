@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import nu.ted.domain.Series;
+import nu.ted.generated.ImageFile;
 import nu.ted.generated.SeriesSearchResult;
 import nu.ted.generated.WatchedSeries;
 import nu.ted.guide.GuideDB;
@@ -39,8 +40,8 @@ public class TedTests
 			throw new RuntimeException("Bad TestSeriesDB, unknown UID");
 		}
 
-		public byte[] getBanner(String searchId) {
-			return new byte[0];
+		public ImageFile getBanner(String searchId) {
+			return new ImageFile();
 		}
 
 	}

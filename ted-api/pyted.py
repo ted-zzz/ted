@@ -27,8 +27,9 @@ id = results[0].searchUID
 
 print "First Search ID: " + id
 
-banner = client.getBanner(id)
+bannerfile = client.getBanner(id)
 
-print "Banner length: " + str(len(banner))
+print "Banner mimetype: " + bannerfile.mimetype
+print "Banner length: " + str(len(bannerfile.data))
 
 

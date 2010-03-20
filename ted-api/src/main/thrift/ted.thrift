@@ -21,6 +21,12 @@ struct WatchedSeries
 	4: i16 episode
 }
 
+struct ImageFile
+{
+	1: string mimetype,
+	2: binary data
+}
+
 service TedService
 {
 	# Find a show
@@ -40,7 +46,7 @@ service TedService
 	list<WatchedSeries> getWatching();
 		# TODO: throws?
 
-	binary getBanner(1: string searchUID);
+	ImageFile getBanner(1: string searchUID);
 		# TODO: throws?
 
 }
