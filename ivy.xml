@@ -1,6 +1,8 @@
 <ivy-module version="2.0">
 	<info organisation="nu.ted" module="Ted" />
 	<dependencies>
+		<dependency org="nu.ted" name="ted-api" rev="0.1-SNAPSHOT" changing="true"/>
+
 		<!-- From Thrift -->
 		<dependency org="org.slf4j" name="slf4j-api" rev="1.5.8" conf="* -> *,!sources,!javadoc"/>
 		<dependency org="org.slf4j" name="slf4j-simple" rev="1.5.8" conf="* -> *,!sources,!javadoc"/>

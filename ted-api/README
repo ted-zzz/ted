@@ -1,3 +1,1 @@
-Run ./ted.thrift to generate Java and Python code.
-
-Java code is currently copied by hand to the ted-server project.
+Run 'mvn -P thrift' to build and install the ted-api jar.

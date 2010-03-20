@@ -5,13 +5,44 @@
 	<include url="${ivy.default.settings.dir}/ivysettings-local.xml" />
 	<include url="${ivy.default.settings.dir}/ivysettings-main-chain.xml"/>
 
+	<!-- These patterns would be useful if ivy detected changes in anything
+	     other then ibiblio
+	-->
+	<!--
+	<property name="local-maven2-pattern"
+	          value="file:${user.home}/.m2/repository/[organisation]/[module]/[revision]/[module]-[revision].[ext]"
+	          override="false" />
+	<property name="local-maven2-pattern"
+	          value="${user.home}/.m2/repository/[organisation]/[module]/[revision]/[module]-[revision].[ext]"
+	          override="false" />
+	-->
+
 	<resolvers> 
 		<ibiblio name="artifactory" m2compatible="true"
 			root="http://code.kmdconsulting.ca/artifactory/repo/"/> 
+		<ibiblio name="local-maven2" m2compatible="true"
+			root="file:${user.home}/.m2/repository/"
+		        checkmodified="true"
+			changingPattern=".*-SNAPSHOT"/>
+
+		<!--
+		<url name="local-maven2" m2compatible="true">
+			<ivy pattern="${local-maven2-pattern}"/>
+			<artifact pattern="${local-maven2-pattern}"/>
+		</url>
+		<filesystem name="local-maven2" m2compatible="true"
+		            transactional="false" local="true"
+			    checkmodified="true"
+			    changingPattern=".*-SNAPSHOT">
+			<artifact pattern="${local-maven2-pattern}"/>
+		</filesystem>
+		-->
+
 	</resolvers> 
 
 	<resolvers>
 		<chain name="libraries" returnFirst="false">
+			<resolver ref="local-maven2"/>
 			<resolver ref="public"/>
 			<resolver ref="artifactory" />
 		</chain>
