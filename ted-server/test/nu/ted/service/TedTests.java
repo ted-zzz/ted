@@ -6,8 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import nu.ted.domain.Series;
-import nu.ted.gen.SeriesSearchResult;
-import nu.ted.gen.WatchedSeries;
+import nu.ted.generated.SeriesSearchResult;
+import nu.ted.generated.WatchedSeries;
 import nu.ted.guide.GuideDB;
 
 import org.apache.thrift.TException;

@@ -1,6 +1,6 @@
 package nu.ted.client;
 
-import nu.ted.gen.TedService.Client;
+import nu.ted.generated.TedService.Client;
 
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;

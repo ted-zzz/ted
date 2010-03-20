@@ -1,6 +1,6 @@
 package nu.ted;
 
-import nu.ted.gen.TedService;
+import nu.ted.generated.TedService;
 import nu.ted.guide.tvdb.TVDB;
 import nu.ted.service.TedServiceImpl;
 

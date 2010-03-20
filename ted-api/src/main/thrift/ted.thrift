@@ -1,6 +1,6 @@
 #!/usr/bin/env thrift --gen java:beans --gen py:new_style
 
-namespace java nu.ted.gen
+namespace java nu.ted.generated
 
 struct SeriesSearchResult
 {

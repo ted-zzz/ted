@@ -6,9 +6,9 @@ import java.util.List;
 import org.apache.thrift.TException;
 
 import nu.ted.domain.Series;
-import nu.ted.gen.SeriesSearchResult;
-import nu.ted.gen.WatchedSeries;
-import nu.ted.gen.TedService.Iface;
+import nu.ted.generated.SeriesSearchResult;
+import nu.ted.generated.WatchedSeries;
+import nu.ted.generated.TedService.Iface;
 import nu.ted.guide.GuideDB;
 
 public class TedServiceImpl implements Iface

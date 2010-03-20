@@ -12,7 +12,7 @@ import java.net.URLEncoder;
 import java.util.LinkedList;
 import java.util.List;
 
-import nu.ted.gen.SeriesSearchResult;
+import nu.ted.generated.SeriesSearchResult;
 import nu.ted.guide.tvdb.Mirrors;
 import nu.ted.guide.tvdb.Mirrors.NoMirrorException;
 import nu.ted.guide.tvdb.SearchResults.TVDBSeries;

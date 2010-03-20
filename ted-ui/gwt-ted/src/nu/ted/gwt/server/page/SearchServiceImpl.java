@@ -7,9 +7,8 @@ import org.apache.thrift.TException;
 
 import nu.ted.client.ClientAction;
 import nu.ted.client.JavaClient;
-import nu.ted.gen.SeriesSearchResult;
-import nu.ted.gen.WatchedSeries;
-import nu.ted.gen.TedService.Client;
+import nu.ted.generated.SeriesSearchResult;
+import nu.ted.generated.TedService.Client;
 import nu.ted.gwt.client.page.SearchService;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;

@@ -3,7 +3,7 @@ package nu.ted.guide;
 import java.util.List;
 
 import nu.ted.domain.Series;
-import nu.ted.gen.SeriesSearchResult;
+import nu.ted.generated.SeriesSearchResult;
 
 public interface GuideDB
 {
