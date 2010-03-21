@@ -1,6 +1,7 @@
 package nu.ted.gwt.client;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -20,8 +21,8 @@ public class PageContainerLayout extends DefaultPageContainerLayout {
     }
     
 	@Override
-	protected HorizontalPanel createHeader() {
-		HorizontalPanel header = new HorizontalPanel();
+	protected FlowPanel createHeader() {
+		FlowPanel header = new FlowPanel();
         header.setStyleName(HEADER_STYLE);
         header.add(new Image(Images.INSTANCE.headerLogo()));
 

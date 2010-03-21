@@ -48,7 +48,6 @@ body { /* text-align: center; !important */
 .ted-content {
   margin: auto;
   width: 800px;
-  border: 1px solid black;
 }
 
 .ted-header {
@@ -57,6 +56,51 @@ body { /* text-align: center; !important */
 }
 
 .ted-header .ted-header-title {
+  float: right;
   margin-top: 22px;
+  margin-right: 270px;
   font-size: 32px;
+}
+
+.ted-page-header {
+  width: 100%;
+  background-color: orange;
+}
+
+.ted-serie-table {
+  /*width: 100%;*/
+}
+
+.ted-table-row {
+  background-color: white;
+}
+
+.ted-table-row-alternate {
+  background-color: #ECF3FE;
+}
+
+.ted-table-row-selected {
+  background-color: #3D80DF;
+}
+
+.ted-show-list {
+  border: 1px solid black;
+  margin-top: 4px;
+  height: 400px;
+}
+
+.ted-show-list td {
+  height: 20px;
+}
+
+.ted-show-list td .gwt-label {
+  width: 200px;
+  font-size: 16px;
+  font-family: Verdana;
+}
+
+.ted-search-show-info {
+	float: right;
+	width: 520px;
+	margin-left: 10px;
 }
