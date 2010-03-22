@@ -17,6 +17,10 @@
   <profiles>
     <profile>
       <id>thrift</id>
+      <!-- Active by default, run with -P !thrift without thrift -->
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
       <build>
         <plugins>
           <plugin>
