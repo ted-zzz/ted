@@ -1,5 +1,6 @@
 package nu.ted.domain;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -15,9 +16,9 @@ public class Episode
 	private int number;
 
 	@XmlElement
-	private Date aired;
+	private Calendar aired;
 
-	public Episode(int seasonNum, int number, Date aired)
+	public Episode(int seasonNum, int number, Calendar aired)
 	{
 		super();
 		this.seasonNum = seasonNum;
@@ -30,12 +31,12 @@ public class Episode
 		return seasonNum;
 	}
 
-	public int getNumber()
+	public int getEpisodeNum()
 	{
 		return number;
 	}
 
-	public Date getAired()
+	public Calendar getAired()
 	{
 		return aired;
 	}

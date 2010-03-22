@@ -5,17 +5,18 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.Calendar;
+import java.util.Date;
 
 import javax.xml.bind.DatatypeConverter;
 
 import junit.framework.Assert;
 
+import nu.ted.domain.Episode;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import nu.ted.guide.tvdb.EpisodeList.Episode;
-
-public class EpisodeListTest
+public class FullSeriesRecordTest
 {
 	private static class TestEpisodeListXML
 	{
@@ -66,23 +67,23 @@ public class EpisodeListTest
 
 	private void assertEpisode(Episode episode, int season, int epnum, String aired, String name) throws ParseException
 	{
-		Assert.assertEquals(season, episode.getSeason());
-		Assert.assertEquals(epnum, episode.getEpisode());
-		Assert.assertEquals(DatatypeConverter.parseDate(aired), episode.getFirstAired());
-		Assert.assertEquals(name, episode.getTitle());
+		Assert.assertEquals(season, episode.getSeasonNum());
+		Assert.assertEquals(epnum, episode.getEpisodeNum());
+		Assert.assertEquals(DatatypeConverter.parseDate(aired), episode.getAired());
 	}
 
 	@Test
 	public void shouldReturnNextEpsiodeFromOne() throws UnsupportedEncodingException, ParseException
 	{
-		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.DAY_OF_MONTH, 1);
-		String date = DatatypeConverter.printDate(cal);
+		Calendar now = Calendar.getInstance();
+		Calendar then = (Calendar) now.clone();
+		then.add(Calendar.DAY_OF_MONTH, 1);
+		String date = DatatypeConverter.printDate(then);
 		this.xml.addEpisode(1, 3, date, "Name");
 
-		EpisodeList list = EpisodeList.create(xml.toStream());
+		FullSeriesRecord list = FullSeriesRecord.create(xml.toStream());
 
-		Episode result = list.getNextEpisode();
+		Episode result = list.getNextEpisode(now);
 		Assert.assertNotNull(result);
 		assertEpisode(result, 1, 3, date, "Name");
 	}
@@ -90,23 +91,25 @@ public class EpisodeListTest
 	@Test
 	public void shouldReturnNextFromMultiple() throws UnsupportedEncodingException, ParseException
 	{
-		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.DAY_OF_MONTH, -1);
-		String date = DatatypeConverter.printDate(cal);
-		this.xml.addEpisode(1, 3, date, "Name");
-		
-		cal.add(Calendar.DAY_OF_MONTH, 2);
-		date = DatatypeConverter.printDate(cal);
-		this.xml.addEpisode(1, 4, date, "Name2");
+		Calendar now = Calendar.getInstance();
 
-		EpisodeList list = EpisodeList.create(xml.toStream());
-		
-		Episode result = list.getNextEpisode();
-		
+		Calendar before = ((Calendar) now.clone());
+		before.add(Calendar.DAY_OF_MONTH, -1);
+
+		Calendar after  = ((Calendar) now.clone());
+		after.add(Calendar.DAY_OF_MONTH,  1);
+
+		this.xml.addEpisode(1, 3, DatatypeConverter.printDate(before), "Name");
+		this.xml.addEpisode(1, 4, DatatypeConverter.printDate(after), "Name2");
+
+		FullSeriesRecord list = FullSeriesRecord.create(xml.toStream());
+
+		Episode result = list.getNextEpisode(now);
+
 		Assert.assertNotNull(result);
-		assertEpisode(result, 1, 4, date, "Name2");
+		assertEpisode(result, 1, 4, DatatypeConverter.printDate(after), "Name2");
 
 	}
-	
+
 	// TODO: decide if NextEpisode() on the date return this ep, or next
 }

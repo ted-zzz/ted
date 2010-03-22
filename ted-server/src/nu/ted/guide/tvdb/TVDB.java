@@ -9,6 +9,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,6 +20,7 @@ import nu.ted.guide.tvdb.Mirrors;
 import nu.ted.guide.tvdb.Mirrors.NoMirrorException;
 import nu.ted.guide.tvdb.SearchResults.TVDBSeries;
 
+import nu.ted.domain.Episode;
 import nu.ted.domain.Series;
 import nu.ted.guide.GuideDB;
 
@@ -70,7 +73,7 @@ public class TVDB implements GuideDB
 	public String getName() {
 		return TVDB.NAME;
 	}
-	
+
 
 	// TODO: this is slow for the moment, as it does a lookup each time. Will be improved.
 	private FullSeriesRecord getFullSeriesRecord(String id) throws NoMirrorException, IOException
@@ -78,11 +81,11 @@ public class TVDB implements GuideDB
 		String location = mirrors.getXMLMirror() + "/api/" + APIKEY + "/series/" + id + "/all/";
 		URL seriesURL = new URL(location);
 		URLConnection seriesConnection = seriesURL.openConnection();
-		
+
 		return FullSeriesRecord.create(seriesConnection.getInputStream());
-		
+
 	}
-	
+
 	public String getName(String id)
 	{
 		FullSeriesRecord record = null;
@@ -105,10 +108,10 @@ public class TVDB implements GuideDB
 	{
 		String mimetype;
 		ImageFile file = new ImageFile();
-		
+
 		try {
 			FullSeriesRecord record = getFullSeriesRecord(id);
-			
+
 			String banner = record.getBanner();
 			if (banner != null) {
 				String location = mirrors.getBannerMirror() + "/banners/" + banner;
@@ -138,7 +141,7 @@ public class TVDB implements GuideDB
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		// TODO: return null? throw exception?
 		return file;
 	}
@@ -185,6 +188,22 @@ public class TVDB implements GuideDB
 			// If we can't connect, return no search results.
 		}
 		return returner;
+	}
+
+	public Episode getNextEpisode(String guideID, Calendar date) {
+		try {
+			FullSeriesRecord record = getFullSeriesRecord(guideID);
+			return record.getNextEpisode(date);
+		} catch (NoMirrorException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// TODO: no new episode exception?
+		return null;
 	}
 
 }
