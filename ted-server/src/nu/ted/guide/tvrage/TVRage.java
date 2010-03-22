@@ -16,13 +16,18 @@ import nu.ted.guide.GuideDB;
 import nu.ted.guide.tvrage.SearchResults.TVRageSeries;
 
 public class TVRage implements GuideDB {
+	public final static String NAME = "TVRage";
+	
+	public String getName() {
+		return this.getName();
+	}
 
 	public ImageFile getBanner(String searchId) {
 		throw new UnsupportedOperationException("Not yet implemented");
 		// TODO Auto-generated method stub
 	}
 
-	public Series getSeriesFromUID(String searchId) {
+	public String getName(String searchId) {
 		throw new UnsupportedOperationException("Not yet implemented");
 		// TODO Auto-generated method stub
 	}

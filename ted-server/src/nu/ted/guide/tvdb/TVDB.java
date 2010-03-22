@@ -23,7 +23,8 @@ import nu.ted.guide.GuideDB;
 
 public class TVDB implements GuideDB
 {
-	private static final String apikey = "0D513FDFA9D09C21";
+	public static final String NAME = "TVDB";
+	private static final String APIKEY = "0D513FDFA9D09C21";
 
 	private Mirrors mirrors;
 
@@ -42,7 +43,7 @@ public class TVDB implements GuideDB
 		URL mirrorUrl;
 		try
 		{
-			mirrorUrl = new URL("http://www.thetvdb.com/api/" + apikey + "/mirrors.xml");
+			mirrorUrl = new URL("http://www.thetvdb.com/api/" + APIKEY + "/mirrors.xml");
 
 			URLConnection mirrorsConnection = mirrorUrl.openConnection();
 			// TODO: set connection timeout
@@ -66,29 +67,51 @@ public class TVDB implements GuideDB
 		}
 	}
 
-	public Series getSeriesFromUID(String id)
+	public String getName() {
+		return TVDB.NAME;
+	}
+	
+
+	// TODO: this is slow for the moment, as it does a lookup each time. Will be improved.
+	private FullSeriesRecord getFullSeriesRecord(String id) throws NoMirrorException, IOException
 	{
-		throw new UnsupportedOperationException("Not yet implemented");
-		// TODO Auto-generated method stub
+		String location = mirrors.getXMLMirror() + "/api/" + APIKEY + "/series/" + id + "/all/";
+		URL seriesURL = new URL(location);
+		URLConnection seriesConnection = seriesURL.openConnection();
+		
+		return FullSeriesRecord.create(seriesConnection.getInputStream());
+		
+	}
+	
+	public String getName(String id)
+	{
+		FullSeriesRecord record = null;
+		try {
+			record = getFullSeriesRecord(id);
+		} catch (NoMirrorException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (record != null) {
+			record.getName();
+		}
+		return null; // TODO: fix
 	}
 
 	public ImageFile getBanner(String id)
 	{
-		URL seriesURL;
-		String location;
 		String mimetype;
 		ImageFile file = new ImageFile();
 		
 		try {
-			location = mirrors.getXMLMirror() + "/api/" + apikey + "/series/" + id + "/all/";
-			seriesURL = new URL(location);
-			URLConnection seriesConnection = seriesURL.openConnection();
-			
-			FullSeriesRecord record = FullSeriesRecord.create(seriesConnection.getInputStream());
+			FullSeriesRecord record = getFullSeriesRecord(id);
 			
 			String banner = record.getBanner();
 			if (banner != null) {
-				location = mirrors.getBannerMirror() + "/banners/" + banner;
+				String location = mirrors.getBannerMirror() + "/banners/" + banner;
 				URL bannerURL = new URL(location);
 				URLConnection bannerURLConnection = bannerURL.openConnection();
 				InputStream iStream = new BufferedInputStream(bannerURLConnection.getInputStream());

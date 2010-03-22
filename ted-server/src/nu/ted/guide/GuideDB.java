@@ -8,9 +8,12 @@ import nu.ted.generated.SeriesSearchResult;
 
 public interface GuideDB
 {
+	// Get the name for this guide.
+	String getName();
+
 	List<SeriesSearchResult> search(String name);
 
-	public ImageFile getBanner(String searchId);
+	ImageFile getBanner(String guideId);
 
-	Series getSeriesFromUID(String searchId);
+	String getName(String guideId);
 }

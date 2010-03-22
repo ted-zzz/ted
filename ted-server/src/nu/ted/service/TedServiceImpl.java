@@ -8,6 +8,7 @@ import org.apache.thrift.TException;
 import nu.ted.domain.Series;
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.SeriesSearchResult;
+import nu.ted.generated.SeriesStatus;
 import nu.ted.generated.WatchedSeries;
 import nu.ted.generated.TedService.Iface;
 import nu.ted.guide.GuideDB;
@@ -37,7 +38,7 @@ public class TedServiceImpl implements Iface
 			// TODO: gen <--> domain translation
 			// TODO: season/episode wrong
 			// TODO: UID may be wrong is translating to SearchSource
-			WatchedSeries ws = new WatchedSeries(s.getUid(), s.getName(), (short)1, (short)1);
+			WatchedSeries ws = new WatchedSeries(s.getUID(), s.getName(), SeriesStatus.UNKNOWN, (short)1, (short)1);
 			results.add(ws);
 		}
 		return results;
@@ -45,21 +46,19 @@ public class TedServiceImpl implements Iface
 
 	public short startWatching(String searchUID) throws TException
 	{
-		// TODO: do UID->internalUID translation
 		// TODO: handle NAME, Season, Episode
-		Series s = seriesSource.getSeriesFromUID(searchUID);
-		s.setUID(nextUID);
+		Series s = new Series(nextUID, seriesSource, searchUID);
 		nextUID++;
 		// TODO: check null UID
 		// TODO: check null result
 		watched.add(s);
-		return s.getUid();
+		return s.getUID();
 	}
 	
 	public void stopWatching(short uid) throws TException
 	{
 		for (Series s : watched) {
-			if (s.getUid() == uid) {
+			if (s.getUID() == uid) {
 				if (!watched.remove(s)) {
 					// TODO: throw exception;
 				}

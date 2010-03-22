@@ -32,19 +32,22 @@ public class TedTests
 			return results;
 		}
 
-		public Series getSeriesFromUID(String id)
-		{
-			if (id.equals("E")) {
-				return new Series((short)1, "Exactly");
-			}
-			throw new RuntimeException("Bad TestSeriesDB, unknown UID");
-		}
-
 		public ImageFile getBanner(String id) {
 			if (id.equals("E")) {
 				return new ImageFile("image/cool", "ABCD".getBytes());
 			}
 			return new ImageFile();
+		}
+
+		public String getName() {
+			return "TEST GUIDE";
+		}
+
+		public String getName(String guideId) {
+			if (guideId.equals("E")) {
+				return "Exactly";
+			}
+			return null;
 		}
 
 	}
@@ -124,7 +127,15 @@ public class TedTests
 		ImageFile image = ted.getBanner("E");
 		assertNotNull(image);
 		assertEquals("image/cool", image.getMimetype());
-		assertEquals("ABCD", image.getData().toString());
+		assertArrayEquals("ABCD".getBytes(), image.getData());
+	}
+
+	@Test
+	public void shouldReturnNextShowsItsWaitingOn() throws TException {
+		TedServiceImpl ted = new TedServiceImpl(new TestSeriesDB());
+		
+		// List<Episode> episodes = ted.getWaitingEpisodes();
+		
 	}
 
 	// Not yet @Test

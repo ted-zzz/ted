@@ -3,6 +3,8 @@ package nu.ted.domain;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import nu.ted.guide.GuideDB;
+
 /**
  * This is a representation of a TV Series.
  *
@@ -17,15 +19,26 @@ public class Series
 	private short uid;
 
 	@XmlElement
-	private Episode lastAired;
+	private Episode nextEpisode;
 
-	// TODO: this should only be settable in constructor
-	public void setUID(short uid)
-	{
+	@XmlElement
+	private String guideID;
+	@XmlElement
+	private String guideDBName;
+
+	// Do not persist:
+	private GuideDB guideDB;
+	
+	public Series(short uid, GuideDB guide, String guideId) {
 		this.uid = uid;
+		this.guideDB = guide;
+		this.guideDBName = guide.getName();
+		this.guideID = guideId;
+		
+		this.name = guide.getName(guideId);
 	}
 
-	public short getUid()
+	public short getUID()
 	{
 		return uid;
 	}

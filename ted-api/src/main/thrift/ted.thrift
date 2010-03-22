@@ -2,10 +2,27 @@
 
 namespace java nu.ted.generated
 
+typedef string date
+
 struct SeriesSearchResult
 {
 	1: string searchUID,
 	2: string name
+}
+
+struct Episode
+{
+	1: i16 seriesID,
+	2: i16 season,
+	3: i16 number,
+	4: date aired
+}
+
+enum SeriesStatus
+{
+	UNKNOWN   = 1,		# Default unknown state
+	WAITING   = 2,		# Waiting for an episode to air
+	SEARCHING = 3,		# Searching for an episode
 }
 
 # TODO: this will be expanded to show the everything a UI would be intersted in a
@@ -17,8 +34,11 @@ struct WatchedSeries
 	# ID number for this series.
 	1: i16 uID,
 	2: string name,
-	3: i16 season,
-	4: i16 episode
+	3: SeriesStatus status,
+
+	# These are only valid when waiting or searching:
+	4: i16 season,
+	5: i16 episode
 }
 
 struct ImageFile
