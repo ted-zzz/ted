@@ -40,7 +40,10 @@ public class TedTests
 			throw new RuntimeException("Bad TestSeriesDB, unknown UID");
 		}
 
-		public ImageFile getBanner(String searchId) {
+		public ImageFile getBanner(String id) {
+			if (id.equals("E")) {
+				return new ImageFile("image/cool", "ABCD".getBytes());
+			}
 			return new ImageFile();
 		}
 
@@ -112,6 +115,16 @@ public class TedTests
 
 		List<WatchedSeries> watched = ted.getWatching();
 		assertEquals(0, watched.size());
+	}
+
+	@Test
+	public void shouldLoadBannerForValidShow() throws TException {
+		TedServiceImpl ted = new TedServiceImpl(new TestSeriesDB());
+
+		ImageFile image = ted.getBanner("E");
+		assertNotNull(image);
+		assertEquals("image/cool", image.getMimetype());
+		assertEquals("ABCD", image.getData().toString());
 	}
 
 	// Not yet @Test
