@@ -2,10 +2,14 @@ package nu.ted.service;
 
 import static org.junit.Assert.*;
 
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
-import nu.ted.domain.Series;
+import javax.xml.bind.DatatypeConverter;
+
+import nu.ted.domain.Episode;
+import nu.ted.generated.CurrentEpisode;
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.SeriesSearchResult;
 import nu.ted.generated.WatchedSeries;
@@ -50,6 +54,14 @@ public class TedTests
 			return null;
 		}
 
+		public Episode getLastEpisode(String guideId, Calendar date) {
+			Calendar oneDayAgo = (Calendar) date.clone();
+			oneDayAgo.add(Calendar.DAY_OF_MONTH, -1);
+			if (guideId.equals("E")) {
+				return new Episode(4, 2, oneDayAgo);
+			}
+			return null;
+		}
 	}
 
 	// TODO: Don't like TException bleeding into other code, can if be avoided?
@@ -105,6 +117,16 @@ public class TedTests
 
 		WatchedSeries series = watched.get(0);
 		assertEquals("Exactly", series.getName());
+		
+		CurrentEpisode currentEpisode = series.getCurrentEpisde();
+		assertNotNull(currentEpisode);
+		assertEquals(4, currentEpisode.getSeason());
+		assertEquals(2, currentEpisode.getNumber());
+		
+		Calendar oneDayAgo = Calendar.getInstance();
+		oneDayAgo.add(Calendar.DAY_OF_MONTH, -1);
+		String dateString = DatatypeConverter.printDate(oneDayAgo);
+		assertEquals(dateString, currentEpisode.getAired());
 		// NB: returned UID may not match Search UID
 	}
 

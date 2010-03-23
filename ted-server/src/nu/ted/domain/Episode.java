@@ -3,8 +3,12 @@ package nu.ted.domain;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.xml.bind.DatatypeConverter;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import nu.ted.generated.CurrentEpisode;
+import nu.ted.generated.UIEpisode;
 
 @XmlRootElement
 public class Episode
@@ -24,6 +28,11 @@ public class Episode
 		this.seasonNum = seasonNum;
 		this.number = number;
 		this.aired = aired;
+	}
+
+	// Not sure if we want this here or not.
+	public CurrentEpisode getCurrentEpisode() {
+		return new CurrentEpisode((short) seasonNum, (short) number, DatatypeConverter.printDate(aired));
 	}
 
 	public int getSeasonNum()

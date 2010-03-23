@@ -35,11 +35,7 @@ public class TedServiceImpl implements Iface
 	{
 		List<WatchedSeries> results = new LinkedList<WatchedSeries>();
 		for (Series s : watched) {
-			// TODO: gen <--> domain translation
-			// TODO: season/episode wrong
-			// TODO: UID may be wrong is translating to SearchSource
-			WatchedSeries ws = new WatchedSeries(s.getUID(), s.getName(), SeriesStatus.UNKNOWN, (short)1, (short)1);
-			results.add(ws);
+			results.add(s.getWatchedSeries());
 		}
 		return results;
 	}

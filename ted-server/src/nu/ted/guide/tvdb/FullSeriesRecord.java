@@ -108,6 +108,16 @@ public class FullSeriesRecord {
 		return null; // TODO: should throw exception
 	}
 
+	public Episode getLastEpisode(Calendar date) {
+		TVDBEpisode last = null;
+		for (TVDBEpisode e : episodeList) {
+			if (e.getFirstAired().after(date))
+				return new Episode(last.getSeason(), e.getEpisode(), e.getFirstAired());
+			last = e;
+		}
+		return null;
+	}
+
 	private void sort(Comparator<TVDBEpisode> comparator) {
 		Collections.sort(episodeList, comparator);
 	}

@@ -1,8 +1,14 @@
 package nu.ted.domain;
 
+import java.util.Calendar;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import nu.ted.generated.CurrentEpisode;
+import nu.ted.generated.SeriesStatus;
+import nu.ted.generated.UIEpisode;
+import nu.ted.generated.WatchedSeries;
 import nu.ted.guide.GuideDB;
 
 /**
@@ -19,7 +25,7 @@ public class Series
 	private short uid;
 
 	@XmlElement
-	private Episode nextEpisode;
+	private Episode currentEpisode;
 
 	@XmlElement
 	private String guideID;
@@ -36,8 +42,13 @@ public class Series
 		this.guideID = guideId;
 		
 		this.name = guide.getName(guideId);
+		this.currentEpisode = guide.getLastEpisode(this.guideID, Calendar.getInstance());
 	}
 
+	public WatchedSeries getWatchedSeries() {
+		CurrentEpisode episode = currentEpisode.getCurrentEpisode();
+		return new WatchedSeries(uid, name, SeriesStatus.UNKNOWN, episode);
+	}
 	public short getUID()
 	{
 		return uid;

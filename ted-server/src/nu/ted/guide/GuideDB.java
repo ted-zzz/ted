@@ -1,8 +1,9 @@
 package nu.ted.guide;
 
+import java.util.Calendar;
 import java.util.List;
 
-import nu.ted.domain.Series;
+import nu.ted.domain.Episode;
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.SeriesSearchResult;
 
@@ -16,4 +17,6 @@ public interface GuideDB
 	ImageFile getBanner(String guideId);
 
 	String getName(String guideId);
+
+	Episode getLastEpisode(String guideId, Calendar date);
 }

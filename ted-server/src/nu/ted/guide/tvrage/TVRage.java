@@ -6,9 +6,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
+import nu.ted.domain.Episode;
 import nu.ted.domain.Series;
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.SeriesSearchResult;
@@ -28,6 +30,11 @@ public class TVRage implements GuideDB {
 	}
 
 	public String getName(String searchId) {
+		throw new UnsupportedOperationException("Not yet implemented");
+		// TODO Auto-generated method stub
+	}
+
+	public Episode getLastEpisode(String guideId, Calendar date) {
 		throw new UnsupportedOperationException("Not yet implemented");
 		// TODO Auto-generated method stub
 	}

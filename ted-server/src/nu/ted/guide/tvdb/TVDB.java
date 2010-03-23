@@ -189,6 +189,21 @@ public class TVDB implements GuideDB
 		}
 		return returner;
 	}
+	
+	public Episode getLastEpisode(String guideID, Calendar date) {
+		FullSeriesRecord record = null;
+		try {
+			record = getFullSeriesRecord(guideID);
+			return record.getLastEpisode(date);
+		} catch (NoMirrorException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	public Episode getNextEpisode(String guideID, Calendar date) {
 		try {

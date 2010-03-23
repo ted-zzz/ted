@@ -10,9 +10,8 @@ struct SeriesSearchResult
 	2: string name
 }
 
-struct Episode
+struct CurrentEpisode
 {
-	1: i16 seriesID,
 	2: i16 season,
 	3: i16 number,
 	4: date aired
@@ -36,9 +35,7 @@ struct WatchedSeries
 	2: string name,
 	3: SeriesStatus status,
 
-	# These are only valid when waiting or searching:
-	4: i16 season,
-	5: i16 episode
+	4: CurrentEpisode currentEpisde
 }
 
 struct ImageFile
