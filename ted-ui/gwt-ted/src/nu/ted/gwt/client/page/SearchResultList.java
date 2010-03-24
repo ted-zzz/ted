@@ -5,16 +5,17 @@ import com.google.gwt.user.client.ui.Widget;
 
 import nu.ted.gwt.client.widget.table.TedTable;
 import nu.ted.gwt.client.widget.table.TedTableModel;
+import nu.ted.gwt.domain.ShowSearchResult;
 
-public class SearchResultList extends TedTable<String> {
+public class SearchResultList extends TedTable<ShowSearchResult> {
 
-	public SearchResultList(TedTableModel<String> model) {
+	public SearchResultList(TedTableModel<ShowSearchResult> model) {
 		super(model);
 	}
 
 	@Override
-	protected Widget createWidgetForRow(String showTitle) {
-		return new Label(showTitle);
+	protected Widget createWidgetForRow(ShowSearchResult result) {
+		return new Label("[" + result.getSearchId() + "] " + result.getName());
 	}
 
 }

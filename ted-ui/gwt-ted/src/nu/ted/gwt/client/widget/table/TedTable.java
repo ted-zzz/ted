@@ -54,14 +54,21 @@ public abstract class TedTable<T> extends Grid implements TedTableModelListener,
 
     public void onClick(ClickEvent event) {
         Cell cell = getCellForEvent(event);
+
+        // If user clicks on exact pixel that separates row,
+        // don't change selection.
+        if (cell == null) {
+            return;
+        }
+
         int newSelection = cell.getRowIndex();
         setSelectedRow(newSelection);
     }
 
     public void setSelectedRow(int rowToSelect) {
-    	String selectedStyleName = "ted-table-row-selected";
+        String selectedStyleName = "ted-table-row-selected";
 
-    	// Do nothing if we've selected the same index.
+        // Do nothing if we've selected the same index.
         if (this.selectedRow == rowToSelect) {
             return;
         }
@@ -70,7 +77,7 @@ public abstract class TedTable<T> extends Grid implements TedTableModelListener,
 
         // Update the CSS Styles.
         if (this.selectedRow >= 0) {
-        	getRowFormatter().addStyleName(this.selectedRow, selectedStyleName);
+            getRowFormatter().addStyleName(this.selectedRow, selectedStyleName);
         }
 
         if (oldSelection >= 0) {

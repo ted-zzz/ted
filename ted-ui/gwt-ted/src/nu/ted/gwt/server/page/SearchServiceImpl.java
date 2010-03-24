@@ -1,42 +1,57 @@
 package nu.ted.gwt.server.page;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.thrift.TException;
-
-import nu.ted.client.ClientAction;
+import net.bugsquat.diservlet.ImageServlet;
+import net.bugsquat.diservlet.ImageStore;
 import nu.ted.client.JavaClient;
-import nu.ted.generated.SeriesSearchResult;
-import nu.ted.generated.TedService.Client;
 import nu.ted.gwt.client.page.SearchService;
+import nu.ted.gwt.domain.SearchShowInfo;
+import nu.ted.gwt.domain.ShowSearchResult;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public class SearchServiceImpl extends RemoteServiceServlet implements
-		SearchService {
+        SearchService {
 
-	@Override
-	public List<String> search(final String filter) {
-		JavaClient tedClient = new JavaClient("localhost", 9030);
-		final ArrayList<String> shows = new ArrayList<String>();
-		tedClient.run(new ClientAction() {
-			
-			@Override
-			public void run(Client client) throws TException {
-				List<SeriesSearchResult> found = client.search(filter);
-				for (SeriesSearchResult serie : found) {
-					shows.add("(" + serie.getSearchUID() + ") " + serie.getName());
-				}
-			}
-		});
-		return shows;
-	}
+    @Override
+    public List<ShowSearchResult> search(final String filter) {
+        JavaClient tedClient = getTedClient();
+        SearchClientAction searchAction = new SearchClientAction(filter);
+        tedClient.run(searchAction);
+        return searchAction.getFoundSeries();
+    }
 
-	@Override
-	public void destroy() {
-		super.destroy();
-	}
+    @Override
+    public SearchShowInfo loadBanner(final String searchUUID) {
+        ImageStore store = getImageStore();
+        if (store == null) {
+            // Allow the client to continue without showing an image.
+            return new SearchShowInfo(searchUUID, false);
+        }
 
-	
+        if (store.contains(searchUUID)) {
+            return new SearchShowInfo(searchUUID, true);
+        }
+
+        JavaClient tedClient = getTedClient();
+        LoadBannerClientAction action = new LoadBannerClientAction(searchUUID, store);
+        tedClient.run(action);
+
+        if (!action.imageAdded()) {
+            return new SearchShowInfo(searchUUID, false);
+        }
+
+
+        return new SearchShowInfo(searchUUID, true);
+    }
+
+    private JavaClient getTedClient() {
+        return new JavaClient("localhost", 9030);
+    }
+
+    private ImageStore getImageStore() {
+        return (ImageStore) getServletContext().getAttribute(ImageServlet.IMAGE_STORE_ATTR_KEY);
+    }
+
 }

@@ -4,19 +4,29 @@
     "http://java.sun.com/dtd/web-app_2_3.dtd">
 
 <web-app>
-  
+
   <!-- Servlets -->
   <servlet>
     <servlet-name>searchService</servlet-name>
-    <servlet-class>
-      nu.ted.gwt.server.page.SearchServiceImpl
-    </servlet-class>
+    <servlet-class>nu.ted.gwt.server.page.SearchServiceImpl</servlet-class>
   </servlet>
+
   <servlet-mapping>
     <servlet-name>searchService</servlet-name>
     <url-pattern>/gwtted/search</url-pattern>
   </servlet-mapping>
-  
+
+  <servlet>
+    <servlet-name>imageService</servlet-name>
+    <servlet-class>net.bugsquat.diservlet.ImageServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>imageService</servlet-name>
+    <url-pattern>/gwtted/images</url-pattern>
+  </servlet-mapping>
+
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>GwtTed.html</welcome-file>
