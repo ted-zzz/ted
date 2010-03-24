@@ -21,7 +21,7 @@ public class TVRage implements GuideDB {
 	public final static String NAME = "TVRage";
 	
 	public String getName() {
-		return this.getName();
+		return this.NAME;
 	}
 
 	public ImageFile getBanner(String searchId) {
