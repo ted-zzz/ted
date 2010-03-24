@@ -31,6 +31,7 @@
                 <phase>generate-sources</phase>
                 <configuration>
                   <tasks>
+		    <delete quiet="true" dir="target/generated-sources"/>
                     <mkdir dir="target/generated-sources"/>
                     <exec executable="thrift">
                       <arg value="--gen"/>

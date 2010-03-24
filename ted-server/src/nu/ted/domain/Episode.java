@@ -8,7 +8,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import nu.ted.generated.CurrentEpisode;
-import nu.ted.generated.UIEpisode;
 
 @XmlRootElement
 public class Episode

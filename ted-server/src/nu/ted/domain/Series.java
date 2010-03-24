@@ -7,7 +7,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import nu.ted.generated.CurrentEpisode;
 import nu.ted.generated.SeriesStatus;
-import nu.ted.generated.UIEpisode;
 import nu.ted.generated.WatchedSeries;
 import nu.ted.guide.GuideDB;
 
