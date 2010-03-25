@@ -26,11 +26,13 @@ public class TedServiceImpl implements Iface
 		watched = new LinkedList<Series>();
 	}
 
+	@Override
 	public List<SeriesSearchResult> search(String name) throws TException
 	{
 		return seriesSource.search(name);
 	}
 
+	@Override
 	public List<WatchedSeries> getWatching() throws TException
 	{
 		List<WatchedSeries> results = new LinkedList<WatchedSeries>();
@@ -40,6 +42,7 @@ public class TedServiceImpl implements Iface
 		return results;
 	}
 
+	@Override
 	public short startWatching(String searchUID) throws TException
 	{
 		// TODO: handle NAME, Season, Episode
@@ -51,6 +54,7 @@ public class TedServiceImpl implements Iface
 		return s.getUID();
 	}
 	
+	@Override
 	public void stopWatching(short uid) throws TException
 	{
 		for (Series s : watched) {
@@ -65,8 +69,14 @@ public class TedServiceImpl implements Iface
 		// TODO: throw exception
 	}
 
+	@Override
 	public ImageFile getBanner(String searchUID) throws TException
 	{
 		return seriesSource.getBanner(searchUID);
+	}
+
+	@Override
+	public String getOverview(String searchUID) throws TException {
+		return seriesSource.getOverview(searchUID);
 	}
 }

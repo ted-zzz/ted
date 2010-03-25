@@ -178,4 +178,10 @@ public class TedTests
 //
 //	}
 
+	@Test
+	public void ensureGetOverviewFromService() throws TException
+	{
+		TedServiceImpl ted = new TedServiceImpl(new TestSeriesDB());
+		assertEquals("An Overview", ted.getOverview("E"));
+	}
 }

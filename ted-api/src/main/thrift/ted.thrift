@@ -66,4 +66,7 @@ service TedService
 	ImageFile getBanner(1: string searchUID);
 		# TODO: throws?
 
+	string getOverview(1: string searchUID);
+		# TODO: throws?
+
 }
