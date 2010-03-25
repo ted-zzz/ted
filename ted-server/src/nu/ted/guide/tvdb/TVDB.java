@@ -189,7 +189,7 @@ public class TVDB implements GuideDB
 		}
 		return returner;
 	}
-	
+
 	public Episode getLastEpisode(String guideID, Calendar date) {
 		FullSeriesRecord record = null;
 		try {
@@ -219,6 +219,22 @@ public class TVDB implements GuideDB
 
 		// TODO: no new episode exception?
 		return null;
+	}
+
+	@Override
+	public String getOverview(String guideId) {
+		try {
+			FullSeriesRecord series = getFullSeriesRecord(guideId);
+			return series.getOverview();
+		} catch (NoMirrorException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// TODO: Should throw an exception instead of returning null.
+		return "";
 	}
 
 }

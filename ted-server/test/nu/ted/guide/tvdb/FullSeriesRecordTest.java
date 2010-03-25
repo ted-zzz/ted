@@ -20,6 +20,7 @@ public class FullSeriesRecordTest
 {
 	private static class TestEpisodeListXML
 	{
+		private static final String EXPECTED_OVERVIEW = "This is the overview.";
 		private StringBuffer xml;
 
 		public TestEpisodeListXML()
@@ -27,12 +28,11 @@ public class FullSeriesRecordTest
 			xml = new StringBuffer();
 			xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 			xml.append("<Data>\n");
-
-			// Add a serie, as this appears in the results (but we don't need it)
-			xml.append("  <Serie>\n");
+			xml.append("  <Series>\n");
 			xml.append("    <id>1000</id>\n");
 			xml.append("    <Actors>people</Actors>\n");
-			xml.append("  </Serie>\n");
+			xml.append("    <Overview>" + EXPECTED_OVERVIEW + "</Overview>\n");
+			xml.append("  </Series>\n");
 		}
 
 		public void addEpisode(int season, int episode, String aired, String name)
@@ -111,5 +111,13 @@ public class FullSeriesRecordTest
 
 	}
 
+	@Test
+	public void getOverviewFromXml() throws UnsupportedEncodingException
+	{
+		FullSeriesRecord series = FullSeriesRecord.create(xml.toStream());
+		Assert.assertEquals(TestEpisodeListXML.EXPECTED_OVERVIEW, series.getOverview());
+	}
+
 	// TODO: decide if NextEpisode() on the date return this ep, or next
+
 }

@@ -62,6 +62,11 @@ public class TedTests
 			}
 			return null;
 		}
+
+		@Override
+		public String getOverview(String guideId) {
+			return "An Overview";
+		}
 	}
 
 	// TODO: Don't like TException bleeding into other code, can if be avoided?
@@ -117,12 +122,12 @@ public class TedTests
 
 		WatchedSeries series = watched.get(0);
 		assertEquals("Exactly", series.getName());
-		
+
 		CurrentEpisode currentEpisode = series.getCurrentEpisde();
 		assertNotNull(currentEpisode);
 		assertEquals(4, currentEpisode.getSeason());
 		assertEquals(2, currentEpisode.getNumber());
-		
+
 		Calendar oneDayAgo = Calendar.getInstance();
 		oneDayAgo.add(Calendar.DAY_OF_MONTH, -1);
 		String dateString = DatatypeConverter.printDate(oneDayAgo);
@@ -155,9 +160,9 @@ public class TedTests
 	@Test
 	public void shouldReturnNextShowsItsWaitingOn() throws TException {
 		TedServiceImpl ted = new TedServiceImpl(new TestSeriesDB());
-		
+
 		// List<Episode> episodes = ted.getWaitingEpisodes();
-		
+
 	}
 
 	// Not yet @Test

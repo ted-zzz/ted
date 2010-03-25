@@ -19,7 +19,7 @@ import nu.ted.guide.tvrage.SearchResults.TVRageSeries;
 
 public class TVRage implements GuideDB {
 	public final static String NAME = "TVRage";
-	
+
 	public String getName() {
 		return this.NAME;
 	}
@@ -69,6 +69,12 @@ public class TVRage implements GuideDB {
 		}
 
 		return returner;
+	}
+
+	@Override
+	public String getOverview(String guideId) {
+		// TODO Implement me.
+		throw new UnsupportedOperationException("Not yet implemented");
 	}
 
 }

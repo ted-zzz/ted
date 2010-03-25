@@ -27,6 +27,8 @@ public class FullSeriesRecord {
 		@XmlElement(name = "banner")
 		private String banner;
 
+		@XmlElement(name = "Overview")
+		private String overview;
 	}
 
 	private static class TVDBEpisode
@@ -128,6 +130,11 @@ public class FullSeriesRecord {
 
 	public String getName() {
 		return series.name;
+	}
+
+
+	public String getOverview() {
+		return series.overview;
 	}
 
 	public static FullSeriesRecord create(InputStream is)

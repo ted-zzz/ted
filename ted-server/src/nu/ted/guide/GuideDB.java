@@ -19,4 +19,6 @@ public interface GuideDB
 	String getName(String guideId);
 
 	Episode getLastEpisode(String guideId, Calendar date);
+
+	String getOverview(String guideId);
 }
