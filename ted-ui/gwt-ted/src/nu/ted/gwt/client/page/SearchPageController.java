@@ -16,67 +16,60 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class SearchPageController extends PageController<SearchPage> implements TedTableSelectionListener
 {
-    private final SearchServiceAsync searchService = (SearchServiceAsync)GWT.create(SearchService.class);
+	private final SearchServiceAsync searchService = (SearchServiceAsync)GWT.create(SearchService.class);
 
-    public SearchPageController() {
-        this.page = new SearchPage(this);
-    }
+	public SearchPageController() {
+		this.page = new SearchPage(this);
+	}
 
-    public void loadData(Page<SearchPageController> page) {
-        loadListener.pageDataHasBeenLoaded(page);
-    }
+	public void loadData(Page<SearchPageController> page) {
+		loadListener.pageDataHasBeenLoaded(page);
+	}
 
-    public void search(String filter) {
-        PageLoader.getInstance().showLoadingPage();
-        searchService.search(filter, new MessageCallback<List<ShowSearchResult>>() {
+	public void search(String filter) {
+		PageLoader.getInstance().showLoadingPage();
+		searchService.search(filter, new MessageCallback<List<ShowSearchResult>>() {
 
-            @Override
-            public void onSuccess(List<ShowSearchResult> results) {
-                hideLoadingIndicator();
-                page.setSearchResults(results);
-            }
+			@Override
+			public void onSuccess(List<ShowSearchResult> results) {
+				hideLoadingIndicator();
+				page.setSearchResults(results);
+			}
 
-            @Override
-            public void onFailure(Throwable caught) {
-                super.onFailure(caught);
-                hideLoadingIndicator();
-            }
+			@Override
+			public void onFailure(Throwable caught) {
+				super.onFailure(caught);
+				hideLoadingIndicator();
+			}
 
-            private void hideLoadingIndicator() {
-                PageLoader.getInstance().hideLoadingPage();
-            }
-        });
+			private void hideLoadingIndicator() {
+				PageLoader.getInstance().hideLoadingPage();
+			}
+		});
 
-    }
+	}
 
-    @Override
-    public SearchPage getPage() {
-        return page;
-    }
+	@Override
+	public SearchPage getPage() {
+		return page;
+	}
 
-    @Override
-    public void selectionChanged() {
-        if (!page.hasSelectedResult())
-            return;
+	@Override
+	public void selectionChanged() {
+		if (!page.hasSelectedResult())
+			return;
 
-        page.clearShowInfo();
+		page.clearShowInfo();
 
-        ShowSearchResult selected = page.getSelectedResult();
-        searchService.loadBanner(selected.getSearchId(), new MessageCallback<SearchShowInfo>() {
+		ShowSearchResult selected = page.getSelectedResult();
+		searchService.getShowInfo(selected.getSearchId(), new MessageCallback<SearchShowInfo>() {
 
-            @Override
-            public void onSuccess(SearchShowInfo imageAdded) {
-                if (imageAdded.isImageAdded()) {
-                    page.setShowInfo(imageAdded.getSearchUUID());
-                }
-                else {
-                    // TODO [MS] Might be better to show a default image
-                    //           stating no image data found.
-                    page.showNoShowInfoAvailable();
-                }
-            }
-        });
+			@Override
+			public void onSuccess(SearchShowInfo showInfo) {
+				page.setShowInfo(showInfo);
+			}
+		});
 
-    }
+	}
 
 }

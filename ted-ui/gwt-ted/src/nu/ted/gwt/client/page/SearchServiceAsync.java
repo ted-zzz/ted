@@ -11,6 +11,6 @@ public interface SearchServiceAsync {
 
     void search(String filter, AsyncCallback<List<ShowSearchResult>> callback);
 
-    void loadBanner(String searchUUID, AsyncCallback<SearchShowInfo> callback);
+    void getShowInfo(String searchUUID, AsyncCallback<SearchShowInfo> callback);
 
 }

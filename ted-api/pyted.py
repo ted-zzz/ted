@@ -32,4 +32,6 @@ bannerfile = client.getBanner(id)
 print "Banner mimetype: " + bannerfile.mimetype
 print "Banner length: " + str(len(bannerfile.data))
 
+overview = client.getOverview(id)
+print "Overview: " + overview
 

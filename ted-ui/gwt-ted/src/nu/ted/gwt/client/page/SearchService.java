@@ -11,5 +11,5 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("search")
 public interface SearchService extends RemoteService {
     public List<ShowSearchResult> search(String filter);
-    public SearchShowInfo loadBanner(String searchUUID);
+    public SearchShowInfo getShowInfo(String searchUUID);
 }
