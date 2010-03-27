@@ -42,6 +42,7 @@
                     </exec>
                     <delete quiet="true">
                       <fileset dir="src/main/java/nu/ted/generated" includes="**/*"/>
+		      <fileset dir="target/classes/nu/ted/generated" includes="**/*"/>
                     </delete>
 		    <mkdir dir="src/main/java/nu/ted/generated"/>
                     <copy todir="src/main/java/nu/ted/generated">
