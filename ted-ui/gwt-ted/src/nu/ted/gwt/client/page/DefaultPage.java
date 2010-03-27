@@ -2,6 +2,7 @@ package nu.ted.gwt.client.page;
 
 import net.bugsquat.gwtsite.client.page.Page;
 import net.bugsquat.gwtsite.client.page.PageController;
+import nu.ted.gwt.client.Css.Application;
 
 import com.google.gwt.user.client.ui.Widget;
 
@@ -12,21 +13,21 @@ import com.google.gwt.user.client.ui.Widget;
 public abstract class DefaultPage<C extends PageController> extends Page<C> {
 
 	public DefaultPage() {
-		content.setStyleName("ted-content");
+		content.setStyleName(Application.TED_CONTENT);
 		content.add(createPageHeader());
 	}
-    
-    private Widget createPageHeader() {
+
+	private Widget createPageHeader() {
 		PageHeader header = new PageHeader();
 		header.setHeaderText(getHeaderText());
 		return header;
 	}
 
-    /**
-     * Defines the header text for this page.
-     * 
-     * @return the header text.
-     */
+	/**
+	 * Defines the header text for this page.
+	 *
+	 * @return the header text.
+	 */
 	public abstract String getHeaderText();
 
 }

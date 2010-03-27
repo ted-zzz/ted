@@ -3,6 +3,7 @@ package nu.ted.gwt.client.page;
 import java.util.List;
 
 import net.bugsquat.gwtsite.client.page.PageId;
+import nu.ted.gwt.client.Css;
 import nu.ted.gwt.client.TedPageId;
 import nu.ted.gwt.client.widget.table.TedTableModel;
 import nu.ted.gwt.domain.FoundSeries;
@@ -71,11 +72,11 @@ public class SearchPage extends DefaultPage<SearchPageController> {
 
 		ScrollPanel seriesListScrollPanel = new ScrollPanel();
 		seriesListScrollPanel.add(searchResultList);
-		seriesListScrollPanel.setStyleName("ted-series-list");
+		seriesListScrollPanel.setStyleName(Css.SearchPage.TED_SERIES_LIST);
 
 
 		seriesInfoPanel = new FlowPanel();
-		seriesInfoPanel.setStyleName("ted-search-series-info");
+		seriesInfoPanel.setStyleName(Css.SearchPage.TED_SEARCH_SERIES_INFO);
 
 		content.add(seriesInfoPanel);
 		content.add(seriesListScrollPanel);
@@ -97,7 +98,7 @@ public class SearchPage extends DefaultPage<SearchPageController> {
 		if (seriesInfo.isImageAdded()) {
 			Image image = new Image(GWT.getModuleBaseURL() +
 					"images?iid=" + seriesInfo.getSearchUUID());
-			image.setStyleName("ted-search-serie-img");
+			image.setStyleName(Css.SearchPage.TED_SEARCH_SERIES_IMG);
 			seriesInfoPanel.add(image);
 		}
 		else {
@@ -105,7 +106,7 @@ public class SearchPage extends DefaultPage<SearchPageController> {
 		}
 
 		Label overview = new Label(seriesInfo.getOverview());
-		overview.setStyleName("ted-search-overview");
+		overview.setStyleName(Css.SearchPage.TED_SEARCH_SERIES_OVERVIEW);
 		seriesInfoPanel.add(overview);
 	}
 

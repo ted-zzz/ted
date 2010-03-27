@@ -68,6 +68,9 @@ body { /* text-align: center; !important */
 	font-weight: bold;
 }
 
+.ted-page-header-text {
+}
+
 .ted-serie-table {
 	width: 100%;
 }
@@ -93,7 +96,7 @@ body { /* text-align: center; !important */
 
 .ted-series-list td {
 	height: 20px;
-	width: 100%;
+	width: 238px;
 }
 
 .ted-series-list td .gwt-label {
