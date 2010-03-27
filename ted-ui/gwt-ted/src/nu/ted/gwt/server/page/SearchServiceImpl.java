@@ -10,8 +10,8 @@ import nu.ted.client.ClientAction;
 import nu.ted.client.JavaClient;
 import nu.ted.generated.TedService.Client;
 import nu.ted.gwt.client.page.SearchService;
-import nu.ted.gwt.domain.SearchShowInfo;
-import nu.ted.gwt.domain.ShowSearchResult;
+import nu.ted.gwt.domain.SearchSeriesInfo;
+import nu.ted.gwt.domain.FoundSeries;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -19,7 +19,7 @@ public class SearchServiceImpl extends RemoteServiceServlet implements
 		SearchService {
 
 	@Override
-	public List<ShowSearchResult> search(final String filter) {
+	public List<FoundSeries> search(final String filter) {
 		JavaClient tedClient = getTedClient();
 		SearchClientAction searchAction = new SearchClientAction(filter);
 		tedClient.run(searchAction);
@@ -27,7 +27,7 @@ public class SearchServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public SearchShowInfo getShowInfo(final String searchUUID) {
+	public SearchSeriesInfo getSeriesInfo(final String searchUUID) {
 		JavaClient tedClient = getTedClient();
 		GetOverviewClientAction overviewAction = new GetOverviewClientAction(searchUUID);
 		tedClient.run(overviewAction);
@@ -36,11 +36,11 @@ public class SearchServiceImpl extends RemoteServiceServlet implements
 		ImageStore store = getImageStore();
 		if (store == null) {
 			// Allow the client to continue without showing an image.
-			return new SearchShowInfo(searchUUID, overview, false);
+			return new SearchSeriesInfo(searchUUID, overview, false);
 		}
 
 		if (store.contains(searchUUID)) {
-			return new SearchShowInfo(searchUUID, overview, true);
+			return new SearchSeriesInfo(searchUUID, overview, true);
 		}
 
 
@@ -48,11 +48,11 @@ public class SearchServiceImpl extends RemoteServiceServlet implements
 		tedClient.run(action);
 
 		if (!action.imageAdded()) {
-			return new SearchShowInfo(searchUUID, overview, false);
+			return new SearchSeriesInfo(searchUUID, overview, false);
 		}
 
 
-		return new SearchShowInfo(searchUUID, overview, true);
+		return new SearchSeriesInfo(searchUUID, overview, true);
 	}
 
 	private JavaClient getTedClient() {

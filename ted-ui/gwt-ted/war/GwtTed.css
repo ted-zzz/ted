@@ -1,109 +1,108 @@
 /** Add css rules here for your application. */
 body { /* text-align: center; !important */
-margin: 0px;
-height: 100%;
-vertical-align: top;
-background-color: #EEEEEE;
+	margin: 0px;
+	height: 100%;
+	vertical-align: top;
+	background-color: #EEEEEE;
 }
 
 #loading-container {
-/*width: 100%;
-height: 100%;
-background-color: red;*/
-position: fixed;
-top: 0%;
-left: 0%;
-width: 100%;
-height: 100%;
-background-color: black;
-z-index: 1001;
--moz-opacity: 0.5;
-opacity: .50;
-filter: alpha(opacity = 50);
+	/*width: 100%;
+	height: 100%;
+	background-color: red;*/
+	position: fixed;
+	top: 0%;
+	left: 0%;
+	width: 100%;
+	height: 100%;
+	background-color: black;
+	z-index: 1001;
+	-moz-opacity: 0.5;
+	opacity: .50;
+	filter: alpha(opacity = 50);
 }
 
 #loading-outer {
-position: absolute;
-top: 50%;
-left: 0px;
-width: 100%;
-height: 1px;
-overflow: visible;
+	position: absolute;
+	top: 50%;
+	left: 0px;
+	width: 100%;
+	height: 1px;
+	overflow: visible;
 }
 
 #loading-inner {
-background-color: white;
-position: absolute;
-top: -30px; /* half of the height to make it centered */
-left: 50%;
-width: 100px; /* width of the centered content */
-height: 60px; /* height of the centered content */
-margin-left: -50px; /* half of the width to make it centered */
-font: bold 13px tahoma, arial, helvetica;
-text-align: center;
-padding: 6px;
-
+	background-color: white;
+	position: absolute;
+	top: -30px; /* half of the height to make it centered */
+	left: 50%;
+	width: 100px; /* width of the centered content */
+	height: 60px; /* height of the centered content */
+	margin-left: -50px; /* half of the width to make it centered */
+	font: bold 13px tahoma, arial, helvetica;
+	text-align: center;
+	padding: 6px;
 }
 
 .ted-content {
-margin: auto;
-width: 1024px;
+	margin: auto;
+	width: 1024px;
 }
 
 .ted-header {
-width: 100%;
-background-color: #EEEEEE;
+	width: 100%;
+	background-color: #EEEEEE;
 }
 
 .ted-header .ted-header-title {
-float: right;
-margin-top: 22px;
-margin-right: 270px;
-font-size: 32px;
+	float: right;
+	margin-top: 22px;
+	margin-right: 270px;
+	font-size: 32px;
 }
 
 .ted-page-header {
-width: 100%;
-background-color: orange;
-font-size: 18pt;
-font-weight: bold;
+	width: 100%;
+	background-color: orange;
+	font-size: 18pt;
+	font-weight: bold;
 }
 
 .ted-serie-table {
-width: 100%;
+	width: 100%;
 }
 
 .ted-table-row {
-background-color: white;
+	background-color: white;
 }
 
 .ted-table-row-alternate {
-background-color: #ECF3FE;
+	background-color: #ECF3FE;
 }
 
 .ted-table-row-selected {
-background-color: #3D80DF;
+	background-color: #3D80DF;
 }
 
-.ted-show-list {
-border: 1px solid black;
-margin-top: 4px;
-height: 500px;
-width: 238px;
+.ted-series-list {
+	border: 1px solid black;
+	margin-top: 4px;
+	height: 500px;
+	width: 238px;
 }
 
-.ted-show-list td {
-height: 20px;
-width: 100%;
+.ted-series-list td {
+	height: 20px;
+	width: 100%;
 }
 
-.ted-show-list td .gwt-label {
-width: 100%;
-font-size: 16px;
-font-family: Verdana;
+.ted-series-list td .gwt-label {
+	width: 100%;
+	font-size: 16px;
+	font-family: Verdana;
 }
 
-.ted-search-show-info {
+.ted-search-series-info {
 	float: right;
 	width: 766px;
 	margin-left: 10px;

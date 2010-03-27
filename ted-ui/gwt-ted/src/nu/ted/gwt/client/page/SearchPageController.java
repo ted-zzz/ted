@@ -7,12 +7,10 @@ import net.bugsquat.gwtsite.client.page.Page;
 import net.bugsquat.gwtsite.client.page.PageController;
 import nu.ted.gwt.client.MessageCallback;
 import nu.ted.gwt.client.widget.table.TedTableSelectionListener;
-import nu.ted.gwt.domain.SearchShowInfo;
-import nu.ted.gwt.domain.ShowSearchResult;
+import nu.ted.gwt.domain.FoundSeries;
+import nu.ted.gwt.domain.SearchSeriesInfo;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class SearchPageController extends PageController<SearchPage> implements TedTableSelectionListener
 {
@@ -28,10 +26,10 @@ public class SearchPageController extends PageController<SearchPage> implements 
 
 	public void search(String filter) {
 		PageLoader.getInstance().showLoadingPage();
-		searchService.search(filter, new MessageCallback<List<ShowSearchResult>>() {
+		searchService.search(filter, new MessageCallback<List<FoundSeries>>() {
 
 			@Override
-			public void onSuccess(List<ShowSearchResult> results) {
+			public void onSuccess(List<FoundSeries> results) {
 				hideLoadingIndicator();
 				page.setSearchResults(results);
 			}
@@ -59,14 +57,14 @@ public class SearchPageController extends PageController<SearchPage> implements 
 		if (!page.hasSelectedResult())
 			return;
 
-		page.clearShowInfo();
+		page.clearSeriesInfo();
 
-		ShowSearchResult selected = page.getSelectedResult();
-		searchService.getShowInfo(selected.getSearchId(), new MessageCallback<SearchShowInfo>() {
+		FoundSeries selected = page.getSelectedResult();
+		searchService.getSeriesInfo(selected.getSearchId(), new MessageCallback<SearchSeriesInfo>() {
 
 			@Override
-			public void onSuccess(SearchShowInfo showInfo) {
-				page.setShowInfo(showInfo);
+			public void onSuccess(SearchSeriesInfo seriesInfo) {
+				page.setSeriesInfo(seriesInfo);
 			}
 		});
 

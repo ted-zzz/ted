@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Represents a search result from the server.
  *
  */
-public class ShowSearchResult implements Serializable {
+public class FoundSeries implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -16,9 +16,9 @@ public class ShowSearchResult implements Serializable {
 	/**
 	 * Required by GWT.
 	 */
-	public ShowSearchResult(){}
+	public FoundSeries(){}
 	
-	public ShowSearchResult(String name, String searchId) {
+	public FoundSeries(String name, String searchId) {
 		this.name = name;
 		this.searchId = searchId;
 	}

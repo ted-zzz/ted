@@ -2,15 +2,15 @@ package nu.ted.gwt.client.page;
 
 import java.util.List;
 
-import nu.ted.gwt.domain.SearchShowInfo;
-import nu.ted.gwt.domain.ShowSearchResult;
+import nu.ted.gwt.domain.SearchSeriesInfo;
+import nu.ted.gwt.domain.FoundSeries;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface SearchServiceAsync {
 
-    void search(String filter, AsyncCallback<List<ShowSearchResult>> callback);
+    void search(String filter, AsyncCallback<List<FoundSeries>> callback);
 
-    void getShowInfo(String searchUUID, AsyncCallback<SearchShowInfo> callback);
+    void getSeriesInfo(String searchUUID, AsyncCallback<SearchSeriesInfo> callback);
 
 }

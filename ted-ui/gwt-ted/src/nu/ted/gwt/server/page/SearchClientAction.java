@@ -8,16 +8,16 @@ import org.apache.thrift.TException;
 import nu.ted.client.ClientAction;
 import nu.ted.generated.SeriesSearchResult;
 import nu.ted.generated.TedService.Client;
-import nu.ted.gwt.domain.ShowSearchResult;
+import nu.ted.gwt.domain.FoundSeries;
 
 public class SearchClientAction implements ClientAction {
 
     private final String filter;
-    private List<ShowSearchResult> foundSeries;
+    private List<FoundSeries> foundSeries;
 
     public SearchClientAction(String filter) {
         this.filter = filter;
-        this.foundSeries = new ArrayList<ShowSearchResult>();
+        this.foundSeries = new ArrayList<FoundSeries>();
     }
 
     @Override
@@ -28,11 +28,11 @@ public class SearchClientAction implements ClientAction {
 
         List<SeriesSearchResult> found = client.search(filter);
         for (SeriesSearchResult serie : found) {
-            getFoundSeries().add(new ShowSearchResult(serie.getName(), serie.getSearchUID()));
+            getFoundSeries().add(new FoundSeries(serie.getName(), serie.getSearchUID()));
         }
     }
 
-    public List<ShowSearchResult> getFoundSeries() {
+    public List<FoundSeries> getFoundSeries() {
         return foundSeries;
     }
 
