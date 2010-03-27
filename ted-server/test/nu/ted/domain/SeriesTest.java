@@ -3,8 +3,6 @@ package nu.ted.domain;
 
 import static org.junit.Assert.*;
 
-import java.util.List;
-
 import org.junit.Test;
 
 import nu.ted.generated.CurrentEpisode;

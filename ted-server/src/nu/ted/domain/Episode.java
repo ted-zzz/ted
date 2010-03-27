@@ -1,7 +1,6 @@
 package nu.ted.domain;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import javax.xml.bind.DatatypeConverter;
 import javax.xml.bind.annotation.XmlElement;

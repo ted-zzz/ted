@@ -10,7 +10,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,7 +20,6 @@ import nu.ted.guide.tvdb.Mirrors.NoMirrorException;
 import nu.ted.guide.tvdb.SearchResults.TVDBSeries;
 
 import nu.ted.domain.Episode;
-import nu.ted.domain.Series;
 import nu.ted.guide.GuideDB;
 
 public class TVDB implements GuideDB

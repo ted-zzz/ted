@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.xml.bind.DatatypeConverter;
 
-import nu.ted.generated.AiredEpisode;
 import nu.ted.generated.CurrentEpisode;
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.SeriesSearchResult;

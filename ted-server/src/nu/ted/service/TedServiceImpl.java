@@ -5,12 +5,7 @@ import java.util.List;
 
 import org.apache.thrift.TException;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
-import nu.ted.domain.Episode;
 import nu.ted.domain.Series;
-import nu.ted.generated.AiredEpisode;
-import nu.ted.generated.EpisodeStatus;
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.SeriesSearchResult;
 import nu.ted.generated.WatchedSeries;

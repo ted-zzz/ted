@@ -1,10 +1,5 @@
 package nu.ted.domain;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import nu.ted.guide.GuideDB;
-
 // Class for top of the API
 public class Ted
 {

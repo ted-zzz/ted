@@ -11,7 +11,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import nu.ted.domain.Episode;
-import nu.ted.domain.Series;
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.SeriesSearchResult;
 import nu.ted.guide.GuideDB;
@@ -21,7 +20,7 @@ public class TVRage implements GuideDB {
 	public final static String NAME = "TVRage";
 
 	public String getName() {
-		return this.NAME;
+		return TVRage.NAME;
 	}
 
 	public ImageFile getBanner(String searchId) {
