@@ -1,8 +1,41 @@
-These libraries are currently needed manually (or versions close to these):
+Ted
 
+[Building]
 
-junit-4.8.1.jar
-slf4j-api-1.5.8.jar
-commons-lang-2.4.jar
-libthrift.jar
-slf4j-simple-1.5.8.jar
+Currently to build Ted requires the following steps be followed:
+
+ 1. Install Apache Thrift, and Apache Ant for you platform.
+ 2. Enter the ted-api directory: $ cd ted-api
+ 3. Install ted-api to your local maven repo: $ mvn
+ 4. Change back to the main directory: $ cd ..
+ 5. Have Ant/Ivy pull down the dependencies: $ ant
+ 6. In Eclipse set a classpath variable TED_LIB_DIR to point
+    to the newly created lib directory.
+ 7. Open projects in Eclipse.
+
+[Lexicon]
+
+Or what in the world I'm talking about.
+
+ * ted-api:    The Thrift based API allowing clients in many languages
+               to talk with the ted-server.
+ * ted-server: The back-end daemon that looks for and downloads torrents.
+ * ted-gui:    The UIs included in the Ted project.
+ * gwt-ted:    The GWT UI to talk to the Ted-server.
+
+In Ted there is a back-end domain model. This is the data that will be
+persisted between restarts of the ted-server. When possible they will
+use the simplest and shortest names for an item:
+
+ * Series  
+ * Episode
+
+Data that is passed through the API may use longer names as not to
+conflict with domain types.
+
+ * WatchedSeries: A series of which you are currently interested in
+                  tracking the episodes.
+ * AiredEpisode:  An episode that has aired on a WatchedSeries while
+                  it was a WatchedSeries. This does not include
+                  episodes that may have aired before the Series became
+                  a WatchedSeries (Unless manually added later).
