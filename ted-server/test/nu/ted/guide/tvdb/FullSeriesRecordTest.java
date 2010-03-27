@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.Calendar;
-import java.util.Date;
 
 import javax.xml.bind.DatatypeConverter;
 

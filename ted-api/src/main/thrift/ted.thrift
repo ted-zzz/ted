@@ -12,16 +12,26 @@ struct SeriesSearchResult
 
 struct CurrentEpisode
 {
-	2: i16 season,
-	3: i16 number,
-	4: date aired
+	1: i16 season,
+	2: i16 number,
+	3: date aired
 }
 
-enum SeriesStatus
+enum EpisodeStatus
 {
-	UNKNOWN   = 1,		# Default unknown state
-	WAITING   = 2,		# Waiting for an episode to air
-	SEARCHING = 3,		# Searching for an episode
+	SEARCHING = 1,
+	FOUND = 2
+}
+
+# This is an Episode that has come out and is on a Series.
+struct AiredEpisode
+{
+	1: i16 season,
+	2: i16 number,
+	3: date aired,
+
+	4: EpisodeStatus status
+
 }
 
 # TODO: this will be expanded to show the everything a UI would be intersted in a
@@ -33,9 +43,9 @@ struct WatchedSeries
 	# ID number for this series.
 	1: i16 uID,
 	2: string name,
-	3: SeriesStatus status,
 
-	4: CurrentEpisode currentEpisde
+	3: CurrentEpisode currentEpisode,
+	4: list<AiredEpisode> airedEpisodes
 }
 
 struct ImageFile

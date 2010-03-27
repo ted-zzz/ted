@@ -3,17 +3,16 @@ package nu.ted.service;
 import static org.junit.Assert.*;
 
 import java.util.Calendar;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.xml.bind.DatatypeConverter;
 
-import nu.ted.domain.Episode;
+import nu.ted.generated.AiredEpisode;
 import nu.ted.generated.CurrentEpisode;
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.SeriesSearchResult;
 import nu.ted.generated.WatchedSeries;
-import nu.ted.guide.GuideDB;
+import nu.ted.guide.TestGuide;
 
 import org.apache.thrift.TException;
 import org.junit.Test;
@@ -21,60 +20,10 @@ import org.junit.Test;
 
 public class TedTests
 {
-
-	private class TestSeriesDB implements GuideDB
-	{
-		public List<SeriesSearchResult> search(String name) {
-			List<SeriesSearchResult> results = new LinkedList<SeriesSearchResult>();
-			if (name.equalsIgnoreCase("Exactly")) {
-				results.add(new SeriesSearchResult("E", "Exactly"));
-			} else if (name.equalsIgnoreCase("General")) {
-				results.add(new SeriesSearchResult("1", "General1"));
-				results.add(new SeriesSearchResult("2", "General2"));
-				results.add(new SeriesSearchResult("3", "General3"));
-			}
-			return results;
-		}
-
-		public ImageFile getBanner(String id) {
-			if (id.equals("E")) {
-				return new ImageFile("image/cool", "ABCD".getBytes());
-			}
-			return new ImageFile();
-		}
-
-		public String getName() {
-			return "TEST GUIDE";
-		}
-
-		public String getName(String guideId) {
-			if (guideId.equals("E")) {
-				return "Exactly";
-			}
-			return null;
-		}
-
-		public Episode getLastEpisode(String guideId, Calendar date) {
-			Calendar oneDayAgo = (Calendar) date.clone();
-			oneDayAgo.add(Calendar.DAY_OF_MONTH, -1);
-			if (guideId.equals("E")) {
-				return new Episode(4, 2, oneDayAgo);
-			}
-			return null;
-		}
-
-		@Override
-		public String getOverview(String guideId) {
-			return "An Overview";
-		}
-	}
-
-	// TODO: Don't like TException bleeding into other code, can if be avoided?
-
 	@Test
 	public void testFindExactSeries() throws TException
 	{
-		TedServiceImpl ted = new TedServiceImpl(new TestSeriesDB());
+		TedServiceImpl ted = new TedServiceImpl(new TestGuide());
 		List<SeriesSearchResult> results = ted.search("Exactly");
 
 		assertNotNull("Ted not returning a List", results);
@@ -86,7 +35,7 @@ public class TedTests
 
 	@Test
 	public void testFindMultipleSeries() throws TException {
-		TedServiceImpl ted = new TedServiceImpl(new TestSeriesDB());
+		TedServiceImpl ted = new TedServiceImpl(new TestGuide());
 		List<SeriesSearchResult>  results = ted.search("General");
 
 		assertNotNull("Ted not returning a List", results);
@@ -103,7 +52,7 @@ public class TedTests
 
 	@Test
 	public void shouldStartOutEmpty() throws TException {
-		TedServiceImpl ted = new TedServiceImpl(new TestSeriesDB());
+		TedServiceImpl ted = new TedServiceImpl(new TestGuide());
 
 		List<WatchedSeries> watched = ted.getWatching();
 		assertNotNull(watched);
@@ -113,7 +62,7 @@ public class TedTests
 
 	@Test
 	public void shouldBeAbleToWatchOneValidShow() throws TException {
-		TedServiceImpl ted = new TedServiceImpl(new TestSeriesDB());
+		TedServiceImpl ted = new TedServiceImpl(new TestGuide());
 
 		ted.startWatching("E");
 
@@ -123,7 +72,7 @@ public class TedTests
 		WatchedSeries series = watched.get(0);
 		assertEquals("Exactly", series.getName());
 
-		CurrentEpisode currentEpisode = series.getCurrentEpisde();
+		CurrentEpisode currentEpisode = series.getCurrentEpisode();
 		assertNotNull(currentEpisode);
 		assertEquals(4, currentEpisode.getSeason());
 		assertEquals(2, currentEpisode.getNumber());
@@ -138,7 +87,7 @@ public class TedTests
 
 	@Test
 	public void shouldBeAbleToStopWatchingAShowYourWatching() throws TException {
-		TedServiceImpl ted = new TedServiceImpl(new TestSeriesDB());
+		TedServiceImpl ted = new TedServiceImpl(new TestGuide());
 		short id = ted.startWatching("E");
 
 		ted.stopWatching(id);
@@ -149,7 +98,7 @@ public class TedTests
 
 	@Test
 	public void shouldLoadBannerForValidShow() throws TException {
-		TedServiceImpl ted = new TedServiceImpl(new TestSeriesDB());
+		TedServiceImpl ted = new TedServiceImpl(new TestGuide());
 
 		ImageFile image = ted.getBanner("E");
 		assertNotNull(image);
@@ -158,30 +107,9 @@ public class TedTests
 	}
 
 	@Test
-	public void shouldReturnNextShowsItsWaitingOn() throws TException {
-		TedServiceImpl ted = new TedServiceImpl(new TestSeriesDB());
-
-		// List<Episode> episodes = ted.getWaitingEpisodes();
-
-	}
-
-	// Not yet @Test
-//	public void testMoreInfoAboutSeries()
-//	{
-//		TedServiceImpl ted = new TedServiceImpl(new TestSeriesDB());
-//		List<Series> results = ted.search("Exactly");
-//		Series series = results.get(0);
-//
-//		List<Episode> episodes = ted.listEpisodes(series);
-//		assertNotNull("Ted unable to find episodes", episodes);
-//		assertEquals("Ted didn't find episodes", 2, episodes.size());
-//
-//	}
-
-	@Test
 	public void ensureGetOverviewFromService() throws TException
 	{
-		TedServiceImpl ted = new TedServiceImpl(new TestSeriesDB());
+		TedServiceImpl ted = new TedServiceImpl(new TestGuide());
 		assertEquals("An Overview", ted.getOverview("E"));
 	}
 }
