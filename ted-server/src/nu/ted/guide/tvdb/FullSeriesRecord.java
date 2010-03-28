@@ -117,7 +117,7 @@ public class FullSeriesRecord {
 				return new Episode(last.getSeason(), e.getEpisode(), e.getFirstAired());
 			last = e;
 		}
-		return null;
+		return new Episode(last.getSeason(), last.getEpisode(), last.getFirstAired());
 	}
 
 	private void sort(Comparator<TVDBEpisode> comparator) {
