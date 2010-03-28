@@ -18,13 +18,15 @@ public class JavaClient {
 		TProtocol prot = new TBinaryProtocol(transport);
 		client = new Client(prot);
 	}
-	
+
 	public void run(ClientAction action) {
 		try {
 			transport.open();
 			action.run(client);
 		}
 		catch (TException e) {
+			// TODO [MS] Throw an exception here so it can be handled
+			// by the caller.
 			e.printStackTrace();
 		}
 		finally {

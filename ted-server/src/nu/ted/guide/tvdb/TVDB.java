@@ -99,7 +99,7 @@ public class TVDB implements GuideDB
 			e.printStackTrace();
 		}
 		if (record != null) {
-			record.getName();
+			return record.getName();
 		}
 		return null; // TODO: fix
 	}

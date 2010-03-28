@@ -113,7 +113,7 @@ public class FullSeriesRecord {
 	public Episode getLastEpisode(Calendar date) {
 		TVDBEpisode last = null;
 		for (TVDBEpisode e : episodeList) {
-			if (e.getFirstAired().after(date))
+			if (e.getFirstAired() != null && e.getFirstAired().after(date))
 				return new Episode(last.getSeason(), e.getEpisode(), e.getFirstAired());
 			last = e;
 		}
