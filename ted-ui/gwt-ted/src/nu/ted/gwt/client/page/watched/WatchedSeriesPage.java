@@ -1,15 +1,25 @@
 package nu.ted.gwt.client.page.watched;
 
+import java.util.List;
+
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Label;
+
 import net.bugsquat.gwtsite.client.page.PageId;
 import nu.ted.gwt.client.TedPageId;
 import nu.ted.gwt.client.page.DefaultPage;
+import nu.ted.gwt.domain.GwtWatchedSeries;
 
 public class WatchedSeriesPage extends DefaultPage<WatchedSeriesPageController>{
 
 	private WatchedSeriesPageController controller;
+	private FlowPanel watchedSeriesList;
 
 	public WatchedSeriesPage(WatchedSeriesPageController controller) {
 		this.controller = controller;
+
+		watchedSeriesList = new FlowPanel();
+		content.add(watchedSeriesList);
 	}
 
 	@Override
@@ -30,6 +40,13 @@ public class WatchedSeriesPage extends DefaultPage<WatchedSeriesPageController>{
 	@Override
 	public void loadData() {
 		controller.loadData(this);
+	}
+
+	public void setWatchedSeries(List<GwtWatchedSeries> watchedSeries) {
+		this.watchedSeriesList.clear();
+		for (GwtWatchedSeries watched : watchedSeries) {
+			watchedSeriesList.add(new Label(watched.getName()));
+		}
 	}
 
 }

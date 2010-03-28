@@ -17,6 +17,16 @@
 	</servlet-mapping>
 
 	<servlet>
+		<servlet-name>watchedSeriesService</servlet-name>
+		<servlet-class>nu.ted.gwt.server.page.watched.WatchedSeriesServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>watchedSeriesService</servlet-name>
+		<url-pattern>/gwtted/watched</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
 		<servlet-name>imageService</servlet-name>
 		<servlet-class>net.bugsquat.diservlet.ImageServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
