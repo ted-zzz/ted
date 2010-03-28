@@ -15,7 +15,7 @@ import nu.ted.gwt.domain.FoundSeries;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
-public class SearchServiceImpl extends RemoteServiceServlet implements
+public class SearchServiceImpl extends TedRemoteServiceServlet implements
 		SearchService {
 
 	@Override
@@ -62,14 +62,6 @@ public class SearchServiceImpl extends RemoteServiceServlet implements
 		AddWatchedSeriesClientAction addWatched = new AddWatchedSeriesClientAction(searchId);
 		tedClient.run(addWatched);
 		// TODO [MS] Handle case where an exception is thrown.
-	}
-
-	private JavaClient getTedClient() {
-		return new JavaClient("localhost", 9030);
-	}
-
-	private ImageStore getImageStore() {
-		return (ImageStore) getServletContext().getAttribute(ImageServlet.IMAGE_STORE_ATTR_KEY);
 	}
 
 }

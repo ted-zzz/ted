@@ -44,6 +44,12 @@ public class WatchedSeriesPage extends DefaultPage<WatchedSeriesPageController>{
 
 	public void setWatchedSeries(List<GwtWatchedSeries> watchedSeries) {
 		this.watchedSeriesList.clear();
+
+		if (watchedSeries.isEmpty()) {
+			watchedSeriesList.add(new Label("There are currently no series being watched."));
+			return;
+		}
+
 		for (GwtWatchedSeries watched : watchedSeries) {
 			watchedSeriesList.add(new Label(watched.getName()));
 		}
