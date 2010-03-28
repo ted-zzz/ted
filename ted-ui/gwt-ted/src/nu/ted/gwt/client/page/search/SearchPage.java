@@ -1,10 +1,12 @@
-package nu.ted.gwt.client.page;
+package nu.ted.gwt.client.page.search;
 
 import java.util.List;
 
 import net.bugsquat.gwtsite.client.page.PageId;
 import nu.ted.gwt.client.Css;
 import nu.ted.gwt.client.TedPageId;
+import nu.ted.gwt.client.page.DefaultPage;
+import nu.ted.gwt.client.page.SearchResultList;
 import nu.ted.gwt.client.widget.table.TedTableModel;
 import nu.ted.gwt.domain.FoundSeries;
 import nu.ted.gwt.domain.SearchSeriesInfo;

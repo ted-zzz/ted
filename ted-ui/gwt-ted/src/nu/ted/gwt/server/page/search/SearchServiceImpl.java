@@ -1,4 +1,4 @@
-package nu.ted.gwt.server.page;
+package nu.ted.gwt.server.page.search;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import net.bugsquat.diservlet.ImageStore;
 import nu.ted.client.ClientAction;
 import nu.ted.client.JavaClient;
 import nu.ted.generated.TedService.Client;
-import nu.ted.gwt.client.page.SearchService;
+import nu.ted.gwt.client.page.search.SearchService;
 import nu.ted.gwt.domain.SearchSeriesInfo;
 import nu.ted.gwt.domain.FoundSeries;
 

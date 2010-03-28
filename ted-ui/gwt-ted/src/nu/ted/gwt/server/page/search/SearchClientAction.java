@@ -1,4 +1,4 @@
-package nu.ted.gwt.server.page;
+package nu.ted.gwt.server.page.search;
 
 import java.util.ArrayList;
 import java.util.List;

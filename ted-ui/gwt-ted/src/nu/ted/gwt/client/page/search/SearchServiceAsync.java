@@ -1,4 +1,4 @@
-package nu.ted.gwt.client.page;
+package nu.ted.gwt.client.page.search;
 
 import java.util.List;
 
