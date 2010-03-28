@@ -11,6 +11,7 @@ import nu.ted.gwt.domain.FoundSeries;
 import nu.ted.gwt.domain.SearchSeriesInfo;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
 
 public class SearchPageController extends PageController<SearchPage> implements TedTableSelectionListener
 {
@@ -68,6 +69,24 @@ public class SearchPageController extends PageController<SearchPage> implements 
 			}
 		});
 
+	}
+
+	public void addSelectedAsWatchedSeries() {
+		if (!page.hasSelectedResult())
+			return;
+
+		final FoundSeries series = page.getSelectedResult();
+		PageLoader.getInstance().showLoadingPage();
+		searchService.addWatchedSeries(series.getSearchId(), new MessageCallback<Void>() {
+
+			@Override
+			public void onSuccess(Void result) {
+				// TODO [MS] Load the watched shows page.
+				PageLoader.getInstance().hideLoadingPage();
+				Window.alert("You are now watching: " + series.getName());
+			}
+
+		});
 	}
 
 }

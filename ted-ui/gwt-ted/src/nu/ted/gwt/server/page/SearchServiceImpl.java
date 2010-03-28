@@ -24,6 +24,7 @@ public class SearchServiceImpl extends RemoteServiceServlet implements
 		SearchClientAction searchAction = new SearchClientAction(filter);
 		tedClient.run(searchAction);
 		return searchAction.getFoundSeries();
+		// TODO [MS] Should we filter watched shows out of the list?
 	}
 
 	@Override
@@ -53,6 +54,14 @@ public class SearchServiceImpl extends RemoteServiceServlet implements
 
 
 		return new SearchSeriesInfo(searchUUID, overview, true);
+	}
+
+	@Override
+	public void addWatchedSeries(String searchId) {
+		JavaClient tedClient = getTedClient();
+		AddWatchedSeriesClientAction addWatched = new AddWatchedSeriesClientAction(searchId);
+		tedClient.run(addWatched);
+		// TODO [MS] Handle case where an exception is thrown.
 	}
 
 	private JavaClient getTedClient() {

@@ -80,6 +80,16 @@ public class SearchPage extends DefaultPage<SearchPageController> {
 
 		content.add(seriesInfoPanel);
 		content.add(seriesListScrollPanel);
+
+		Button watchButton = new Button("Watch");
+		watchButton.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				controller.addSelectedAsWatchedSeries();
+			}
+		});
+		content.add(watchButton);
 	}
 
 	public void setSearchResults(List<FoundSeries> results)
