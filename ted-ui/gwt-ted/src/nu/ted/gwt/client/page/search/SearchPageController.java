@@ -6,6 +6,7 @@ import net.bugsquat.gwtsite.client.PageLoader;
 import net.bugsquat.gwtsite.client.page.Page;
 import net.bugsquat.gwtsite.client.page.PageController;
 import nu.ted.gwt.client.MessageCallback;
+import nu.ted.gwt.client.TedPageId;
 import nu.ted.gwt.client.widget.table.TedTableSelectionListener;
 import nu.ted.gwt.domain.FoundSeries;
 import nu.ted.gwt.domain.SearchSeriesInfo;
@@ -81,9 +82,9 @@ public class SearchPageController extends PageController<SearchPage> implements 
 
 			@Override
 			public void onSuccess(Void result) {
-				// TODO [MS] Load the watched shows page.
 				PageLoader.getInstance().hideLoadingPage();
 				Window.alert("You are now watching: " + series.getName());
+				PageLoader.getInstance().loadPage(TedPageId.WATCHED_SERIES);
 			}
 
 		});
