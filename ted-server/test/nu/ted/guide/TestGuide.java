@@ -50,10 +50,10 @@ public class TestGuide implements GuideDB
 
 	@Override
 	public Episode getLastEpisode(String guideId, Calendar date) {
-		Calendar oneDayAgo = (Calendar) date.clone();
-		oneDayAgo.add(Calendar.DAY_OF_MONTH, -1);
+		Calendar twoDaysAgo = (Calendar) date.clone();
+		twoDaysAgo.add(Calendar.DAY_OF_MONTH, -2);
 		if (guideId.equals("E")) {
-			return new Episode(LAST_EPISODE_SEASON, LAST_EPISODE_NUMBER, oneDayAgo);
+			return new Episode(LAST_EPISODE_SEASON, LAST_EPISODE_NUMBER, twoDaysAgo);
 		}
 		return null;
 	}
@@ -61,5 +61,15 @@ public class TestGuide implements GuideDB
 	@Override
 	public String getOverview(String guideId) {
 		return "An Overview";
+	}
+
+	@Override
+	public List<Episode> getNewAiredEpisodes(String guideId, Calendar date,
+			Episode lastEpisode) {
+		Calendar oneDayAgo = (Calendar) date.clone();
+		oneDayAgo.add(Calendar.DAY_OF_MONTH, -1);
+		List<Episode> episodes = new LinkedList<Episode>();
+		episodes.add(new Episode(LAST_EPISODE_SEASON, LAST_EPISODE_NUMBER +1, oneDayAgo));
+		return episodes;
 	}
 }

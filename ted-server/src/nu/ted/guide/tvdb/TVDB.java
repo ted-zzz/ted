@@ -235,4 +235,11 @@ public class TVDB implements GuideDB
 		return "";
 	}
 
+	@Override
+	public List<Episode> getNewAiredEpisodes(String guideId, Calendar date,
+			Episode lastEpisode) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -1,5 +1,6 @@
 package nu.ted.service;
 
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class TedServiceImpl implements Iface
 	public short startWatching(String searchUID) throws TException
 	{
 		// TODO: handle NAME, Season, Episode
-		Series s = new Series(nextUID, seriesSource, searchUID);
+		Series s = new Series(Calendar.getInstance(), nextUID, seriesSource, searchUID);
 		nextUID++;
 		// TODO: check null UID
 		// TODO: check null result

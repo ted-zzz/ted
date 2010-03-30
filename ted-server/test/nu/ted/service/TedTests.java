@@ -77,7 +77,7 @@ public class TedTests
 		assertEquals(2, currentEpisode.getNumber());
 
 		Calendar oneDayAgo = Calendar.getInstance();
-		oneDayAgo.add(Calendar.DAY_OF_MONTH, -1);
+		oneDayAgo.add(Calendar.DAY_OF_MONTH, -2);
 		String dateString = DatatypeConverter.printDate(oneDayAgo);
 		assertEquals(dateString, currentEpisode.getAired());
 		// NB: returned UID may not match Search UID
