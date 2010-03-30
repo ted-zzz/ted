@@ -13,13 +13,15 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
+import nu.ted.generated.Episode;
+import nu.ted.generated.EpisodeStatus;
 import nu.ted.generated.ImageFile;
+import nu.ted.generated.Series;
 import nu.ted.generated.SeriesSearchResult;
 import nu.ted.guide.tvdb.Mirrors;
 import nu.ted.guide.tvdb.Mirrors.NoMirrorException;
 import nu.ted.guide.tvdb.SearchResults.TVDBSeries;
 
-import nu.ted.domain.Episode;
 import nu.ted.guide.GuideDB;
 
 public class TVDB implements GuideDB
@@ -238,6 +240,27 @@ public class TVDB implements GuideDB
 	@Override
 	public List<Episode> getNewAiredEpisodes(String guideId, Calendar date,
 			Episode lastEpisode) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Series getSeries(String guideId, short id, Calendar date) {
+		try {
+			FullSeriesRecord record = getFullSeriesRecord(guideId);
+			Episode lastEpisode = record.getLastEpisode(date);
+			lastEpisode.setStatus(EpisodeStatus.OLD);
+			List<Episode> episodes = new LinkedList<Episode>();
+			episodes.add(lastEpisode);
+			Series s = new Series(id, record.getName(), getName(), guideId, episodes);
+			return s;
+		} catch (NoMirrorException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// TODO Auto-generated method stub
 		return null;
 	}

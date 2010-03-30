@@ -10,8 +10,10 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
-import nu.ted.domain.Episode;
+import nu.ted.domain.EpisodeBackendWrapper;
+import nu.ted.generated.Episode;
 import nu.ted.generated.ImageFile;
+import nu.ted.generated.Series;
 import nu.ted.generated.SeriesSearchResult;
 import nu.ted.guide.GuideDB;
 import nu.ted.guide.tvrage.SearchResults.TVRageSeries;
@@ -21,6 +23,12 @@ public class TVRage implements GuideDB {
 
 	public String getName() {
 		return TVRage.NAME;
+	}
+
+	@Override
+	public Series getSeries(String guideId, short id, Calendar date) {
+		throw new UnsupportedOperationException("Not yet implemented");
+		// TODO Auto-generated method stub
 	}
 
 	public ImageFile getBanner(String searchId) {
@@ -82,5 +90,4 @@ public class TVRage implements GuideDB {
 		throw new UnsupportedOperationException("Not yet implemented");
 		// TODO Auto-generated method stub
 	}
-
 }

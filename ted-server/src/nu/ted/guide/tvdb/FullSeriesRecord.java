@@ -14,7 +14,8 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import nu.ted.domain.Episode;
+import nu.ted.generated.Episode;
+import nu.ted.generated.EpisodeStatus;
 
 @XmlRootElement(name = "Data")
 public class FullSeriesRecord {
@@ -55,13 +56,21 @@ public class FullSeriesRecord {
 			return episode;
 		}
 
+		private void zeroTimeOnFirstAired() {
+			firstAired.set(Calendar.HOUR, 0);
+			firstAired.set(Calendar.MINUTE, 0);
+			firstAired.set(Calendar.SECOND, 0);
+			firstAired.set(Calendar.MILLISECOND, 0);
+		}
 		public Calendar getFirstAired()
 		{
+			zeroTimeOnFirstAired();
 			return firstAired;
 		}
 
 		public Date getFirstAiredDate()
 		{
+			zeroTimeOnFirstAired();
 			return firstAired.getTime();
 		}
 
@@ -104,7 +113,8 @@ public class FullSeriesRecord {
 	{
 		for (TVDBEpisode e : episodeList) {
 			if (e.getFirstAired().after(date)) {
-				return new Episode(e.getSeason(), e.getEpisode(), e.getFirstAired());
+				return new Episode((short) e.getSeason(), (short) e.getEpisode(),
+						e.getFirstAired().getTimeInMillis(), EpisodeStatus.SEARCHING);
 			}
 		}
 		return null; // TODO: should throw exception
@@ -114,10 +124,12 @@ public class FullSeriesRecord {
 		TVDBEpisode last = null;
 		for (TVDBEpisode e : episodeList) {
 			if (e.getFirstAired() != null && e.getFirstAired().after(date))
-				return new Episode(last.getSeason(), e.getEpisode(), e.getFirstAired());
+				return new Episode((short) last.getSeason(), (short) e.getEpisode(),
+						e.getFirstAired().getTimeInMillis(), EpisodeStatus.OLD);
 			last = e;
 		}
-		return new Episode(last.getSeason(), last.getEpisode(), last.getFirstAired());
+		return new Episode((short) last.getSeason(), (short) last.getEpisode(),
+				last.getFirstAired().getTimeInMillis(), EpisodeStatus.OLD);
 	}
 
 	private void sort(Comparator<TVDBEpisode> comparator) {

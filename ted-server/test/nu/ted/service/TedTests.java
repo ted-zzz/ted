@@ -7,10 +7,11 @@ import java.util.List;
 
 import javax.xml.bind.DatatypeConverter;
 
-import nu.ted.generated.CurrentEpisode;
+import nu.ted.domain.SeriesBackendWrapper;
+import nu.ted.generated.Episode;
 import nu.ted.generated.ImageFile;
+import nu.ted.generated.Series;
 import nu.ted.generated.SeriesSearchResult;
-import nu.ted.generated.WatchedSeries;
 import nu.ted.guide.TestGuide;
 
 import org.apache.thrift.TException;
@@ -53,7 +54,7 @@ public class TedTests
 	public void shouldStartOutEmpty() throws TException {
 		TedServiceImpl ted = new TedServiceImpl(new TestGuide());
 
-		List<WatchedSeries> watched = ted.getWatching();
+		List<Series> watched = ted.getWatching();
 		assertNotNull(watched);
 		assertEquals(0, watched.size());
 
@@ -65,21 +66,26 @@ public class TedTests
 
 		ted.startWatching("E");
 
-		List<WatchedSeries> watched = ted.getWatching();
+		List<Series> watched = ted.getWatching();
 		assertEquals(1, watched.size());
 
-		WatchedSeries series = watched.get(0);
+		Series series = watched.get(0);
 		assertEquals("Exactly", series.getName());
 
-		CurrentEpisode currentEpisode = series.getCurrentEpisode();
+		Episode currentEpisode = (new SeriesBackendWrapper(series)).getLastEpisode();
 		assertNotNull(currentEpisode);
 		assertEquals(4, currentEpisode.getSeason());
 		assertEquals(2, currentEpisode.getNumber());
 
 		Calendar oneDayAgo = Calendar.getInstance();
 		oneDayAgo.add(Calendar.DAY_OF_MONTH, -2);
-		String dateString = DatatypeConverter.printDate(oneDayAgo);
-		assertEquals(dateString, currentEpisode.getAired());
+		
+		Calendar aired = Calendar.getInstance();
+		// TODO: should we zero mills in the cal creations
+		aired.setTimeInMillis(currentEpisode.getAired());
+		aired.set(Calendar.MILLISECOND, 0);
+		oneDayAgo.set(Calendar.MILLISECOND, 0);
+		assertEquals(oneDayAgo, aired);
 		// NB: returned UID may not match Search UID
 	}
 
@@ -91,7 +97,7 @@ public class TedTests
 
 		ted.stopWatching(id);
 
-		List<WatchedSeries> watched = ted.getWatching();
+		List<Series> watched = ted.getWatching();
 		assertEquals(0, watched.size());
 	}
 

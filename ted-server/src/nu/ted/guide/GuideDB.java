@@ -3,8 +3,9 @@ package nu.ted.guide;
 import java.util.Calendar;
 import java.util.List;
 
-import nu.ted.domain.Episode;
+import nu.ted.generated.Episode;
 import nu.ted.generated.ImageFile;
+import nu.ted.generated.Series;
 import nu.ted.generated.SeriesSearchResult;
 
 public interface GuideDB
@@ -13,6 +14,8 @@ public interface GuideDB
 	String getName();
 
 	List<SeriesSearchResult> search(String name);
+	
+	Series getSeries(String guideId, short id, Calendar date);
 
 	ImageFile getBanner(String guideId);
 

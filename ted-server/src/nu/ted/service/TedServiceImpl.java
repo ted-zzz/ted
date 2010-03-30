@@ -6,10 +6,9 @@ import java.util.List;
 
 import org.apache.thrift.TException;
 
-import nu.ted.domain.Series;
 import nu.ted.generated.ImageFile;
+import nu.ted.generated.Series;
 import nu.ted.generated.SeriesSearchResult;
-import nu.ted.generated.WatchedSeries;
 import nu.ted.generated.TedService.Iface;
 import nu.ted.guide.GuideDB;
 
@@ -33,32 +32,25 @@ public class TedServiceImpl implements Iface
 	}
 
 	@Override
-	public List<WatchedSeries> getWatching() throws TException
+	public List<Series> getWatching() throws TException
 	{
-		List<WatchedSeries> results = new LinkedList<WatchedSeries>();
-		for (Series s : watched) {
-			results.add(s.getWatchedSeries());
-		}
-		return results;
+		return watched;
 	}
 
 	@Override
-	public short startWatching(String searchUID) throws TException
+	public short startWatching(String guideId) throws TException
 	{
-		// TODO: handle NAME, Season, Episode
-		Series s = new Series(Calendar.getInstance(), nextUID, seriesSource, searchUID);
+		Series s = seriesSource.getSeries(guideId, nextUID, Calendar.getInstance());
 		nextUID++;
-		// TODO: check null UID
-		// TODO: check null result
 		watched.add(s);
-		return s.getUID();
+		return s.getUid();
 	}
 	
 	@Override
 	public void stopWatching(short uid) throws TException
 	{
 		for (Series s : watched) {
-			if (s.getUID() == uid) {
+			if (s.getUid() == uid) {
 				if (!watched.remove(s)) {
 					// TODO: throw exception;
 				}

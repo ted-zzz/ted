@@ -2,7 +2,7 @@
 
 namespace java nu.ted.generated
 
-typedef string date
+typedef i64 date
 
 struct SeriesSearchResult
 {
@@ -10,42 +10,32 @@ struct SeriesSearchResult
 	2: string name
 }
 
-struct CurrentEpisode
-{
-	1: i16 season,
-	2: i16 number,
-	3: date aired
-}
-
 enum EpisodeStatus
 {
-	SEARCHING = 1,
-	FOUND = 2
+	UNKNOWN = 1,
+	SEARCHING = 2,
+	FOUND = 3,
+	OLD = 4
 }
 
-# This is an Episode that has come out and is on a Series.
-struct AiredEpisode
+struct Episode
 {
-	1: i16 season,
-	2: i16 number,
-	3: date aired,
+	1: i16			season,
+	2: i16			number,
+	3: date			aired
 
-	4: EpisodeStatus status
-
+	4: EpisodeStatus	status
 }
 
-# TODO: this will be expanded to show the everything a UI would be intersted in a
-#       subscribed Series
-struct WatchedSeries
+struct Series
 {
-	# UID does not match searchUID. SearchUID is known only by
-	# the current search source, whereas UID is Ted's internal
-	# ID number for this series.
-	1: i16 uID,
-	2: string name,
+	1: i16			uid,
+	2: string		name,
 
-	3: CurrentEpisode currentEpisode,
-	4: list<AiredEpisode> airedEpisodes
+	3: string		guideName,
+	4: string		guideId,
+
+	5: list<Episode>	episodes
 }
 
 struct ImageFile
@@ -70,7 +60,7 @@ service TedService
 		# TODO: throws? should be void and just throw?
 
 	# get a list of what you're currently subscribed to.
-	list<WatchedSeries> getWatching();
+	list<Series> getWatching();
 		# TODO: throws?
 
 	ImageFile getBanner(1: string searchUID);
