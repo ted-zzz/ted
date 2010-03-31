@@ -27,12 +27,13 @@ public class SearchPage extends DefaultPage<SearchPageController> {
 	private TedTableModel<FoundSeries> searchResultListModel;
 	private FlowPanel seriesInfoPanel;
 	private SearchResultList searchResultList;
+	private ScrollPanel seriesListScrollPanel;
+	private Button watchButton;
 
 	public SearchPage(SearchPageController controller)
 	{
 		this.controller = controller;
 		initView();
-
 	}
 
 	@Override
@@ -72,9 +73,10 @@ public class SearchPage extends DefaultPage<SearchPageController> {
 		searchResultList = new SearchResultList(searchResultListModel);
 		searchResultList.addSelectionListener(controller);
 
-		ScrollPanel seriesListScrollPanel = new ScrollPanel();
+		seriesListScrollPanel = new ScrollPanel();
 		seriesListScrollPanel.add(searchResultList);
 		seriesListScrollPanel.setStyleName(Css.SearchPage.TED_SERIES_LIST);
+		seriesListScrollPanel.setVisible(false);
 
 
 		seriesInfoPanel = new FlowPanel();
@@ -83,7 +85,7 @@ public class SearchPage extends DefaultPage<SearchPageController> {
 		content.add(seriesInfoPanel);
 		content.add(seriesListScrollPanel);
 
-		Button watchButton = new Button("Watch");
+		watchButton = new Button("Watch");
 		watchButton.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -92,10 +94,13 @@ public class SearchPage extends DefaultPage<SearchPageController> {
 			}
 		});
 		content.add(watchButton);
+		watchButton.setVisible(false);
 	}
 
 	public void setSearchResults(List<FoundSeries> results)
 	{
+		seriesListScrollPanel.setVisible(!results.isEmpty());
+		watchButton.setVisible(!results.isEmpty());
 		searchResultListModel.setData(results);
 	}
 
