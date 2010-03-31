@@ -8,10 +8,19 @@ public interface Css {
 
 	public interface Application {
 		public static final String TED_HEADER = "ted-header";
+		public static final String TED_HEADER_LOGO = TED_HEADER + "-logo";
 		public static final String TED_HEADER_TITLE = TED_HEADER + "-title";
 		public static final String TED_CONTENT = "ted-content";
 		public static final String TED_PAGE_HEADER = "ted-page-header";
 		public static final String TED_PAGE_HEADER_TEXT = TED_PAGE_HEADER + "-text";
+		public static final String TED_MENU = "ted-menu";
+		public static final String TED_MENU_ITEM = TED_MENU + "-item";
+		public static final String TED_MENU_SPACER = TED_MENU + "-spacer";
+
+		/**
+		 * Appended to TED_MENU_ITEM onMouseOver() - .ted-menu-item-over
+		 */
+		public static final String TED_MENU_ITEM_OVER = "over";
 	}
 
 	public interface Widgets {
@@ -27,7 +36,7 @@ public interface Css {
 		public static final String TED_SEARCH_SERIES_IMG = "ted-search-serie-img";
 		public static final String TED_SEARCH_SERIES_OVERVIEW = "ted-search-overview";
 	}
-	
+
 	public interface WatchedSeriesPage {
 		public static final String WATCHED_SERIES = "ted-watched-series";
 		public static final String WATCHED_SERIES_IMAGE = WATCHED_SERIES + "-image";
