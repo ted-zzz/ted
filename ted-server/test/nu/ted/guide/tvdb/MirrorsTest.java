@@ -16,48 +16,12 @@ import org.junit.Test;
 
 public class MirrorsTest
 {
-	private static class TestMirrorXML
-	{
-		private StringBuffer xml;
-		private int i = 1;
 
-		public TestMirrorXML()
-		{
-			xml = new StringBuffer();
-			xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-			xml.append("<Mirrors>\n");
-		}
-
-		public void addMirror(String path, int mask)
-		{
-			xml.append("  <Mirror>\n");
-
-			xml.append("    <id>" + i + "</id>\n");
-			xml.append("    <mirrorpath>" + path + "</mirrorpath>\n");
-			xml.append("    <typemask>" + mask + "</typemask>\n");
-
-			xml.append("  </Mirror>\n");
-
-			i++;
-		}
-
-		public String toString()
-		{
-			return xml.toString() + "</Mirrors>";
-		}
-
-		public InputStream toStream() throws UnsupportedEncodingException
-		{
-			return new ByteArrayInputStream(this.toString().getBytes("UTF-8"));
-		}
-
-	}
-
-	private TestMirrorXML xml;
+	private TestMirrorXml xml;
 
 	@Before
 	public void setUp() {
-		this.xml = new TestMirrorXML();
+		this.xml = new TestMirrorXml();
 	}
 
 	@Test(expected=NoMirrorException.class)

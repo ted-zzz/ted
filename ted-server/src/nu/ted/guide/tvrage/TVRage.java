@@ -10,9 +10,9 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
-import nu.ted.domain.EpisodeBackendWrapper;
 import nu.ted.generated.Episode;
 import nu.ted.generated.ImageFile;
+import nu.ted.generated.ImageType;
 import nu.ted.generated.Series;
 import nu.ted.generated.SeriesSearchResult;
 import nu.ted.guide.GuideDB;
@@ -21,6 +21,7 @@ import nu.ted.guide.tvrage.SearchResults.TVRageSeries;
 public class TVRage implements GuideDB {
 	public final static String NAME = "TVRage";
 
+	@Override
 	public String getName() {
 		return TVRage.NAME;
 	}
@@ -31,21 +32,26 @@ public class TVRage implements GuideDB {
 		// TODO Auto-generated method stub
 	}
 
-	public ImageFile getBanner(String searchId) {
-		throw new UnsupportedOperationException("Not yet implemented");
+
+	@Override
+	public ImageFile getImage(String guideId, ImageType type) {
 		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Not yet implemented");
 	}
 
+	@Override
 	public String getName(String searchId) {
 		throw new UnsupportedOperationException("Not yet implemented");
 		// TODO Auto-generated method stub
 	}
 
+	@Override
 	public Episode getLastEpisode(String guideId, Calendar date) {
 		throw new UnsupportedOperationException("Not yet implemented");
 		// TODO Auto-generated method stub
 	}
 
+	@Override
 	public List<SeriesSearchResult> search(String name) {
 
 		List<SeriesSearchResult> returner = new LinkedList<SeriesSearchResult>();
@@ -90,4 +96,5 @@ public class TVRage implements GuideDB {
 		throw new UnsupportedOperationException("Not yet implemented");
 		// TODO Auto-generated method stub
 	}
+
 }

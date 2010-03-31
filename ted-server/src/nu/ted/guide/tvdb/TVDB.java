@@ -13,9 +13,12 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.lang.NotImplementedException;
+
 import nu.ted.generated.Episode;
 import nu.ted.generated.EpisodeStatus;
 import nu.ted.generated.ImageFile;
+import nu.ted.generated.ImageType;
 import nu.ted.generated.Series;
 import nu.ted.generated.SeriesSearchResult;
 import nu.ted.guide.tvdb.Mirrors;
@@ -30,6 +33,7 @@ public class TVDB implements GuideDB
 	private static final String APIKEY = "0D513FDFA9D09C21";
 
 	private Mirrors mirrors;
+	private ImageFileFactory imageFactory;
 
 	private static class TVDBHolder
 	{
@@ -51,7 +55,8 @@ public class TVDB implements GuideDB
 			URLConnection mirrorsConnection = mirrorUrl.openConnection();
 			// TODO: set connection timeout
 
-			mirrors = Mirrors.createMirrors(mirrorsConnection.getInputStream());
+			this.mirrors = Mirrors.createMirrors(mirrorsConnection.getInputStream());
+			this.imageFactory = new ImageFileFactory(this.mirrors);
 		}
 		catch (MalformedURLException e)
 		{
@@ -68,6 +73,7 @@ public class TVDB implements GuideDB
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 	}
 
 	public String getName() {
@@ -104,46 +110,27 @@ public class TVDB implements GuideDB
 		return null; // TODO: fix
 	}
 
-	public ImageFile getBanner(String id)
+	@Override
+	public ImageFile getImage(String guideId, ImageType type)
 	{
-		String mimetype;
-		ImageFile file = new ImageFile();
-
 		try {
-			FullSeriesRecord record = getFullSeriesRecord(id);
-
-			String banner = record.getBanner();
-			if (banner != null) {
-				String location = mirrors.getBannerMirror() + "/banners/" + banner;
-				URL bannerURL = new URL(location);
-				URLConnection bannerURLConnection = bannerURL.openConnection();
-				InputStream iStream = new BufferedInputStream(bannerURLConnection.getInputStream());
-				mimetype = bannerURLConnection.getContentType();
-				ByteArrayOutputStream out = new ByteArrayOutputStream();
-				byte[] buf = new byte[1024];
-				int n = 0;
-				while ((n = iStream.read(buf)) != -1) {
-					out.write(buf, 0, n);
-				}
-				out.close();
-				iStream.close();
-				file.setData(out.toByteArray());
-				file.setMimetype(mimetype);
-				return file;
-			}
+			FullSeriesRecord record = getFullSeriesRecord(guideId);
+			return imageFactory.createImage(record, type);
 		} catch (NoMirrorException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (ImageFileFactoryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ImageNotAvailableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-
-		// TODO: return null? throw exception?
-		return file;
+		// TODO Throw new exception.
+		return new ImageFile();
 	}
 
 	public List<SeriesSearchResult> search(String name)

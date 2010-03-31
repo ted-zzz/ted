@@ -6,7 +6,9 @@ import java.util.List;
 
 import org.apache.thrift.TException;
 
+import nu.ted.domain.SeriesBackendWrapper;
 import nu.ted.generated.ImageFile;
+import nu.ted.generated.ImageType;
 import nu.ted.generated.Series;
 import nu.ted.generated.SeriesSearchResult;
 import nu.ted.generated.TedService.Iface;
@@ -16,9 +18,9 @@ public class TedServiceImpl implements Iface
 {
 	GuideDB seriesSource;
 	List<Series> watched;
-	
+
 	static short nextUID = 1; // TODO: static across restarts
-	
+
 	// TODO: watched needs to be a singleton, or in another class
 	public TedServiceImpl(GuideDB seriesSource) {
 		this.seriesSource = seriesSource;
@@ -45,30 +47,47 @@ public class TedServiceImpl implements Iface
 		watched.add(s);
 		return s.getUid();
 	}
-	
+
 	@Override
 	public void stopWatching(short uid) throws TException
 	{
-		for (Series s : watched) {
-			if (s.getUid() == uid) {
-				if (!watched.remove(s)) {
-					// TODO: throw exception;
-				}
-				return;
-			}
-			
+		Series watchMatch = findWatched(uid);
+		if (watchMatch == null || !watched.remove(watchMatch)) {
+			// TODO throw exception?
+			return;
 		}
-		// TODO: throw exception
 	}
 
 	@Override
-	public ImageFile getBanner(String searchUID) throws TException
+	public ImageFile getImageByGuideId(String guideId, ImageType type)
+		throws TException
 	{
-		return seriesSource.getBanner(searchUID);
+		return seriesSource.getImage(guideId, type);
 	}
+
+	@Override
+	public ImageFile getImageBySeriesId(short uID, ImageType type)
+		throws TException {
+		Series series = findWatched(uID);
+		if (series == null) {
+			return new ImageFile();
+		}
+
+		return seriesSource.getImage(series.getGuideId(), type);
+	}
+
 
 	@Override
 	public String getOverview(String searchUID) throws TException {
 		return seriesSource.getOverview(searchUID);
+	}
+
+	private Series findWatched(short uID) {
+		for (Series s : watched) {
+			if (uID == s.getUid()) {
+				return s;
+			}
+		}
+		return null;
 	}
 }

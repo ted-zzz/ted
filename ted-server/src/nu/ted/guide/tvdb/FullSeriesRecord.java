@@ -62,6 +62,7 @@ public class FullSeriesRecord {
 			firstAired.set(Calendar.SECOND, 0);
 			firstAired.set(Calendar.MILLISECOND, 0);
 		}
+
 		public Calendar getFirstAired()
 		{
 			zeroTimeOnFirstAired();

@@ -7,6 +7,7 @@ import java.util.List;
 import nu.ted.generated.Episode;
 import nu.ted.generated.EpisodeStatus;
 import nu.ted.generated.ImageFile;
+import nu.ted.generated.ImageType;
 import nu.ted.generated.Series;
 import nu.ted.generated.SeriesSearchResult;
 import nu.ted.guide.GuideDB;
@@ -15,7 +16,7 @@ public class TestGuide implements GuideDB
 {
 	public static final short LAST_EPISODE_SEASON = 4;
 	public static final short LAST_EPISODE_NUMBER = 2;
-	
+
 	@Override
 	public List<SeriesSearchResult> search(String name) {
 		List<SeriesSearchResult> results = new LinkedList<SeriesSearchResult>();
@@ -30,9 +31,16 @@ public class TestGuide implements GuideDB
 	}
 
 	@Override
-	public ImageFile getBanner(String id) {
+	public ImageFile getImage(String id, ImageType type) {
 		if (id.equals("E")) {
-			return new ImageFile("image/cool", "ABCD".getBytes());
+			return getImageFile(type);
+		}
+		return new ImageFile();
+	}
+
+	public ImageFile getImage(short uID, ImageType type) {
+		if (uID == 2) {
+			return getImageFile(type);
 		}
 		return new ImageFile();
 	}
@@ -86,5 +94,17 @@ public class TestGuide implements GuideDB
 			return new Series(id, "Exactly", getName(), guideId, eplist);
 		}
 		return null;
+	}
+
+	private ImageFile getImageFile(ImageType type) {
+		if (type == ImageType.BANNER) {
+			return new ImageFile("image/banner", "BANNER".getBytes());
+		}
+		else if (type == ImageType.BANNER_THUMBNAIL) {
+			return new ImageFile("image/thumbnail", "THUMBNAIL".getBytes());
+		}
+		else {
+			return new ImageFile();
+		}
 	}
 }

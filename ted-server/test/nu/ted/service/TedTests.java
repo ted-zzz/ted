@@ -1,15 +1,18 @@
 package nu.ted.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
-import javax.xml.bind.DatatypeConverter;
 
 import nu.ted.domain.SeriesBackendWrapper;
 import nu.ted.generated.Episode;
 import nu.ted.generated.ImageFile;
+import nu.ted.generated.ImageType;
 import nu.ted.generated.Series;
 import nu.ted.generated.SeriesSearchResult;
 import nu.ted.guide.TestGuide;
@@ -57,7 +60,6 @@ public class TedTests
 		List<Series> watched = ted.getWatching();
 		assertNotNull(watched);
 		assertEquals(0, watched.size());
-
 	}
 
 	@Test
@@ -79,7 +81,7 @@ public class TedTests
 
 		Calendar oneDayAgo = Calendar.getInstance();
 		oneDayAgo.add(Calendar.DAY_OF_MONTH, -2);
-		
+
 		Calendar aired = Calendar.getInstance();
 		// TODO: should we zero mills in the cal creations
 		aired.setTimeInMillis(currentEpisode.getAired());
@@ -102,13 +104,45 @@ public class TedTests
 	}
 
 	@Test
-	public void shouldLoadBannerForValidShow() throws TException {
+	public void shouldLoadBannerForValidSearchId() throws TException {
 		TedServiceImpl ted = new TedServiceImpl(new TestGuide());
 
-		ImageFile image = ted.getBanner("E");
+		ImageFile image = ted.getImageByGuideId("E", ImageType.BANNER);
 		assertNotNull(image);
-		assertEquals("image/cool", image.getMimetype());
-		assertArrayEquals("ABCD".getBytes(), image.getData());
+		assertEquals("image/banner", image.getMimetype());
+		assertArrayEquals("BANNER".getBytes(), image.getData());
+	}
+
+	@Test
+	public void shouldLoadBannerThumbnailForValidSearchId() throws TException {
+		TedServiceImpl ted = new TedServiceImpl(new TestGuide());
+
+		ImageFile image = ted.getImageByGuideId("E", ImageType.BANNER_THUMBNAIL);
+		assertNotNull(image);
+		assertEquals("image/thumbnail", image.getMimetype());
+		assertArrayEquals("THUMBNAIL".getBytes(), image.getData());
+	}
+
+	@Test
+	public void shouldLoadBannerForValidSeriesId() throws TException {
+		TedServiceImpl ted = new TedServiceImpl(new TestGuide());
+		ted.watched.add(new Series((short)2, "", "", "E", new ArrayList<Episode>()));
+
+		ImageFile image = ted.getImageBySeriesId((short)2, ImageType.BANNER);
+		assertNotNull(image);
+		assertEquals("image/banner", image.getMimetype());
+		assertArrayEquals("BANNER".getBytes(), image.getData());
+	}
+
+	@Test
+	public void shouldLoadBannerThumbnailForValidSeriesId() throws TException {
+		TedServiceImpl ted = new TedServiceImpl(new TestGuide());
+		ted.watched.add(new Series((short)2, "", "", "E", new ArrayList<Episode>()));
+
+		ImageFile image = ted.getImageBySeriesId((short)2, ImageType.BANNER_THUMBNAIL);
+		assertNotNull(image);
+		assertEquals("image/thumbnail", image.getMimetype());
+		assertArrayEquals("THUMBNAIL".getBytes(), image.getData());
 	}
 
 	@Test

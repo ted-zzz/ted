@@ -1,7 +1,5 @@
 package nu.ted.guide.tvdb;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.Calendar;
@@ -9,8 +7,7 @@ import java.util.Calendar;
 import javax.xml.bind.DatatypeConverter;
 
 import junit.framework.Assert;
-
-import nu.ted.domain.EpisodeBackendWrapper;
+import nu.ted.domain.TestSeriesXml;
 import nu.ted.generated.Episode;
 
 import org.junit.Before;
@@ -18,72 +15,33 @@ import org.junit.Test;
 
 public class FullSeriesRecordTest
 {
-	private static class TestEpisodeListXML
-	{
-		private static final String EXPECTED_OVERVIEW = "This is the overview.";
-		private StringBuffer xml;
-
-		public TestEpisodeListXML()
-		{
-			xml = new StringBuffer();
-			xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-			xml.append("<Data>\n");
-			xml.append("  <Series>\n");
-			xml.append("    <id>1000</id>\n");
-			xml.append("    <Actors>people</Actors>\n");
-			xml.append("    <Overview>" + EXPECTED_OVERVIEW + "</Overview>\n");
-			xml.append("  </Series>\n");
-		}
-
-		public void addEpisode(int season, int episode, String aired, String name)
-		{
-			xml.append("  <Episode>\n");
-			xml.append("    <SeasonNumber>" + season + "</SeasonNumber>\n");
-			xml.append("    <EpisodeNumber>" + episode + "</EpisodeNumber>\n");
-			xml.append("    <FirstAired>" + aired + "</FirstAired>\n");
-			xml.append("    <EpisodeName>" + name + "</EpisodeName>\n");
-			xml.append("  </Episode>\n");
-		}
-
-		public String toString()
-		{
-			return xml.toString() + "</Data>";
-		}
-
-		public InputStream toStream() throws UnsupportedEncodingException
-		{
-			return new ByteArrayInputStream(this.toString().getBytes("UTF-8"));
-		}
-
-	}
-
-	private TestEpisodeListXML xml;
+	private TestSeriesXml xml;
 
 	@Before
 	public void setUp()
 	{
-		this.xml = new TestEpisodeListXML();
+		this.xml = new TestSeriesXml();
 	}
 
 	private void assertEpisode(Episode episode, short season, short epnum, Calendar aired, String name) throws ParseException
 	{
 		Assert.assertEquals(season, episode.getSeason());
 		Assert.assertEquals(epnum, episode.getNumber());
-		
+
 		aired.set(Calendar.MILLISECOND, 0);
-		
+
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(episode.getAired());
 		cal.set(Calendar.MILLISECOND, 0);
-		
+
 		Calendar cal2 = Calendar.getInstance();
 		cal2.setTimeInMillis(episode.getAired());
 		cal2.set(Calendar.MILLISECOND, 0);
 		System.out.println("Cal2 is " + cal2.toString());
-		
+
 		Assert.assertEquals(aired.getTimeInMillis(), episode.getAired());
 	}
-	
+
 	private void zeroTimeOnCal(Calendar cal) {
 		cal.set(Calendar.HOUR, 0);
 		cal.set(Calendar.MINUTE, 0);
@@ -137,7 +95,7 @@ public class FullSeriesRecordTest
 	public void getOverviewFromXml() throws UnsupportedEncodingException
 	{
 		FullSeriesRecord series = FullSeriesRecord.create(xml.toStream());
-		Assert.assertEquals(TestEpisodeListXML.EXPECTED_OVERVIEW, series.getOverview());
+		Assert.assertEquals(TestSeriesXml.EXPECTED_OVERVIEW, series.getOverview());
 	}
 
 	// TODO: decide if NextEpisode() on the date return this ep, or next

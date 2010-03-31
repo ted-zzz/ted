@@ -38,6 +38,11 @@ struct Series
 	5: list<Episode>	episodes
 }
 
+enum ImageType {
+	BANNER = 1,
+	BANNER_THUMBNAIL = 2
+}
+
 struct ImageFile
 {
 	1: string mimetype,
@@ -54,7 +59,7 @@ service TedService
 	# Returns the Ted-UID of the show.
 	i16 startWatching(1: string searchUID);
 		# TODO: throws? should be void and just throw?
-	
+
 	# unsubscribe to a show
 	void stopWatching(1: i16 uID);
 		# TODO: throws? should be void and just throw?
@@ -63,7 +68,10 @@ service TedService
 	list<Series> getWatching();
 		# TODO: throws?
 
-	ImageFile getBanner(1: string searchUID);
+	ImageFile getImageByGuideId(1: string searchUID, 2: ImageType type);
+		# TODO: throws?
+
+	ImageFile getImageBySeriesId(1: i16 uID, 2: ImageType type);
 		# TODO: throws?
 
 	string getOverview(1: string searchUID);
