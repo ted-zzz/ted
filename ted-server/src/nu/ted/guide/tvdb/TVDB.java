@@ -234,11 +234,15 @@ public class TVDB implements GuideDB
 	@Override
 	public Series getSeries(String guideId, short id, Calendar date) {
 		try {
-			FullSeriesRecord record = getFullSeriesRecord(guideId);
-			Episode lastEpisode = record.getLastEpisode(date);
-			lastEpisode.setStatus(EpisodeStatus.OLD);
 			List<Episode> episodes = new LinkedList<Episode>();
-			episodes.add(lastEpisode);
+			FullSeriesRecord record = getFullSeriesRecord(guideId);
+
+			Episode lastEpisode = record.getLastEpisode(date);
+			if (lastEpisode != null) {
+				lastEpisode.setStatus(EpisodeStatus.OLD);
+				episodes.add(lastEpisode);
+			}
+
 			Series s = new Series(id, record.getName(), getName(), guideId, episodes);
 			return s;
 		} catch (NoMirrorException e) {

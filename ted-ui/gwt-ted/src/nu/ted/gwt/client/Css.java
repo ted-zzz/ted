@@ -27,5 +27,11 @@ public interface Css {
 		public static final String TED_SEARCH_SERIES_IMG = "ted-search-serie-img";
 		public static final String TED_SEARCH_SERIES_OVERVIEW = "ted-search-overview";
 	}
+	
+	public interface WatchedSeriesPage {
+		public static final String WATCHED_SERIES = "ted-watched-series";
+		public static final String WATCHED_SERIES_IMAGE = WATCHED_SERIES + "-image";
+		public static final String WATCHED_SERIES_INFO = WATCHED_SERIES + "-info";
+	}
 
 }

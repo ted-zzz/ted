@@ -57,6 +57,10 @@ public class FullSeriesRecord {
 		}
 
 		private void zeroTimeOnFirstAired() {
+			if (firstAired == null) {
+				return;
+			}
+
 			firstAired.set(Calendar.HOUR, 0);
 			firstAired.set(Calendar.MINUTE, 0);
 			firstAired.set(Calendar.SECOND, 0);
@@ -129,6 +133,11 @@ public class FullSeriesRecord {
 						e.getFirstAired().getTimeInMillis(), EpisodeStatus.OLD);
 			last = e;
 		}
+
+		if (last == null) {
+			return null;
+		}
+
 		return new Episode((short) last.getSeason(), (short) last.getEpisode(),
 				last.getFirstAired().getTimeInMillis(), EpisodeStatus.OLD);
 	}
