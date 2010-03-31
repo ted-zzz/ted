@@ -138,8 +138,12 @@ public class FullSeriesRecord {
 			return null;
 		}
 
+		// 0L default value for long.
+		long firstAiredMillis = last.getFirstAired() == null ? 0L :
+			last.getFirstAired().getTimeInMillis();
+
 		return new Episode((short) last.getSeason(), (short) last.getEpisode(),
-				last.getFirstAired().getTimeInMillis(), EpisodeStatus.OLD);
+				firstAiredMillis, EpisodeStatus.OLD);
 	}
 
 	private void sort(Comparator<TVDBEpisode> comparator) {
