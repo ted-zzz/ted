@@ -3,6 +3,7 @@ package nu.ted.guide.tvdb;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.Calendar;
+import java.util.Date;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -57,14 +58,16 @@ public class FullSeriesRecordTest
 
 		Calendar then = (Calendar) now.clone();
 		then.add(Calendar.DAY_OF_MONTH, 1);
-		String date = DatatypeConverter.printDate(then);
-		this.xml.addEpisode(1, 3, date, "Name");
+		String thenPrintDate = DatatypeConverter.printDate(then);
+		this.xml.addEpisode(1, 3, thenPrintDate, "Name");
+
+		Calendar thenCompare = DatatypeConverter.parseDate(thenPrintDate);
 
 		FullSeriesRecord list = FullSeriesRecord.create(xml.toStream());
 
 		Episode result = list.getNextEpisode(now);
 		Assert.assertNotNull(result);
-		assertEpisode(result, (short) 1, (short) 3, then, "Name");
+		assertEpisode(result, (short) 1, (short) 3, thenCompare, "Name");
 	}
 
 	@Test
@@ -80,14 +83,16 @@ public class FullSeriesRecordTest
 		after.add(Calendar.DAY_OF_MONTH,  1);
 
 		this.xml.addEpisode(1, 3, DatatypeConverter.printDate(before), "Name");
-		this.xml.addEpisode(1, 4, DatatypeConverter.printDate(after), "Name2");
+		String afterPrintDate = DatatypeConverter.printDate(after);
+		this.xml.addEpisode(1, 4, afterPrintDate, "Name2");
 
+		Calendar afterCompare = DatatypeConverter.parseDate(afterPrintDate);
 		FullSeriesRecord list = FullSeriesRecord.create(xml.toStream());
 
 		Episode result = list.getNextEpisode(now);
 
 		Assert.assertNotNull(result);
-		assertEpisode(result, (short) 1, (short) 4, after, "Name2");
+		assertEpisode(result, (short) 1, (short) 4, afterCompare, "Name2");
 
 	}
 
