@@ -119,3 +119,20 @@ body { /* text-align: center; !important */
 .ted-search-overview {
 	font-size: 14pt;
 }
+
+.ted-watched-series {
+	width: 1024px;
+	clear: both;
+}
+
+ted-watched-series-image {
+	float: left;
+	width: 300px;
+}
+
+.ted-watched-series-info {
+	float: right;
+	width: 718px;
+	margin-left: 6px;
+	font-size: 19pt;
+}
