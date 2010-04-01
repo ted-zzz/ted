@@ -7,11 +7,13 @@ import com.google.gwt.resources.client.ImageResource;
 public interface Images extends ClientBundle {
 
 	public static Images INSTANCE = GWT.create(Images.class);
-	
-    /**
-     * @return The header image.
-     */
-    @Source("header_logo.png")
-    ImageResource headerLogo();
 
+	/**
+	 * @return The header image.
+	 */
+	@Source("header_logo.png")
+	ImageResource headerLogo();
+
+	@Source("stop_watching.png")
+	ImageResource stopWatchingIcon();
 }

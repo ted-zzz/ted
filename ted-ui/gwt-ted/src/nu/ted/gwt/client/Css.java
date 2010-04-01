@@ -41,6 +41,8 @@ public interface Css {
 		public static final String WATCHED_SERIES = "ted-watched-series";
 		public static final String WATCHED_SERIES_IMAGE = WATCHED_SERIES + "-image";
 		public static final String WATCHED_SERIES_INFO = WATCHED_SERIES + "-info";
+		public static final String WATCHED_SERIES_ACTIONS = WATCHED_SERIES + "-actions";
+		public static final String WATCHED_SERIES_ACTION_ITEM = WATCHED_SERIES + "-action-item";
 	}
 
 }

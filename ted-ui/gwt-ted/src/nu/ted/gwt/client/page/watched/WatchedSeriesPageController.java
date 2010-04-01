@@ -34,4 +34,7 @@ public class WatchedSeriesPageController extends PageController<WatchedSeriesPag
 		loadListener.pageDataHasBeenLoaded(page);
 	}
 
+	public void stopWatching() {
+
+	}
 }

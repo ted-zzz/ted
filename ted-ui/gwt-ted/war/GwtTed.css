@@ -167,7 +167,16 @@ ted-watched-series-image {
 
 .ted-watched-series-info {
 	float: right;
-	width: 718px;
+	width: 698px;
 	margin-left: 6px;
 	font-size: 19pt;
+}
+
+.ted-watched-series-actions {
+	float: right;
+	width: 20px;
+}
+
+.ted-watched-series-action-item {
+	cursor: pointer;
 }
