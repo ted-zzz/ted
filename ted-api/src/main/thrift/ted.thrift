@@ -2,7 +2,9 @@
 
 namespace java nu.ted.generated
 
-typedef i64 date
+struct Date {
+	1: i64			value
+}
 
 struct SeriesSearchResult
 {
@@ -22,7 +24,7 @@ struct Episode
 {
 	1: i16			season,
 	2: i16			number,
-	3: date			aired
+	3: Date			aired,
 
 	4: EpisodeStatus	status
 }
@@ -31,11 +33,23 @@ struct Series
 {
 	1: i16			uid,
 	2: string		name,
+	3: Date			lastCheck,
 
-	3: string		guideName,
-	4: string		guideId,
+	4: string		guideName,
+	5: string		guideId,
 
-	5: list<Episode>	episodes
+	6: list<Episode>	episodes
+}
+
+struct TedConfig
+{
+	1: i16			port	# Listening Port
+}
+
+struct Ted
+{
+	1: TedConfig		config,
+	2: list<Series>		series
 }
 
 enum ImageType {

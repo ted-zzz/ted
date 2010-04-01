@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.apache.commons.lang.NotImplementedException;
 
+import nu.ted.generated.Date;
 import nu.ted.generated.Episode;
 import nu.ted.generated.EpisodeStatus;
 import nu.ted.generated.ImageFile;
@@ -177,21 +178,6 @@ public class TVDB implements GuideDB
 		return returner;
 	}
 
-	public Episode getLastEpisode(String guideID, Calendar date) {
-		FullSeriesRecord record = null;
-		try {
-			record = getFullSeriesRecord(guideID);
-			return record.getLastEpisode(date);
-		} catch (NoMirrorException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
-
 	public Episode getNextEpisode(String guideID, Calendar date) {
 		try {
 			FullSeriesRecord record = getFullSeriesRecord(guideID);
@@ -234,16 +220,10 @@ public class TVDB implements GuideDB
 	@Override
 	public Series getSeries(String guideId, short id, Calendar date) {
 		try {
-			List<Episode> episodes = new LinkedList<Episode>();
 			FullSeriesRecord record = getFullSeriesRecord(guideId);
 
-			Episode lastEpisode = record.getLastEpisode(date);
-			if (lastEpisode != null) {
-				lastEpisode.setStatus(EpisodeStatus.OLD);
-				episodes.add(lastEpisode);
-			}
-
-			Series s = new Series(id, record.getName(), getName(), guideId, episodes);
+			Series s = new Series(id, record.getName(), new Date(date.getTimeInMillis()),
+					getName(), guideId, new LinkedList<Episode>());
 			return s;
 		} catch (NoMirrorException e) {
 			// TODO Auto-generated catch block

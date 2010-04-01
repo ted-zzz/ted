@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
@@ -14,6 +13,7 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import nu.ted.generated.Date;
 import nu.ted.generated.Episode;
 import nu.ted.generated.EpisodeStatus;
 
@@ -67,16 +67,10 @@ public class FullSeriesRecord {
 			firstAired.set(Calendar.MILLISECOND, 0);
 		}
 
-		public Calendar getFirstAired()
+		public long getFirstAired()
 		{
 			zeroTimeOnFirstAired();
-			return firstAired;
-		}
-
-		public Date getFirstAiredDate()
-		{
-			zeroTimeOnFirstAired();
-			return firstAired.getTime();
+			return firstAired.getTimeInMillis();
 		}
 
 		public String getTitle()
@@ -116,34 +110,14 @@ public class FullSeriesRecord {
 
 	public Episode getNextEpisode(Calendar date)
 	{
+		long checkDate = date.getTimeInMillis();
 		for (TVDBEpisode e : episodeList) {
-			if (e.getFirstAired().after(date)) {
+			if (e.getFirstAired() > checkDate) {
 				return new Episode((short) e.getSeason(), (short) e.getEpisode(),
-						e.getFirstAired().getTimeInMillis(), EpisodeStatus.SEARCHING);
+						new Date(e.getFirstAired()), EpisodeStatus.SEARCHING);
 			}
 		}
 		return null; // TODO: should throw exception
-	}
-
-	public Episode getLastEpisode(Calendar date) {
-		TVDBEpisode last = null;
-		for (TVDBEpisode e : episodeList) {
-			if (e.getFirstAired() != null && e.getFirstAired().after(date))
-				return new Episode((short) last.getSeason(), (short) e.getEpisode(),
-						e.getFirstAired().getTimeInMillis(), EpisodeStatus.OLD);
-			last = e;
-		}
-
-		if (last == null) {
-			return null;
-		}
-
-		// 0L default value for long.
-		long firstAiredMillis = last.getFirstAired() == null ? 0L :
-			last.getFirstAired().getTimeInMillis();
-
-		return new Episode((short) last.getSeason(), (short) last.getEpisode(),
-				firstAiredMillis, EpisodeStatus.OLD);
 	}
 
 	private void sort(Comparator<TVDBEpisode> comparator) {

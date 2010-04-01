@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
+import nu.ted.generated.Date;
 import nu.ted.generated.Episode;
 import nu.ted.generated.EpisodeStatus;
 import nu.ted.generated.ImageFile;
@@ -59,17 +60,6 @@ public class TestGuide implements GuideDB
 	}
 
 	@Override
-	public Episode getLastEpisode(String guideId, Calendar date) {
-		Calendar twoDaysAgo = (Calendar) date.clone();
-		twoDaysAgo.add(Calendar.DAY_OF_MONTH, -2);
-		if (guideId.equals("E")) {
-			return new Episode(LAST_EPISODE_SEASON, LAST_EPISODE_NUMBER, twoDaysAgo.getTimeInMillis(),
-					EpisodeStatus.UNKNOWN);
-		}
-		return null;
-	}
-
-	@Override
 	public String getOverview(String guideId) {
 		return "An Overview";
 	}
@@ -81,17 +71,15 @@ public class TestGuide implements GuideDB
 		oneDayAgo.add(Calendar.DAY_OF_MONTH, -1);
 		List<Episode> episodes = new LinkedList<Episode>();
 		episodes.add(new Episode(LAST_EPISODE_SEASON, (short) (LAST_EPISODE_NUMBER + 1),
-				oneDayAgo.getTimeInMillis(), EpisodeStatus.UNKNOWN));
+				new Date(oneDayAgo.getTimeInMillis()), EpisodeStatus.UNKNOWN));
 		return episodes;
 	}
 
 	@Override
 	public Series getSeries(String guideId, short id, Calendar date) {
-		Episode episode = getLastEpisode(guideId, date);
-		List<Episode> eplist = new LinkedList<Episode>();
-		eplist.add(episode);
 		if (guideId.equals("E")) {
-			return new Series(id, "Exactly", getName(), guideId, eplist);
+			return new Series(id, "Exactly", new Date(date.getTimeInMillis()),
+					getName(), guideId, new LinkedList<Episode>());
 		}
 		return null;
 	}

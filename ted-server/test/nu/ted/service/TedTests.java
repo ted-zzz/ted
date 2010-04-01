@@ -1,15 +1,15 @@
 package nu.ted.service;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import junit.framework.Assert;
+
 import nu.ted.domain.SeriesBackendWrapper;
+import nu.ted.generated.Date;
 import nu.ted.generated.Episode;
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.ImageType;
@@ -74,21 +74,8 @@ public class TedTests
 		Series series = watched.get(0);
 		assertEquals("Exactly", series.getName());
 
-		Episode currentEpisode = (new SeriesBackendWrapper(series)).getLastEpisode();
-		assertNotNull(currentEpisode);
-		assertEquals(4, currentEpisode.getSeason());
-		assertEquals(2, currentEpisode.getNumber());
+		assertNull(new SeriesBackendWrapper(series).getLastEpisode());
 
-		Calendar oneDayAgo = Calendar.getInstance();
-		oneDayAgo.add(Calendar.DAY_OF_MONTH, -2);
-
-		Calendar aired = Calendar.getInstance();
-		// TODO: should we zero mills in the cal creations
-		aired.setTimeInMillis(currentEpisode.getAired());
-		aired.set(Calendar.MILLISECOND, 0);
-		oneDayAgo.set(Calendar.MILLISECOND, 0);
-		assertEquals(oneDayAgo, aired);
-		// NB: returned UID may not match Search UID
 	}
 
 
@@ -126,7 +113,7 @@ public class TedTests
 	@Test
 	public void shouldLoadBannerForValidSeriesId() throws TException {
 		TedServiceImpl ted = new TedServiceImpl(new TestGuide());
-		ted.watched.add(new Series((short)2, "", "", "E", new ArrayList<Episode>()));
+		ted.watched.add(new Series((short)2, "", new Date(), "", "E", new ArrayList<Episode>()));
 
 		ImageFile image = ted.getImageBySeriesId((short)2, ImageType.BANNER);
 		assertNotNull(image);
@@ -137,7 +124,7 @@ public class TedTests
 	@Test
 	public void shouldLoadBannerThumbnailForValidSeriesId() throws TException {
 		TedServiceImpl ted = new TedServiceImpl(new TestGuide());
-		ted.watched.add(new Series((short)2, "", "", "E", new ArrayList<Episode>()));
+		ted.watched.add(new Series((short)2, "", new Date(), "", "E", new ArrayList<Episode>()));
 
 		ImageFile image = ted.getImageBySeriesId((short)2, ImageType.BANNER_THUMBNAIL);
 		assertNotNull(image);

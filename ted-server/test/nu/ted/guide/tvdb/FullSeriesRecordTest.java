@@ -32,15 +32,15 @@ public class FullSeriesRecordTest
 		aired.set(Calendar.MILLISECOND, 0);
 
 		Calendar cal = Calendar.getInstance();
-		cal.setTimeInMillis(episode.getAired());
+		cal.setTimeInMillis(episode.getAired().getValue());
 		cal.set(Calendar.MILLISECOND, 0);
 
 		Calendar cal2 = Calendar.getInstance();
-		cal2.setTimeInMillis(episode.getAired());
+		cal2.setTimeInMillis(episode.getAired().getValue());
 		cal2.set(Calendar.MILLISECOND, 0);
 		System.out.println("Cal2 is " + cal2.toString());
 
-		Assert.assertEquals(aired.getTimeInMillis(), episode.getAired());
+		Assert.assertEquals(aired.getTimeInMillis(), episode.getAired().getValue());
 	}
 
 	private void zeroTimeOnCal(Calendar cal) {

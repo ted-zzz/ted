@@ -46,12 +46,6 @@ public class TVRage implements GuideDB {
 	}
 
 	@Override
-	public Episode getLastEpisode(String guideId, Calendar date) {
-		throw new UnsupportedOperationException("Not yet implemented");
-		// TODO Auto-generated method stub
-	}
-
-	@Override
 	public List<SeriesSearchResult> search(String name) {
 
 		List<SeriesSearchResult> returner = new LinkedList<SeriesSearchResult>();
