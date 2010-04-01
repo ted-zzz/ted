@@ -10,4 +10,6 @@ public interface WatchedSeriesServiceAsync {
 
 	void getWatchedSeries(AsyncCallback<List<GwtWatchedSeries>> callback);
 
+	void stopWatching(short seriesUid, AsyncCallback<Void> messageCallback);
+
 }

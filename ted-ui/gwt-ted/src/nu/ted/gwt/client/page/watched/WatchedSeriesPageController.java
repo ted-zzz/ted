@@ -2,8 +2,10 @@ package nu.ted.gwt.client.page.watched;
 
 import java.util.List;
 
+import net.bugsquat.gwtsite.client.PageLoader;
 import net.bugsquat.gwtsite.client.page.PageController;
 import nu.ted.gwt.client.MessageCallback;
+import nu.ted.gwt.client.TedPageId;
 import nu.ted.gwt.domain.GwtWatchedSeries;
 
 import com.google.gwt.core.client.GWT;
@@ -34,7 +36,16 @@ public class WatchedSeriesPageController extends PageController<WatchedSeriesPag
 		loadListener.pageDataHasBeenLoaded(page);
 	}
 
-	public void stopWatching() {
+	public void stopWatching(short seriesUid) {
+		// TODO [MS] Add a prompt here, providing a chance to cancel.
+		PageLoader.getInstance().showLoadingPage();
+		watchedSeriesService.stopWatching(seriesUid, new MessageCallback<Void>() {
 
+			@Override
+			public void onSuccess(Void result) {
+				PageLoader.getInstance().hideLoadingPage();
+				PageLoader.getInstance().loadPage(TedPageId.WATCHED_SERIES);
+			}
+		});
 	}
 }

@@ -56,7 +56,7 @@ public class WatchedSeriesPage extends DefaultPage<WatchedSeriesPageController>{
 			return;
 		}
 
-		for (GwtWatchedSeries watched : watchedSeries) {
+		for (final GwtWatchedSeries watched : watchedSeries) {
 			String thumbImgKey = watched.getName() + watched.getuID();
 			String thumbUrl = GWT.getModuleBaseURL() + "images?iid=" + thumbImgKey;
 			FlowPanel imagePanel = new FlowPanel();
@@ -73,8 +73,9 @@ public class WatchedSeriesPage extends DefaultPage<WatchedSeriesPageController>{
 
 				@Override
 				public void onClick(ClickEvent event) {
-					controller.stopWatching();
+					controller.stopWatching(watched.getuID());
 				}
+
 			});
 
 			FlowPanel actionPanel = new FlowPanel();
