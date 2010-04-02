@@ -8,6 +8,7 @@ import java.util.List;
 
 import junit.framework.Assert;
 
+import nu.ted.Server;
 import nu.ted.domain.SeriesBackendWrapper;
 import nu.ted.generated.Date;
 import nu.ted.generated.Episode;
@@ -15,6 +16,7 @@ import nu.ted.generated.ImageFile;
 import nu.ted.generated.ImageType;
 import nu.ted.generated.Series;
 import nu.ted.generated.SeriesSearchResult;
+import nu.ted.generated.Ted;
 import nu.ted.guide.TestGuide;
 
 import org.apache.thrift.TException;
@@ -26,7 +28,7 @@ public class TedTests
 	@Test
 	public void testFindExactSeries() throws TException
 	{
-		TedServiceImpl ted = new TedServiceImpl(new TestGuide());
+		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
 		List<SeriesSearchResult> results = ted.search("Exactly");
 
 		assertNotNull("Ted not returning a List", results);
@@ -38,7 +40,7 @@ public class TedTests
 
 	@Test
 	public void testFindMultipleSeries() throws TException {
-		TedServiceImpl ted = new TedServiceImpl(new TestGuide());
+		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
 		List<SeriesSearchResult>  results = ted.search("General");
 
 		assertNotNull("Ted not returning a List", results);
@@ -55,7 +57,7 @@ public class TedTests
 
 	@Test
 	public void shouldStartOutEmpty() throws TException {
-		TedServiceImpl ted = new TedServiceImpl(new TestGuide());
+		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
 
 		List<Series> watched = ted.getWatching();
 		assertNotNull(watched);
@@ -64,7 +66,7 @@ public class TedTests
 
 	@Test
 	public void shouldBeAbleToWatchOneValidShow() throws TException {
-		TedServiceImpl ted = new TedServiceImpl(new TestGuide());
+		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
 
 		ted.startWatching("E");
 
@@ -81,7 +83,7 @@ public class TedTests
 
 	@Test
 	public void shouldBeAbleToStopWatchingAShowYourWatching() throws TException {
-		TedServiceImpl ted = new TedServiceImpl(new TestGuide());
+		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
 		short id = ted.startWatching("E");
 
 		ted.stopWatching(id);
@@ -92,7 +94,7 @@ public class TedTests
 
 	@Test
 	public void shouldLoadBannerForValidSearchId() throws TException {
-		TedServiceImpl ted = new TedServiceImpl(new TestGuide());
+		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
 
 		ImageFile image = ted.getImageByGuideId("E", ImageType.BANNER);
 		assertNotNull(image);
@@ -102,7 +104,7 @@ public class TedTests
 
 	@Test
 	public void shouldLoadBannerThumbnailForValidSearchId() throws TException {
-		TedServiceImpl ted = new TedServiceImpl(new TestGuide());
+		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
 
 		ImageFile image = ted.getImageByGuideId("E", ImageType.BANNER_THUMBNAIL);
 		assertNotNull(image);
@@ -112,10 +114,10 @@ public class TedTests
 
 	@Test
 	public void shouldLoadBannerForValidSeriesId() throws TException {
-		TedServiceImpl ted = new TedServiceImpl(new TestGuide());
-		ted.watched.add(new Series((short)2, "", new Date(), "", "E", new ArrayList<Episode>()));
+		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
+		short id = ted.startWatching("E");
 
-		ImageFile image = ted.getImageBySeriesId((short)2, ImageType.BANNER);
+		ImageFile image = ted.getImageBySeriesId(id, ImageType.BANNER);
 		assertNotNull(image);
 		assertEquals("image/banner", image.getMimetype());
 		assertArrayEquals("BANNER".getBytes(), image.getData());
@@ -123,10 +125,10 @@ public class TedTests
 
 	@Test
 	public void shouldLoadBannerThumbnailForValidSeriesId() throws TException {
-		TedServiceImpl ted = new TedServiceImpl(new TestGuide());
-		ted.watched.add(new Series((short)2, "", new Date(), "", "E", new ArrayList<Episode>()));
+		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
+		short id = ted.startWatching("E");
 
-		ImageFile image = ted.getImageBySeriesId((short)2, ImageType.BANNER_THUMBNAIL);
+		ImageFile image = ted.getImageBySeriesId(id, ImageType.BANNER_THUMBNAIL);
 		assertNotNull(image);
 		assertEquals("image/thumbnail", image.getMimetype());
 		assertArrayEquals("THUMBNAIL".getBytes(), image.getData());
@@ -135,7 +137,7 @@ public class TedTests
 	@Test
 	public void ensureGetOverviewFromService() throws TException
 	{
-		TedServiceImpl ted = new TedServiceImpl(new TestGuide());
+		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
 		assertEquals("An Overview", ted.getOverview("E"));
 	}
 }

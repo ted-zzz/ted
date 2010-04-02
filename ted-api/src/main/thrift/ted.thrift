@@ -7,6 +7,8 @@ namespace java nu.ted.generated
 #  2) Persisted data will need to be upgraded.
 const i32	PROTOCOL_VERSION = 1
 
+const i16	DEFAULT_PORT = 9030
+
 struct Date {
 	1: i64			value
 }
@@ -48,7 +50,7 @@ struct Series
 
 struct TedConfig
 {
-	1: i16			port	# Listening Port
+	1: i16			port = DEFAULT_PORT	# Listening Port
 }
 
 struct Ted

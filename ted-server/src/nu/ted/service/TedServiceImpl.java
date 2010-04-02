@@ -1,7 +1,7 @@
 package nu.ted.service;
 
 import java.util.Calendar;
-import java.util.LinkedList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.thrift.TException;
@@ -11,20 +11,22 @@ import nu.ted.generated.ImageFile;
 import nu.ted.generated.ImageType;
 import nu.ted.generated.Series;
 import nu.ted.generated.SeriesSearchResult;
+import nu.ted.generated.Ted;
 import nu.ted.generated.TedService.Iface;
 import nu.ted.guide.GuideDB;
 
 public class TedServiceImpl implements Iface
 {
 	GuideDB seriesSource;
-	List<Series> watched;
+	private Ted ted;
 
 	static short nextUID = 1; // TODO: static across restarts
 
 	// TODO: watched needs to be a singleton, or in another class
-	public TedServiceImpl(GuideDB seriesSource) {
+	public TedServiceImpl(Ted ted, GuideDB seriesSource) {
+
+		this.ted = ted;
 		this.seriesSource = seriesSource;
-		watched = new LinkedList<Series>();
 	}
 
 	@Override
@@ -41,7 +43,7 @@ public class TedServiceImpl implements Iface
 	@Override
 	public List<Series> getWatching() throws TException
 	{
-		return watched;
+		return Collections.unmodifiableList(ted.getSeries());
 	}
 
 	@Override
@@ -49,7 +51,7 @@ public class TedServiceImpl implements Iface
 	{
 		Series s = seriesSource.getSeries(guideId, nextUID, Calendar.getInstance());
 		nextUID++;
-		watched.add(s);
+		ted.getSeries().add(s);
 		return s.getUid();
 	}
 
@@ -57,7 +59,7 @@ public class TedServiceImpl implements Iface
 	public void stopWatching(short uid) throws TException
 	{
 		Series watchMatch = findWatched(uid);
-		if (watchMatch == null || !watched.remove(watchMatch)) {
+		if (watchMatch == null || !ted.getSeries().remove(watchMatch)) {
 			// TODO throw exception?
 			return;
 		}
@@ -88,7 +90,7 @@ public class TedServiceImpl implements Iface
 	}
 
 	private Series findWatched(short uID) {
-		for (Series s : watched) {
+		for (Series s : ted.getSeries()) {
 			if (uID == s.getUid()) {
 				return s;
 			}

@@ -3,6 +3,9 @@
 	<dependencies>
 		<dependency org="nu.ted" name="ted-api" rev="0.1-SNAPSHOT" changing="true"/>
 
+		<!-- For CLI Args -->
+		<dependency org="com.martiansoftware" name="jsap" rev="2.1" conf="* -> *,!sources,!javadoc"/>
+
 		<!-- From Thrift -->
 		<dependency org="org.slf4j" name="slf4j-api" rev="1.5.8" conf="* -> *,!sources,!javadoc"/>
 		<dependency org="org.slf4j" name="slf4j-simple" rev="1.5.8" conf="* -> *,!sources,!javadoc"/>
