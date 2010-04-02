@@ -1,4 +1,4 @@
-package nu.ted.guide.tvdb;
+package nu.ted.guide.tvdb.datasource.direct;
 
 import java.io.InputStream;
 import java.util.ArrayList;

@@ -13,6 +13,7 @@ import nu.ted.generated.Series;
 import nu.ted.generated.SeriesSearchResult;
 import nu.ted.generated.Ted;
 import nu.ted.generated.TedService.Iface;
+import nu.ted.guide.DataSourceException;
 import nu.ted.guide.GuideDB;
 
 public class TedServiceImpl implements Iface
@@ -37,7 +38,13 @@ public class TedServiceImpl implements Iface
 	@Override
 	public List<SeriesSearchResult> search(String name) throws TException
 	{
-		return seriesSource.search(name);
+		try {
+			return seriesSource.search(name);
+		} catch (DataSourceException e) {
+			// TODO: how does this work? Client won't know about cause classes? (more examples below)
+			// TODO: need to define an exception in the thrift for these I think.
+			throw new TException(e);
+		}
 	}
 
 	@Override
@@ -49,7 +56,12 @@ public class TedServiceImpl implements Iface
 	@Override
 	public short startWatching(String guideId) throws TException
 	{
-		Series s = seriesSource.getSeries(guideId, nextUID, Calendar.getInstance());
+		Series s;
+		try {
+			s = seriesSource.getSeries(guideId, nextUID, Calendar.getInstance());
+		} catch (DataSourceException e) {
+			throw new TException(e);
+		}
 		nextUID++;
 		ted.getSeries().add(s);
 		return s.getUid();
@@ -69,7 +81,11 @@ public class TedServiceImpl implements Iface
 	public ImageFile getImageByGuideId(String guideId, ImageType type)
 		throws TException
 	{
-		return seriesSource.getImage(guideId, type);
+		try {
+			return seriesSource.getImage(guideId, type);
+		} catch (DataSourceException e) {
+			throw new TException(e);
+		}
 	}
 
 	@Override
@@ -80,13 +96,21 @@ public class TedServiceImpl implements Iface
 			return new ImageFile();
 		}
 
-		return seriesSource.getImage(series.getGuideId(), type);
+		try {
+			return seriesSource.getImage(series.getGuideId(), type);
+		} catch (DataSourceException e) {
+			throw new TException(e);
+		}
 	}
 
 
 	@Override
 	public String getOverview(String searchUID) throws TException {
-		return seriesSource.getOverview(searchUID);
+		try {
+			return seriesSource.getOverview(searchUID);
+		} catch (DataSourceException e) {
+			throw new TException(e);
+		}
 	}
 
 	private Series findWatched(short uID) {

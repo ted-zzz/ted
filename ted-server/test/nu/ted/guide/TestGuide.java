@@ -52,7 +52,7 @@ public class TestGuide implements GuideDB
 	}
 
 	@Override
-	public String getName(String guideId) {
+	public String getName(String guideId) throws DataSourceException {
 		if (guideId.equals("E")) {
 			return "Exactly";
 		}
@@ -60,13 +60,13 @@ public class TestGuide implements GuideDB
 	}
 
 	@Override
-	public String getOverview(String guideId) {
+	public String getOverview(String guideId) throws DataSourceException {
 		return "An Overview";
 	}
 
 	@Override
 	public List<Episode> getNewAiredEpisodes(String guideId, Calendar date,
-			Episode lastEpisode) {
+			Episode lastEpisode) throws DataSourceException {
 		Calendar oneDayAgo = (Calendar) date.clone();
 		oneDayAgo.add(Calendar.DAY_OF_MONTH, -1);
 		List<Episode> episodes = new LinkedList<Episode>();
@@ -76,7 +76,7 @@ public class TestGuide implements GuideDB
 	}
 
 	@Override
-	public Series getSeries(String guideId, short id, Calendar date) {
+	public Series getSeries(String guideId, short id, Calendar date) throws DataSourceException {
 		if (guideId.equals("E")) {
 			return new Series(id, "Exactly", new Date(date.getTimeInMillis()),
 					getName(), guideId, new LinkedList<Episode>());

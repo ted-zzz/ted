@@ -15,6 +15,7 @@ import nu.ted.generated.ImageFile;
 import nu.ted.generated.ImageType;
 import nu.ted.generated.Series;
 import nu.ted.generated.SeriesSearchResult;
+import nu.ted.guide.DataSourceException;
 import nu.ted.guide.GuideDB;
 import nu.ted.guide.tvrage.SearchResults.TVRageSeries;
 
@@ -27,7 +28,7 @@ public class TVRage implements GuideDB {
 	}
 
 	@Override
-	public Series getSeries(String guideId, short id, Calendar date) {
+	public Series getSeries(String guideId, short id, Calendar date) throws DataSourceException {
 		throw new UnsupportedOperationException("Not yet implemented");
 		// TODO Auto-generated method stub
 	}
@@ -40,7 +41,7 @@ public class TVRage implements GuideDB {
 	}
 
 	@Override
-	public String getName(String searchId) {
+	public String getName(String searchId) throws DataSourceException {
 		throw new UnsupportedOperationException("Not yet implemented");
 		// TODO Auto-generated method stub
 	}
@@ -79,14 +80,14 @@ public class TVRage implements GuideDB {
 	}
 
 	@Override
-	public String getOverview(String guideId) {
+	public String getOverview(String guideId) throws DataSourceException {
 		// TODO Implement me.
 		throw new UnsupportedOperationException("Not yet implemented");
 	}
 
 	@Override
 	public List<Episode> getNewAiredEpisodes(String guideId, Calendar date,
-			Episode lastEpisode) {
+			Episode lastEpisode) throws DataSourceException {
 		throw new UnsupportedOperationException("Not yet implemented");
 		// TODO Auto-generated method stub
 	}

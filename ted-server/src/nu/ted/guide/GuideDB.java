@@ -14,16 +14,16 @@ public interface GuideDB
 	// Get the name for this guide.
 	String getName();
 
-	List<SeriesSearchResult> search(String name);
+	List<SeriesSearchResult> search(String name) throws DataSourceException;
 
-	Series getSeries(String guideId, short id, Calendar date);
+	Series getSeries(String guideId, short id, Calendar date) throws DataSourceException;
 
-	String getName(String guideId);
+	String getName(String guideId) throws DataSourceException;
 
-	List<Episode> getNewAiredEpisodes(String guideId, Calendar date, Episode lastEpisode);
+	List<Episode> getNewAiredEpisodes(String guideId, Calendar date, Episode lastEpisode) throws DataSourceException;
 
-	String getOverview(String guideId);
+	String getOverview(String guideId) throws DataSourceException;
 
-	ImageFile getImage(String guideId, ImageType type);
+	ImageFile getImage(String guideId, ImageType type) throws DataSourceException;
 
 }

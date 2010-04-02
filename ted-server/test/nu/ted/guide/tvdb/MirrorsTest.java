@@ -6,8 +6,9 @@ import java.io.UnsupportedEncodingException;
 
 import junit.framework.Assert;
 
-import nu.ted.guide.tvdb.Mirrors.Mask;
-import nu.ted.guide.tvdb.Mirrors.NoMirrorException;
+import nu.ted.guide.tvdb.datasource.direct.Mirrors;
+import nu.ted.guide.tvdb.datasource.direct.Mirrors.Mask;
+import nu.ted.guide.tvdb.datasource.direct.Mirrors.NoMirrorException;
 
 import org.junit.Before;
 import org.junit.Test;

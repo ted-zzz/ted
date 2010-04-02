@@ -5,6 +5,7 @@ import java.util.List;
 
 import nu.ted.generated.Episode;
 import nu.ted.generated.Series;
+import nu.ted.guide.DataSourceException;
 import nu.ted.guide.GuideDB;
 import nu.ted.guide.GuideFactory;
 
@@ -15,21 +16,21 @@ import nu.ted.guide.GuideFactory;
 public class SeriesBackendWrapper
 {
 	Series series;
-	
+
 	public SeriesBackendWrapper(Series series) {
 		this.series = series;
 	}
-	
+
 	public Episode getLastEpisode() {
 		if (series.getEpisodesSize() > 0)
 			return series.getEpisodes().get(series.getEpisodesSize() - 1);
 		return null; /* TODO: what if no last */
 	}
-	
+
 	public GuideDB getGuide() {
 		String guideName = series.getGuideName();
 		return GuideFactory.getGuide(guideName);
-		
+
 	}
 
 	public void update(Calendar calendar) {
@@ -37,10 +38,15 @@ public class SeriesBackendWrapper
 		GuideDB guide = getGuide();
 		String guideId = series.getGuideId();
 
-		List<Episode> newEpisodes = guide.getNewAiredEpisodes(guideId, calendar, last);
-
-		for (Episode e : newEpisodes) {
-			series.addToEpisodes(e);
+		List<Episode> newEpisodes;
+		try {
+			newEpisodes = guide.getNewAiredEpisodes(guideId, calendar, last);
+			for (Episode e : newEpisodes) {
+				series.addToEpisodes(e);
+			}
+		} catch (DataSourceException e1) {
+			// TODO: log or rethrow?
 		}
+
 	}
 }
