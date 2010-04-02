@@ -2,6 +2,11 @@
 
 namespace java nu.ted.generated
 
+# Version must be bumped either:
+#  1) A client would not be able communicate with a service
+#  2) Persisted data will need to be upgraded.
+const i32	PROTOCOL_VERSION = 1
+
 struct Date {
 	1: i64			value
 }
@@ -48,8 +53,10 @@ struct TedConfig
 
 struct Ted
 {
-	1: TedConfig		config,
-	2: list<Series>		series
+	1: i32				version = PROTOCOL_VERSION,
+
+	2: TedConfig		config,
+	3: list<Series>		series
 }
 
 enum ImageType {
@@ -65,6 +72,9 @@ struct ImageFile
 
 service TedService
 {
+	# Get the server protocol version
+	i32 getVersion();
+
 	# Find a show
 	list<SeriesSearchResult> search(1: string name);
 		# TODO: throws?

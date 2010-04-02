@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.apache.thrift.TException;
 
-import nu.ted.domain.SeriesBackendWrapper;
+import nu.ted.generated.Constants;
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.ImageType;
 import nu.ted.generated.Series;
@@ -25,6 +25,11 @@ public class TedServiceImpl implements Iface
 	public TedServiceImpl(GuideDB seriesSource) {
 		this.seriesSource = seriesSource;
 		watched = new LinkedList<Series>();
+	}
+
+	@Override
+	public int getVersion() throws TException {
+		return Constants.PROTOCOL_VERSION;
 	}
 
 	@Override
