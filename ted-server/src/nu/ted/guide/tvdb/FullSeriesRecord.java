@@ -33,13 +33,35 @@ public class FullSeriesRecord {
 		private String overview;
 	}
 
-	private static class TVDBEpisode
+	public static class TVDBEpisode
 	{
+		public TVDBEpisode(int season, int number, Calendar aired, String name) {
+			this.season = season;
+			this.number = number;
+			this.firstAired = (Calendar) aired.clone();
+			this.title = name;
+		}
+
+		@SuppressWarnings("unused")
+		private TVDBEpisode() { // For JAXB
+			return;
+		}
+
+		public boolean equalsEpisode(Episode episode) {
+			if (season != episode.getSeason())
+				return false;
+
+			if (number != episode.getNumber())
+				return false;
+
+			return true;
+		}
+
 		@XmlElement(name = "SeasonNumber")
 		private int season;
 
 		@XmlElement(name = "EpisodeNumber")
-		private int episode;
+		private int number;
 
 		@XmlElement(name = "FirstAired")
 		private Calendar firstAired;
@@ -54,7 +76,7 @@ public class FullSeriesRecord {
 
 		public int getEpisode()
 		{
-			return episode;
+			return number;
 		}
 
 		private void zeroTimeOnFirstAired() {
@@ -77,6 +99,11 @@ public class FullSeriesRecord {
 		public String getTitle()
 		{
 			return title;
+		}
+
+		Episode getEpisode(EpisodeStatus status) {
+			return new Episode((short) getSeason(), (short) getEpisode(),
+					new Date(getFirstAired()), status);
 		}
 	}
 
@@ -111,16 +138,34 @@ public class FullSeriesRecord {
 	@XmlElement(name = "Episode")
 	private List<TVDBEpisode> episodeList = new ArrayList<TVDBEpisode>();
 
-	public Episode getNextEpisode(Calendar date)
+	public Episode getNextEpisode(Calendar date, EpisodeStatus status)
 	{
 		long checkDate = date.getTimeInMillis();
 		for (TVDBEpisode e : episodeList) {
 			if (e.getFirstAired() > checkDate) {
-				return new Episode((short) e.getSeason(), (short) e.getEpisode(),
-						new Date(e.getFirstAired()), EpisodeStatus.SEARCHING);
+				return e.getEpisode(status);
 			}
 		}
 		return null; // TODO: should throw exception
+	}
+
+	public Episode getNextEpisode(final Episode last, EpisodeStatus newStatus)
+	{
+		boolean takeThisOne = false;
+		for (TVDBEpisode e : episodeList) {
+			if (takeThisOne)
+				return e.getEpisode(newStatus);
+			else if (e.equalsEpisode(last))
+				takeThisOne = true;
+		}
+
+		if (takeThisOne == false) {
+			throw new RuntimeException("Get Next Episode on episode not in list");
+			// TODO: might not be runtime exception, depending on notifying the clients
+		}
+
+		// You passed in the last Episode
+		return null;
 	}
 
 	private void sort(Comparator<TVDBEpisode> comparator) {

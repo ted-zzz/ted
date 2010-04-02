@@ -3,13 +3,15 @@ package nu.ted.guide.tvdb;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.Calendar;
-import java.util.Date;
 
 import javax.xml.bind.DatatypeConverter;
 
 import junit.framework.Assert;
 import nu.ted.domain.TestSeriesXml;
+import nu.ted.generated.Date;
 import nu.ted.generated.Episode;
+import nu.ted.generated.EpisodeStatus;
+import nu.ted.guide.tvdb.FullSeriesRecord.TVDBEpisode;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -64,7 +66,7 @@ public class FullSeriesRecordTest
 
 		FullSeriesRecord list = FullSeriesRecord.create(xml.toStream());
 
-		Episode result = list.getNextEpisode(now);
+		Episode result = list.getNextEpisode(now, EpisodeStatus.SEARCHING);
 		Assert.assertNotNull(result);
 		assertEpisode(result, (short) 1, (short) 3, thenCompare, "Name");
 	}
@@ -88,7 +90,7 @@ public class FullSeriesRecordTest
 		Calendar afterCompare = DatatypeConverter.parseDate(afterPrintDate);
 		FullSeriesRecord list = FullSeriesRecord.create(xml.toStream());
 
-		Episode result = list.getNextEpisode(now);
+		Episode result = list.getNextEpisode(now, EpisodeStatus.SEARCHING);
 
 		Assert.assertNotNull(result);
 		assertEpisode(result, (short) 1, (short) 4, afterCompare, "Name2");
@@ -100,6 +102,24 @@ public class FullSeriesRecordTest
 	{
 		FullSeriesRecord series = FullSeriesRecord.create(xml.toStream());
 		Assert.assertEquals(TestSeriesXml.EXPECTED_OVERVIEW, series.getOverview());
+	}
+
+	@Test
+	public void equalToAnEpisodeDependsOnlyOnSeasonEpisodeNumber()
+	{
+		Calendar now = Calendar.getInstance();
+		TVDBEpisode episode = new TVDBEpisode(1, 3, now, "EP1");
+
+		Episode matching = new Episode((short) 1, (short) 3,
+				new Date(now.getTimeInMillis()), EpisodeStatus.SEARCHING);
+		Episode wrongSeason = new Episode((short) 2, (short) 3,
+				new Date(now.getTimeInMillis()), EpisodeStatus.SEARCHING);
+		Episode wrongNumber = new Episode((short) 2, (short) 3,
+				new Date(now.getTimeInMillis()), EpisodeStatus.SEARCHING);
+
+		Assert.assertTrue(episode.equalsEpisode(matching));
+		Assert.assertFalse(episode.equalsEpisode(wrongSeason));
+		Assert.assertFalse(episode.equalsEpisode(wrongNumber));
 	}
 
 	// TODO: decide if NextEpisode() on the date return this ep, or next

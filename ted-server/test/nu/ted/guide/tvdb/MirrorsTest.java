@@ -6,7 +6,6 @@ import java.io.UnsupportedEncodingException;
 
 import junit.framework.Assert;
 
-import nu.ted.guide.tvdb.Mirrors;
 import nu.ted.guide.tvdb.Mirrors.Mask;
 import nu.ted.guide.tvdb.Mirrors.NoMirrorException;
 
