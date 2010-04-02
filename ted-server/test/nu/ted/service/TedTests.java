@@ -2,26 +2,18 @@ package nu.ted.service;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-
-import junit.framework.Assert;
 
 import nu.ted.Server;
 import nu.ted.domain.SeriesBackendWrapper;
-import nu.ted.generated.Date;
-import nu.ted.generated.Episode;
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.ImageType;
 import nu.ted.generated.Series;
 import nu.ted.generated.SeriesSearchResult;
-import nu.ted.generated.Ted;
 import nu.ted.guide.TestGuide;
 
 import org.apache.thrift.TException;
 import org.junit.Test;
-
 
 public class TedTests
 {

@@ -18,6 +18,7 @@ import nu.ted.service.TedServiceImpl;
 
 import org.apache.thrift.TDeserializer;
 import org.apache.thrift.TException;
+import org.apache.thrift.TSerializer;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TJSONProtocol;
 import org.apache.thrift.protocol.TBinaryProtocol.Factory;
@@ -72,24 +73,43 @@ public class Server {
 		return ted;
 	}
 
+	public static byte[] serializeTed(Ted ted)
+	{
+		TSerializer serializer = new TSerializer(new TJSONProtocol.Factory());
+		try {
+			return serializer.serialize(ted);
+		} catch (TException e) {
+			// This should never happen.
+			throw new RuntimeException("Unable to serialize ted object.", e);
+		}
+	}
+
+	public static Ted deserializeTed(byte[] bytes)
+	{
+		// Use the default to missing values may be filled in.
+		Ted ted = createDefaultTed();
+		TDeserializer deserializer = new TDeserializer(new TJSONProtocol.Factory());
+		try {
+			deserializer.deserialize(ted, bytes);
+		} catch (TException e) {
+			// TODO: checked exception
+			throw new RuntimeException("Unable to deserialize ted bytes.", e);
+		}
+
+		return ted;
+	}
+
 	private void start(String fileLocation)
 	{
 		Ted ted = createDefaultTed();
-
 		try
 		{
 			File dataFile = new File(fileLocation);
 			if (dataFile.exists()) {
-				TDeserializer deserializer = new TDeserializer(new TJSONProtocol.Factory());
-
 				try {
-					byte[] dataFileBytes = readFileToBytes(dataFile);
-					deserializer.deserialize(ted, dataFileBytes);
+					ted = deserializeTed(readFileToBytes(dataFile));
 				} catch (IOException e) {
 					System.err.println("Error reading data file.");
-					e.printStackTrace();
-				} catch (TException e) {
-					System.err.println("Unable to parse data file.");
 					e.printStackTrace();
 				}
 
@@ -108,7 +128,7 @@ public class Server {
 			TedService.Processor processor = new TedService.Processor(service);
 			Factory protFactory = new TBinaryProtocol.Factory(true, true);
 			TServer server = new TThreadPoolServer(processor, serverTransport, protFactory);
-			System.out.println("Starting server on port 9030 ...");
+			System.out.println("Starting server on port " + config.getPort() + " ...");
 			server.serve();
 		}
 		catch (TTransportException e)
