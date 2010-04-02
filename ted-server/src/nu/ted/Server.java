@@ -3,9 +3,9 @@ package nu.ted;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.LinkedList;
 
-import nu.ted.generated.Constants;
 import nu.ted.generated.Series;
 import nu.ted.generated.Ted;
 import nu.ted.generated.TedConfig;
@@ -30,6 +30,7 @@ import org.apache.thrift.transport.TTransportException;
 import com.martiansoftware.jsap.FlaggedOption;
 import com.martiansoftware.jsap.JSAP;
 import com.martiansoftware.jsap.JSAPResult;
+import com.martiansoftware.jsap.Switch;
 
 public class Server {
 
@@ -102,18 +103,28 @@ public class Server {
 	private void start(String fileLocation)
 	{
 		Ted ted = createDefaultTed();
+		File dataFile = new File(fileLocation);
+		if (dataFile.exists()) {
+			try {
+				ted = deserializeTed(readFileToBytes(dataFile));
+			} catch (IOException e) {
+				System.err.println("Error reading data file.");
+				e.printStackTrace();
+			}
+		}
+		start(ted);
+	}
+
+	private void start()
+	{
+		System.err.println("Warning: Data will not be persisted. See '-h'.");
+		start(createDefaultTed());
+	}
+
+	private void start(Ted ted)
+	{
 		try
 		{
-			File dataFile = new File(fileLocation);
-			if (dataFile.exists()) {
-				try {
-					ted = deserializeTed(readFileToBytes(dataFile));
-				} catch (IOException e) {
-					System.err.println("Error reading data file.");
-					e.printStackTrace();
-				}
-
-			}
 			TedConfig config = ted.getConfig();
 
 			TServerSocket serverTransport = new TServerSocket(config.getPort());
@@ -137,25 +148,64 @@ public class Server {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	private static String createErrorMessage(JSAPResult config) {
+		StringBuffer result = new StringBuffer();
+		for (Iterator<String> i = config.getErrorMessageIterator(); i.hasNext();){
+			result.append("Error: " + i.next() + "\n");
+		}
+		return result.toString();
+	}
+
 	public static void main(String args[]) throws Exception {
+
+		Server srv = new Server();
+		if (args.length == 0) {
+			srv.start();
+			return;
+		}
+
 		FlaggedOption data = new FlaggedOption("data");
 		data.setShortFlag('d');
 		data.setLongFlag("data");
-		data.setRequired(true);
 		data.setHelp("Location for persisted data file");
+
+		Switch help = new Switch("help");
+		help.setShortFlag('h');
+		help.setLongFlag("help");
+		help.setHelp("Show this page");
 
 		JSAP jsap = new JSAP();
 		jsap.registerParameter(data);
+		jsap.registerParameter(help);
 
 		JSAPResult config = jsap.parse(args);
-		if (config.success()) {
-			System.err.println("Usage: java " + Server.class.getName()
-					+ jsap.getHelp());
+
+		// Check this one first, then later errors will be ignored:
+		if (config.getBoolean("help")) {
+			System.err.println("Usage: java " + Server.class.getName());
+			System.err.println(jsap.getHelp());
+			System.exit(0);
+		}
+
+		if (!config.success()) {
+			System.err.println();
+
+			String errors = createErrorMessage(config);
+			if (errors.length() > 0) {
+				System.err.println(errors);
+			}
+
+			System.err.println("Usage: java " + Server.class.getName() + jsap.getUsage());
+			System.err.println();
+			System.err.println(jsap.getHelp());
 			System.exit(1);
 		}
 
-		Server srv = new Server();
-		srv.start(config.getString("data"));
+		if (!config.contains("data")) {
+			srv.start();
+		} else {
+			srv.start(config.getString("data"));
+		}
 	}
-
 }
