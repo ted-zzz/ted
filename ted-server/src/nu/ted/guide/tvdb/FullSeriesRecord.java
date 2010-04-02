@@ -1,6 +1,7 @@
 package nu.ted.guide.tvdb;
 
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -79,8 +80,10 @@ public class FullSeriesRecord {
 		}
 	}
 
-	private static class EpisodeSorter implements Comparator<TVDBEpisode>
+	private static class EpisodeSorter implements Comparator<TVDBEpisode>, Serializable
 	{
+		private static final long serialVersionUID = 1L;
+
 		public int compare(final TVDBEpisode ep1, final TVDBEpisode ep2)
 		{
 			final int season1 = ep1.getSeason();

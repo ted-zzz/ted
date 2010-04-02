@@ -1,9 +1,6 @@
 package nu.ted.guide.tvdb;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -13,11 +10,9 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.commons.lang.NotImplementedException;
 
 import nu.ted.generated.Date;
 import nu.ted.generated.Episode;
-import nu.ted.generated.EpisodeStatus;
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.ImageType;
 import nu.ted.generated.Series;

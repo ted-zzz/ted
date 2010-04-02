@@ -72,7 +72,7 @@ public class ImageFileFactoryTest {
 		factory.createImage(record, ImageType.BANNER);
 	}
 
-	private class TestImageFileFactory extends ImageFileFactory {
+	private static class TestImageFileFactory extends ImageFileFactory {
 		private String location;
 
 		public TestImageFileFactory(Mirrors mirrors) {

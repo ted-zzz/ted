@@ -38,7 +38,6 @@ public class FullSeriesRecordTest
 		Calendar cal2 = Calendar.getInstance();
 		cal2.setTimeInMillis(episode.getAired().getValue());
 		cal2.set(Calendar.MILLISECOND, 0);
-		System.out.println("Cal2 is " + cal2.toString());
 
 		Assert.assertEquals(aired.getTimeInMillis(), episode.getAired().getValue());
 	}
