@@ -17,6 +17,7 @@ import nu.ted.guide.tvdb.TVDB;
 import nu.ted.guide.tvdb.datasource.direct.DirectDataSource;
 import nu.ted.guide.tvrage.TVRage;
 import nu.ted.service.TedServiceImpl;
+import nu.ted.www.DirectPageLoader;
 
 import org.apache.thrift.TDeserializer;
 import org.apache.thrift.TException;
@@ -132,7 +133,7 @@ public class Server {
 			TServerSocket serverTransport = new TServerSocket(config.getPort());
 
 			try {
-				GuideFactory.addGuide(new TVDB(new DirectDataSource()));
+				GuideFactory.addGuide(new TVDB(new DirectDataSource(new DirectPageLoader())));
 			} catch (DataTransferException e) {
 				// For now bring it all down. If we have no TVDB we're likely sunk.
 				throw new RuntimeException("Unable to connect to TVDB", e);
