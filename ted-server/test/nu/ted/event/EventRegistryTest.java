@@ -4,6 +4,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Stack;
+
 import org.junit.Test;
 
 public class EventRegistryTest {
@@ -15,7 +20,7 @@ public class EventRegistryTest {
 		TestClientIdGenerator idGenerator = new TestClientIdGenerator();
 		EventRegistry registry = new EventRegistry(idGenerator);
 		
-		idGenerator.setNextExpectedId(clientId);
+		idGenerator.setAvailableIds(clientId);
 		String registryKey = registry.registerClient();
 		assertEquals(clientId, registryKey);
 	}
@@ -27,26 +32,71 @@ public class EventRegistryTest {
 		TestClientIdGenerator idGenerator = new TestClientIdGenerator();
 		EventRegistry registry = new EventRegistry(idGenerator);
 		
-		idGenerator.setNextExpectedId(expectedClientId);
+		idGenerator.setAvailableIds(expectedClientId);
 		String clientId = registry.registerClient();
 		assertTrue("Expected registry to contain client key: " + clientId, registry.isRegistered(clientId));
 	}
 	
+	@Test
+	public void ensureUniqueIdIsReturnedOnRegisterClientIfGeneratorHappenedToReturnAnAlreadyRegisteredId() {
+		String expectedClientId1 = "C1-GWT";
+		String expectedClientId2 = "C2-GWT";
+
+		TestClientIdGenerator idGenerator = new TestClientIdGenerator();
+		EventRegistry registry = new EventRegistry(idGenerator);
+		
+		// Add ID1 twice in a row to simulate that it gets generated again the 2nd time registerClient is called.
+		// NOTE that the test generator is implemented using a stack (first in, last out).
+		idGenerator.setAvailableIds(expectedClientId2, expectedClientId1, expectedClientId1);
+		assertEquals(expectedClientId1, registry.registerClient());
+		assertEquals(expectedClientId2, registry.registerClient());
+		assertTrue(idGenerator.isEmpty());
+	}
+	
+	@Test(expected = RuntimeException.class)
+	public void ensureTimeoutFoeRegisterClientIfGeneratorNeverGeneratesAUniqueId() {
+		String clientId = "C1-GWT";
+
+		// Set the same ID one more than max_attempts so register will time out.
+		ArrayList<String> sameIds = new ArrayList<String>();
+		
+		// MAX_TRIES + 2: One ID for the initial registration of the ID, and
+		//                another to ensure we go over the maximum.
+		int max = EventRegistry.MAX_TRIES + 2;
+		for(int i = 0; i < max; i++) {
+			sameIds.add(clientId);
+		}
+		
+		TestClientIdGenerator idGenerator = new TestClientIdGenerator();
+		idGenerator.setAvailableIds(sameIds.toArray(new String[sameIds.size()]));
+		
+		EventRegistry registry = new EventRegistry(idGenerator);
+		
+		// Ok for the first attempt.
+		registry.registerClient();
+		
+		// Same ID will be tried until MAX_ATTEMPTS is reached and an exception is thrown.
+		registry.registerClient();
+	}
+	
 	private class TestClientIdGenerator extends ClientIdGenerator {
-		private String nextId;
+		private Stack<String> available = new Stack<String>();
 
 		@Override
 		public String generateClientId() {
-			if (nextId == null) {
-				fail("Next ID was not set in TestClientIdGenerator.");
+			if (available.isEmpty()) {
+				fail("Could not get next ID. None available.");
 			}
-			String nextIdCopy = nextId;
-			nextId = null;
-			return nextIdCopy;
+			return available.pop();
 		}
 		
-		public void setNextExpectedId(String id) {
-			nextId = id;
+		public void setAvailableIds(String ... ids) {
+			available.clear();
+			available.addAll(Arrays.asList(ids));
+		}
+		
+		public boolean isEmpty() {
+			return available.isEmpty();
 		}
 		
 	}
