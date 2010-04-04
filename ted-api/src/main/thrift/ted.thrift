@@ -2,7 +2,6 @@
 
 namespace java nu.ted.generated
 
-# Version must be bumped either:
 #  1) A client would not be able communicate with a service
 #  2) Persisted data will need to be upgraded.
 const i32	PROTOCOL_VERSION = 1
@@ -70,6 +69,16 @@ struct ImageFile
 {
 	1: string mimetype,
 	2: binary data
+}
+
+enum EventType
+{
+	WATCHED_LIST_CHANGED = 1
+}
+
+struct Event
+{
+	1: EventType type
 }
 
 service TedService
