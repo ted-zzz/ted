@@ -12,7 +12,7 @@ import nu.ted.domain.TestSeriesXml;
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.ImageType;
 import nu.ted.guide.DataTransferException;
-import nu.ted.guide.tvdb.FullSeriesRecord;
+import nu.ted.guide.DataUnavailableException;
 import nu.ted.guide.tvdb.TestMirrorXml;
 import nu.ted.guide.tvdb.datasource.direct.Mirrors.Mask;
 import nu.ted.www.PageLoader;
@@ -91,80 +91,81 @@ public class DirectDataSourceTest {
 		assertEquals("image/test", image.getMimetype());
 		assertArrayEquals("abcd".getBytes(), image.getData());
 
+	}
 
+	@Test
+	public void ensureCreateBannerThumbnail() throws Exception {
+		mirrorXml = new TestMirrorXml();
+		mirrorXml.addMirror("banner_url", Mask.banner.value);
+		mirrorXml.addMirror("test-url", Mask.xml.value);
 
+		TestPageLoader loader = new TestPageLoader();
+
+		// Add Series - currently hardcoded to series name 1000
+		TestSeriesXml testXml = new TestSeriesXml();
+		loader.addFullSeriesRecord("test-url/api/" + DirectDataSource.APIKEY + "/series/1000/all/", testXml);
+
+		// Add Banner
+		ImageFile testImage = new ImageFile("image/test", "abcd".getBytes());
+		loader.addImage("banner_url/banners/_cache/graphical/73244-g9.jpg", testImage);
+
+		DirectDataSource dds = new DirectDataSource(loader);
+		ImageFile image = dds.getImage("1000", ImageType.BANNER_THUMBNAIL);
+
+		assertNotNull(image);
+		assertEquals("image/test", image.getMimetype());
+		assertArrayEquals("abcd".getBytes(), image.getData());
 
 	}
 
-	//
-//	@Test
-//	public void ensureCreateBanner() throws Exception {
-//		FullSeriesRecord record = FullSeriesRecord.create(new TestSeriesXml().toStream());
-//		String expectedLocation = expectedBannerMirror + "/banners/" + record.getBanner();
-//
-//		ImageFile image = factory.createImage(record, ImageType.BANNER);
-//		assertEquals(expectedLocation, factory.location);
-//		assertNotNull(image);
-//		assertEquals("image/" + expectedLocation, image.getMimetype());
-//		assertArrayEquals(expectedLocation.getBytes(), image.getData());
-//	}
-//	@Before
-//	public void initTests() throws Exception {
-//		TestMirrorXml mirrorXml = new TestMirrorXml();
-//		mirrorXml.addMirror("banner_url", Mask.banner.value);
-//
-//		mirrors = Mirrors.createMirrors(mirrorXml.toStream());
-//		expectedBannerMirror = mirrors.getBannerMirror();
-//	}
+	@Test(expected = DataUnavailableException.class)
+	public void ensureNoMirrorThrowsDataUnavailableException() throws Exception {
+		mirrorXml = new TestMirrorXml();
+		mirrorXml.addMirror("test-url", Mask.xml.value);
+		// No Banner URL set
 
-//
-//	@Test
-//	public void ensureCreateBannerThumbnail() throws Exception {
-//		FullSeriesRecord record = FullSeriesRecord.create(new TestSeriesXml().toStream());
-//		String expectedLocation = expectedBannerMirror + "/banners/_cache/" + record.getBanner();
-//
-//		ImageFile image = factory.createImage(record, ImageType.BANNER_THUMBNAIL);
-//		assertEquals(expectedLocation, factory.location);
-//		assertNotNull(image);
-//		assertEquals("image/" + expectedLocation, image.getMimetype());
-//		assertArrayEquals(expectedLocation.getBytes(), image.getData());
-//	}
-//
-//	@Test(expected = ImageFileFactoryException.class)
-//	public void ensureNoMirrorThrowsImageFileFactoryExceptionCreatingBanner() throws Exception {
-//		Mirrors mirrors = Mirrors.createMirrors(new TestMirrorXml().toStream());
-//		ImageFileFactory f = new ImageFileFactory(mirrors);
-//		f.createImage(null, ImageType.BANNER);
-//	}
-//
-//	@Test(expected = ImageFileFactoryException.class)
-//	public void ensureNoMirrorThrowsImageFileFactoryExceptionCreatingThumbnail() throws Exception {
-//		Mirrors mirrors = Mirrors.createMirrors(new TestMirrorXml().toStream());
-//		ImageFileFactory f = new ImageFileFactory(mirrors);
-//		f.createImage(null, ImageType.BANNER_THUMBNAIL);
-//	}
-//
-//	@Test(expected = ImageNotAvailableException.class)
-//	public void ensureImageNotAvailableIfBannerNotDefinedBySeries() throws Exception {
-//		TestSeriesXml seriesXml = new TestSeriesXml("");
-//		FullSeriesRecord record = FullSeriesRecord.create(seriesXml.toStream());
-//		factory.createImage(record, ImageType.BANNER);
-//	}
-//
-//	private static class TestImageFileFactory extends ImageFileFactory {
-//		private String location;
-//
-//		public TestImageFileFactory(Mirrors mirrors) {
-//			super(mirrors);
-//		}
-//
-//		@Override
-//		protected ImageFile createImageFile(String location)
-//				throws ImageFileFactoryException {
-//			this.location = location;
-//			return new ImageFile("image/" + location, location.getBytes());
-//		}
-//
-//	}
+		TestPageLoader loader = new TestPageLoader();
 
+		TestSeriesXml testXml = new TestSeriesXml();
+		loader.addFullSeriesRecord("test-url/api/" + DirectDataSource.APIKEY + "/series/1000/all/", testXml);
+
+		DirectDataSource dds = new DirectDataSource(loader);
+
+		ImageFile image = dds.getImage("1000", ImageType.BANNER);
+
+	}
+
+	@Test(expected = DataUnavailableException.class)
+	public void ensureMissingBannerThrowsDataUnavailableException() throws Exception {
+		mirrorXml = new TestMirrorXml();
+		mirrorXml.addMirror("banner_url", Mask.banner.value);
+		mirrorXml.addMirror("test-url", Mask.xml.value);
+
+		TestPageLoader loader = new TestPageLoader();
+
+		// Add Series - currently hardcoded to series name 1000
+		TestSeriesXml testXml = new TestSeriesXml(""); // blank banner location
+		loader.addFullSeriesRecord("test-url/api/" + DirectDataSource.APIKEY + "/series/1000/all/", testXml);
+
+		DirectDataSource dds = new DirectDataSource(loader);
+		dds.getImage("1000", ImageType.BANNER);
+
+	}
+
+	@Test(expected = DataUnavailableException.class)
+	public void ensureMissingBannerThumbnailThrowsDataUnavailableException() throws Exception {
+		mirrorXml = new TestMirrorXml();
+		mirrorXml.addMirror("banner_url", Mask.banner.value);
+		mirrorXml.addMirror("test-url", Mask.xml.value);
+
+		TestPageLoader loader = new TestPageLoader();
+
+		// Add Series - currently hardcoded to series name 1000
+		TestSeriesXml testXml = new TestSeriesXml(""); // blank banner location
+		loader.addFullSeriesRecord("test-url/api/" + DirectDataSource.APIKEY + "/series/1000/all/", testXml);
+
+		DirectDataSource dds = new DirectDataSource(loader);
+		dds.getImage("1000", ImageType.BANNER_THUMBNAIL);
+
+	}
 }

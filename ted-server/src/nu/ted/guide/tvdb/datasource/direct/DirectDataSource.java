@@ -95,7 +95,7 @@ public class DirectDataSource implements DataSource {
 		try {
 			base = mirrors.getBannerMirror() + "/banners/";
 		} catch (NoMirrorException e) {
-			throw new DataTransferException(e);
+			throw new DataUnavailableException(e);
 		}
 
 		if (type == ImageType.BANNER) {
