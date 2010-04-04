@@ -33,8 +33,12 @@ public class TestMirrorXml {
 		return xml.toString() + "</Mirrors>";
 	}
 
-	public InputStream toStream() throws UnsupportedEncodingException
+	public InputStream toStream()
 	{
-		return new ByteArrayInputStream(this.toString().getBytes("UTF-8"));
+		try {
+			return new ByteArrayInputStream(this.toString().getBytes("UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException("Invalid Encoding - testing error", e);
+		}
 	}
 }

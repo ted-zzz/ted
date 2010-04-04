@@ -19,7 +19,7 @@ import nu.ted.guide.tvdb.datasource.direct.Mirrors.NoMirrorException;
 import nu.ted.www.PageLoader;
 
 public class DirectDataSource implements DataSource {
-	private static final String APIKEY = "0D513FDFA9D09C21";
+	public static final String APIKEY = "0D513FDFA9D09C21";
 
 	private Mirrors mirrors;
 	private PageLoader loader;

@@ -41,9 +41,13 @@ public class TestSeriesXml {
 		return xml.toString() + "</Data>";
 	}
 
-	public InputStream toStream() throws UnsupportedEncodingException
+	public InputStream toStream()
 	{
-		return new ByteArrayInputStream(this.toString().getBytes("UTF-8"));
+		try {
+			return new ByteArrayInputStream(this.toString().getBytes("UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException("Testing error, invalid encoding");
+		}
 	}
 
 }
