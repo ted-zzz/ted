@@ -6,7 +6,10 @@ import java.util.List;
 
 import org.apache.thrift.TException;
 
+import nu.ted.event.EventRegistry;
 import nu.ted.generated.Constants;
+import nu.ted.generated.Event;
+import nu.ted.generated.EventType;
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.ImageType;
 import nu.ted.generated.Series;
@@ -20,14 +23,18 @@ public class TedServiceImpl implements Iface
 {
 	GuideDB seriesSource;
 	private Ted ted;
+	// TODO [MS] This is not the right place for this. Currently the Ted
+	//           class is generated, however it feels like it should be
+	//           the main application class for Ted. The registry belongs
+	//           with it.
+	private EventRegistry eventRegistry;
 
 	static short nextUID = 1; // TODO: static across restarts
 
-	// TODO: watched needs to be a singleton, or in another class
 	public TedServiceImpl(Ted ted, GuideDB seriesSource) {
-
 		this.ted = ted;
 		this.seriesSource = seriesSource;
+		this.eventRegistry = new EventRegistry();
 	}
 
 	@Override
@@ -64,6 +71,7 @@ public class TedServiceImpl implements Iface
 		}
 		nextUID++;
 		ted.getSeries().add(s);
+		eventRegistry.addEvent(new Event(EventType.WATCHED_LIST_CHANGED));
 		return s.getUid();
 	}
 
@@ -75,6 +83,7 @@ public class TedServiceImpl implements Iface
 			// TODO throw exception?
 			return;
 		}
+		eventRegistry.addEvent(new Event(EventType.WATCHED_LIST_CHANGED));
 	}
 
 	@Override
@@ -121,4 +130,16 @@ public class TedServiceImpl implements Iface
 		}
 		return null;
 	}
+
+	@Override
+	public String registerClientWithEventRegistry() throws TException {
+		return eventRegistry.registerClient();
+	}
+
+	@Override
+	public List<Event> getEvents(String eventRegistryClientId)
+			throws TException {
+		return eventRegistry.getEvents(eventRegistryClientId);
+	}
+
 }

@@ -6,6 +6,8 @@ import java.util.List;
 
 import nu.ted.Server;
 import nu.ted.domain.SeriesBackendWrapper;
+import nu.ted.generated.Event;
+import nu.ted.generated.EventType;
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.ImageType;
 import nu.ted.generated.Series;
@@ -131,5 +133,30 @@ public class TedTests
 	{
 		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
 		assertEquals("An Overview", ted.getOverview("E"));
+	}
+
+	@Test
+	public void shouldRegisterWatchedListChangedEventIfStartWatching() throws TException{
+		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
+		String eventClientId = ted.registerClientWithEventRegistry();
+
+		ted.startWatching("E");
+		List<Event> events = ted.getEvents(eventClientId);
+		assertEquals(1, events.size());
+		assertEquals(EventType.WATCHED_LIST_CHANGED, events.get(0).getType());
+	}
+
+	@Test
+	public void shouldRegisterWatchedListChangedEventIfStopWatching() throws TException {
+		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
+		String eventClientId = ted.registerClientWithEventRegistry();
+		short id = ted.startWatching("E");
+		// Flush the registry for this client.
+		ted.getEvents(eventClientId);
+
+		ted.stopWatching(id);
+		List<Event> events = ted.getEvents(eventClientId);
+		assertEquals(1, events.size());
+		assertEquals(EventType.WATCHED_LIST_CHANGED, events.get(0).getType());
 	}
 }

@@ -8,6 +8,8 @@ import java.util.Map.Entry;
 
 import nu.ted.generated.Event;
 
+// TODO [MS] Still need a way of removing a client if it does not poll after a
+// 			 certain time period.
 public class EventRegistry {
 
 	protected static final int MAX_TRIES = 50;
@@ -78,6 +80,7 @@ public class EventRegistry {
 				return registry.get(clientId);
 			}
 			finally {
+				// Event list is cleared after a call to get.
 				registry.put(clientId, new ArrayList<Event>());
 			}
 		}

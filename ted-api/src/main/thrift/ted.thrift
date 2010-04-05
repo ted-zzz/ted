@@ -112,4 +112,10 @@ service TedService
 	string getOverview(1: string searchUID);
 		# TODO: throws?
 
+	string registerClientWithEventRegistry();
+		# TODO: throws?
+
+	list<Event> getEvents(1: string eventRegistryClientId);
+		# TODO: throws?
+
 }

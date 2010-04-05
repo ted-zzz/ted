@@ -9,7 +9,7 @@
 	<classpathentry kind="var" path="TED_LIB_DIR/slf4j-api-1.5.8.jar"/>
 	<classpathentry kind="var" path="TED_LIB_DIR/slf4j-simple-1.5.8.jar"/>
 	<classpathentry kind="var" path="TED_LIB_DIR/thrift-0.2.0.jar"/>
-	<classpathentry kind="var" path="TED_LIB_DIR/ted-api-0.1-SNAPSHOT.jar"/>
+	<classpathentry kind="var" path="TED_LIB_DIR/ted-api-0.1-SNAPSHOT.jar" sourcepath="/TED_LIB_DIR/ted-api-0.1-SNAPSHOT-sources.jar"/>
 	<classpathentry kind="var" path="TED_LIB_DIR/jsap-2.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
