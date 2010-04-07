@@ -16,7 +16,7 @@ import nu.ted.gwt.client.image.Images;
 import nu.ted.gwt.client.page.DefaultPage;
 import nu.ted.gwt.domain.GwtWatchedSeries;
 
-public class WatchedSeriesPage extends DefaultPage<WatchedSeriesPageController>{
+public class WatchedSeriesPage extends DefaultPage {
 
 	private WatchedSeriesPageController controller;
 	private FlowPanel watchedSeriesList;
@@ -34,18 +34,8 @@ public class WatchedSeriesPage extends DefaultPage<WatchedSeriesPageController>{
 	}
 
 	@Override
-	public WatchedSeriesPageController getController() {
-		return this.controller;
-	}
-
-	@Override
 	public PageId getId() {
 		return TedPageId.WATCHED_SERIES;
-	}
-
-	@Override
-	public void loadData() {
-		controller.loadData(this);
 	}
 
 	public void setWatchedSeries(List<GwtWatchedSeries> watchedSeries) {

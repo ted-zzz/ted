@@ -1,7 +1,6 @@
 package nu.ted.gwt.client.page;
 
 import net.bugsquat.gwtsite.client.page.Page;
-import net.bugsquat.gwtsite.client.page.PageController;
 import nu.ted.gwt.client.Css.Application;
 
 import com.google.gwt.user.client.ui.Widget;
@@ -10,7 +9,7 @@ import com.google.gwt.user.client.ui.Widget;
  * A basic page made up of a header and content, stacked vertically.
  *
  */
-public abstract class DefaultPage<C extends PageController> extends Page<C> {
+public abstract class DefaultPage extends Page {
 
 	public DefaultPage() {
 		content.setStyleName(Application.TED_CONTENT);

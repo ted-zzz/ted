@@ -3,7 +3,6 @@ package nu.ted.gwt.client.page.search;
 import java.util.List;
 
 import net.bugsquat.gwtsite.client.PageLoader;
-import net.bugsquat.gwtsite.client.page.Page;
 import net.bugsquat.gwtsite.client.page.PageController;
 import nu.ted.gwt.client.MessageCallback;
 import nu.ted.gwt.client.TedPageId;
@@ -20,10 +19,6 @@ public class SearchPageController extends PageController<SearchPage> implements 
 
 	public SearchPageController() {
 		this.page = new SearchPage(this);
-	}
-
-	public void loadData(Page<SearchPageController> page) {
-		loadListener.pageDataHasBeenLoaded(page);
 	}
 
 	public void search(String filter) {
@@ -88,6 +83,11 @@ public class SearchPageController extends PageController<SearchPage> implements 
 			}
 
 		});
+	}
+
+	@Override
+	public void loadData() {
+		loadListener.pageDataHasBeenLoaded(page);
 	}
 
 }

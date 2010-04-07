@@ -15,8 +15,6 @@ public class WatchedSeriesPageController extends PageController<WatchedSeriesPag
 	private final WatchedSeriesServiceAsync watchedSeriesService =
 		(WatchedSeriesServiceAsync)GWT.create(WatchedSeriesService.class);
 
-	private WatchedSeriesPage page;
-
 	public WatchedSeriesPageController() {
 		this.page = new WatchedSeriesPage(this);
 	}
@@ -26,7 +24,7 @@ public class WatchedSeriesPageController extends PageController<WatchedSeriesPag
 		return this.page;
 	}
 
-	public void loadData(WatchedSeriesPage watchedSeriesPage) {
+	public void loadData() {
 		watchedSeriesService.getWatchedSeries(new MessageCallback<List<GwtWatchedSeries>>() {
 			@Override
 			public void onSuccess(List<GwtWatchedSeries> watchedSeries) {

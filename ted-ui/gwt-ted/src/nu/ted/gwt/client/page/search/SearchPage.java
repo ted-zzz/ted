@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 
-public class SearchPage extends DefaultPage<SearchPageController> {
+public class SearchPage extends DefaultPage {
 
 	private final SearchPageController controller;
 	private TedTableModel<FoundSeries> searchResultListModel;
@@ -37,18 +37,8 @@ public class SearchPage extends DefaultPage<SearchPageController> {
 	}
 
 	@Override
-	public SearchPageController getController() {
-		return controller;
-	}
-
-	@Override
 	public PageId getId() {
 		return TedPageId.SEARCH;
-	}
-
-	@Override
-	public void loadData() {
-		this.controller.loadData(this);
 	}
 
 	private void initView() {
