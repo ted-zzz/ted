@@ -73,12 +73,14 @@ struct ImageFile
 
 enum EventType
 {
-	WATCHED_LIST_CHANGED = 1
+	WATCHED_SERIES_ADDED = 1,
+	WATCHED_SERIES_REMOVED = 2
 }
 
 struct Event
 {
-	1: EventType type
+	1: EventType type,
+	2: Series series
 }
 
 service TedService

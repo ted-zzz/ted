@@ -143,7 +143,7 @@ public class TedTests
 		ted.startWatching("E");
 		List<Event> events = ted.getEvents(eventClientId);
 		assertEquals(1, events.size());
-		assertEquals(EventType.WATCHED_LIST_CHANGED, events.get(0).getType());
+		assertEquals(EventType.WATCHED_SERIES_ADDED, events.get(0).getType());
 	}
 
 	@Test
@@ -157,6 +157,6 @@ public class TedTests
 		ted.stopWatching(id);
 		List<Event> events = ted.getEvents(eventClientId);
 		assertEquals(1, events.size());
-		assertEquals(EventType.WATCHED_LIST_CHANGED, events.get(0).getType());
+		assertEquals(EventType.WATCHED_SERIES_REMOVED, events.get(0).getType());
 	}
 }

@@ -71,7 +71,7 @@ public class TedServiceImpl implements Iface
 		}
 		nextUID++;
 		ted.getSeries().add(s);
-		eventRegistry.addEvent(new Event(EventType.WATCHED_LIST_CHANGED));
+		eventRegistry.addEvent(new Event(EventType.WATCHED_SERIES_ADDED, s));
 		return s.getUid();
 	}
 
@@ -83,7 +83,7 @@ public class TedServiceImpl implements Iface
 			// TODO throw exception?
 			return;
 		}
-		eventRegistry.addEvent(new Event(EventType.WATCHED_LIST_CHANGED));
+		eventRegistry.addEvent(new Event(EventType.WATCHED_SERIES_REMOVED, watchMatch));
 	}
 
 	@Override
