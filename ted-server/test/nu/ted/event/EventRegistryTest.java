@@ -1,8 +1,6 @@
 package nu.ted.event;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -131,6 +129,27 @@ public class EventRegistryTest {
 				registry.getEvents(clientId1).isEmpty());
 	}
 
+	@Test
+	public void ensureGetLastPollTimeFromClient() {
+		TestClientIdGenerator idGenerator = new TestClientIdGenerator();
+		EventRegistry registry = new EventRegistry(idGenerator);
+
+		idGenerator.setAvailableIds("CID_1");
+
+		String clientId1 = registry.registerClient();
+
+		Event watchedListChanged = new Event(EventType.WATCHED_LIST_CHANGED);
+		registry.addEvent(watchedListChanged);
+
+		assertFalse(0L == registry.getLastPollTime(clientId1));
+	}
+
+	@Test(expected = RuntimeException.class)
+	public void ensureGetLastPollTimeFromClientThrowsExceptionIfClientDoesNotExist() {
+		EventRegistry registry = new EventRegistry();
+		registry.getLastPollTime("Unknown Client");
+	}
+
 	private class TestClientIdGenerator extends ClientIdGenerator {
 		private Stack<String> available = new Stack<String>();
 
@@ -150,7 +169,6 @@ public class EventRegistryTest {
 		public boolean isEmpty() {
 			return available.isEmpty();
 		}
-
 	}
 
 }
