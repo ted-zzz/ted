@@ -1,12 +1,12 @@
 package nu.ted.event;
 
-public class EventCacheCleaner extends Thread {
+public class EventRegistryCleaner extends Thread {
 	private long retry;
 	private long idleLimit;
 	private EventRegistry eventRegistry;
 	private boolean process = true;
 
-	public EventCacheCleaner(EventRegistry eventRegistry, long retry, long idleLimit) {
+	public EventRegistryCleaner(EventRegistry eventRegistry, long retry, long idleLimit) {
 		this.setDaemon(true);
 		this.setName("TED [EVENT CACHE CLEANER]");
 		this.eventRegistry = eventRegistry;
@@ -16,7 +16,7 @@ public class EventCacheCleaner extends Thread {
 
 	@Override
 	public void run() {
-		while(true) {
+		while(process) {
 			try {
 				sleep(retry);
 				for (String id : eventRegistry.getClientIds()) {

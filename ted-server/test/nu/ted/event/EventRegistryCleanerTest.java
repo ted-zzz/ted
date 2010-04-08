@@ -6,11 +6,11 @@ import nu.ted.generated.EventType;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-public class EventCacheCleanerTest {
+public class EventRegistryCleanerTest {
 
 	@Test
 	public void ensureCacheCleanerCleansExpiredClients() throws Exception {
-		EventRegistry registry = new EventRegistry();
+		EventRegistry registry = new TestEventRegistry(0L, 0L);
 		String c1 = registry.registerClient();
 		String c2 = registry.registerClient();
 
@@ -18,7 +18,7 @@ public class EventCacheCleanerTest {
 		assertEquals(1, registry.getEvents(c1).size());
 		assertEquals(1, registry.getEvents(c2).size());
 
-		EventCacheCleaner cleaner = new EventCacheCleaner(registry, 0, 0);
+		EventRegistryCleaner cleaner = new EventRegistryCleaner(registry, 0, 0);
 		cleaner.start();
 
 		// Don't like having sleeps in tests (yuck), but until
@@ -31,4 +31,18 @@ public class EventCacheCleanerTest {
 		cleaner.kill();
 	}
 
+	private class TestEventRegistry extends EventRegistry {
+
+		public TestEventRegistry(long maxClientIdleTime, long wait) {
+			super(maxClientIdleTime, wait);
+		}
+
+		@Override
+		protected void startRegistryCleaner(long maxClientIdleTime, long wait) {
+			// Don't start the cleaner automatically.
+		}
+
+
+
+	}
 }

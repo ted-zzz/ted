@@ -14,13 +14,20 @@ public class EventRegistry {
 	private ClientIdGenerator idGenerator;
 	private Map<String, EventCache> registry;
 
-	public EventRegistry() {
-		this(new ClientIdGenerator());
+	public EventRegistry(long maxClientIdleTime, long wait) {
+		this(new ClientIdGenerator(), maxClientIdleTime, wait);
 	}
 
-	public EventRegistry(ClientIdGenerator clientIdGenerator) {
+	public EventRegistry(ClientIdGenerator clientIdGenerator, long maxClientIdleTime, long wait) {
 		this.idGenerator = clientIdGenerator;
 		this.registry = new HashMap<String, EventCache>();
+		startRegistryCleaner(maxClientIdleTime, wait);
+	}
+
+	protected void startRegistryCleaner(long maxClientIdleTime, long wait) {
+		EventRegistryCleaner cleaner = new EventRegistryCleaner(this, wait,
+				maxClientIdleTime);
+		cleaner.start();
 	}
 
 	public String registerClient() {

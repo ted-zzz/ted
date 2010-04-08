@@ -19,7 +19,7 @@ public class EventRegistryTest {
 		String clientId = "C1-GWT";
 
 		TestClientIdGenerator idGenerator = new TestClientIdGenerator();
-		EventRegistry registry = new EventRegistry(idGenerator);
+		EventRegistry registry = new EventRegistry(idGenerator, 5000L, 5000L);
 
 		idGenerator.setAvailableIds(clientId);
 		String registryKey = registry.registerClient();
@@ -31,7 +31,7 @@ public class EventRegistryTest {
 		String expectedClientId = "C1-GWT";
 
 		TestClientIdGenerator idGenerator = new TestClientIdGenerator();
-		EventRegistry registry = new EventRegistry(idGenerator);
+		EventRegistry registry = new EventRegistry(idGenerator, 5000L, 5000L);
 
 		idGenerator.setAvailableIds(expectedClientId);
 		String clientId = registry.registerClient();
@@ -44,7 +44,7 @@ public class EventRegistryTest {
 		String expectedClientId2 = "C2-GWT";
 
 		TestClientIdGenerator idGenerator = new TestClientIdGenerator();
-		EventRegistry registry = new EventRegistry(idGenerator);
+		EventRegistry registry = new EventRegistry(idGenerator, 5000L, 5000L);
 
 		// Add ID1 twice in a row to simulate that it gets generated again the 2nd time registerClient is called.
 		// NOTE that the test generator is implemented using a stack (first in, last out).
@@ -71,7 +71,7 @@ public class EventRegistryTest {
 		TestClientIdGenerator idGenerator = new TestClientIdGenerator();
 		idGenerator.setAvailableIds(sameIds.toArray(new String[sameIds.size()]));
 
-		EventRegistry registry = new EventRegistry(idGenerator);
+		EventRegistry registry = new EventRegistry(idGenerator, 5000L, 5000L);
 
 		// Ok for the first attempt.
 		registry.registerClient();
@@ -83,7 +83,7 @@ public class EventRegistryTest {
 	@Test
 	public void checkEventAssociatedWithAllRegisteredClients() {
 		TestClientIdGenerator idGenerator = new TestClientIdGenerator();
-		EventRegistry registry = new EventRegistry(idGenerator);
+		EventRegistry registry = new EventRegistry(idGenerator, 5000L, 5000L);
 
 		idGenerator.setAvailableIds("CID_2", "CID_1");
 
@@ -105,14 +105,14 @@ public class EventRegistryTest {
 	@Test(expected = RuntimeException.class)
 	public void ensureExceptionIsThrownIfClientIsNotRegisteredOnGetEvents() {
 		TestClientIdGenerator generator = new TestClientIdGenerator();
-		EventRegistry registry = new EventRegistry(generator);
+		EventRegistry registry = new EventRegistry(generator, 5000L, 5000L);
 		registry.getEvents("SS");
 	}
 
 	@Test
 	public void ensureEventListIsClearedAfterRetrieval() {
 		TestClientIdGenerator idGenerator = new TestClientIdGenerator();
-		EventRegistry registry = new EventRegistry(idGenerator);
+		EventRegistry registry = new EventRegistry(idGenerator, 5000L, 5000L);
 
 		idGenerator.setAvailableIds("CID_1");
 
@@ -132,7 +132,7 @@ public class EventRegistryTest {
 	@Test
 	public void ensureGetLastPollTimeFromClient() {
 		TestClientIdGenerator idGenerator = new TestClientIdGenerator();
-		EventRegistry registry = new EventRegistry(idGenerator);
+		EventRegistry registry = new EventRegistry(idGenerator, 5000L, 5000L);
 
 		idGenerator.setAvailableIds("CID_1");
 
@@ -146,7 +146,7 @@ public class EventRegistryTest {
 
 	@Test(expected = RuntimeException.class)
 	public void ensureGetLastPollTimeFromClientThrowsExceptionIfClientDoesNotExist() {
-		EventRegistry registry = new EventRegistry();
+		EventRegistry registry = new EventRegistry(5000L, 5000L);
 		registry.getLastPollTime("Unknown Client");
 	}
 
