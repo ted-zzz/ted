@@ -6,6 +6,7 @@ import nu.ted.generated.Series;
 import nu.ted.gwt.domain.GwtWatchedSeries;
 import nu.ted.gwt.domain.event.GwtEvent;
 import nu.ted.gwt.domain.event.GwtEventType;
+import nu.ted.gwt.domain.event.WatchedSeriesEvent;
 
 /**
  * Responsible for converting a TED API event into a GwtEvent.

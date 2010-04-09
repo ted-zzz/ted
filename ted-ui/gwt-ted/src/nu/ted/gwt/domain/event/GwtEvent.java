@@ -6,6 +6,9 @@ public abstract class GwtEvent implements Serializable {
 
 	private GwtEventType type;
 
+	// Required by GWT.
+	protected GwtEvent(){}
+
 	public GwtEvent(GwtEventType type) {
 		this.type = type;
 	}

@@ -1,7 +1,9 @@
 package nu.ted.gwt.client.event;
 
-public interface EventListener {
+import nu.ted.gwt.domain.event.GwtEvent;
 
-	void onEvent();
+public interface EventListener<E extends GwtEvent> {
+
+	void onEvent(E event);
 
 }

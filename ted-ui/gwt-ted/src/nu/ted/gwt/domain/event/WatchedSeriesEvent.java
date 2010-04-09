@@ -1,12 +1,13 @@
-package nu.ted.gwt.server.event;
+package nu.ted.gwt.domain.event;
 
 import nu.ted.gwt.domain.GwtWatchedSeries;
-import nu.ted.gwt.domain.event.GwtEvent;
-import nu.ted.gwt.domain.event.GwtEventType;
 
 public class WatchedSeriesEvent extends GwtEvent {
 
 	private GwtWatchedSeries series;
+
+	// Required by GWT.
+	protected WatchedSeriesEvent() {}
 
 	public WatchedSeriesEvent(GwtEventType type, GwtWatchedSeries series) {
 		super(type);
