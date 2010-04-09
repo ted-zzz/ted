@@ -24,4 +24,13 @@ public class WatchedSeriesServiceImpl extends TedRemoteServiceServlet
 		client.run(new StopWatchingSeriesClientAction(seriesUid));
 	}
 
+	@Override
+	public GwtWatchedSeries getWatchedSeriesInfo(short seriesUid) {
+		GetWatchedSeriesInfoClientAction action =
+			new GetWatchedSeriesInfoClientAction(seriesUid, getImageStore());
+		JavaClient ted = getTedClient();
+		ted.run(action);
+		return action.getSeries();
+	}
+
 }

@@ -14,4 +14,6 @@ public interface WatchedSeriesService extends RemoteService {
 
 	void stopWatching(short seriesUid);
 
+	GwtWatchedSeries getWatchedSeriesInfo(short seriesUid);
+
 }

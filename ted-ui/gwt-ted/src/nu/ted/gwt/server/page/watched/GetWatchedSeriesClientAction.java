@@ -14,12 +14,12 @@ import nu.ted.gwt.domain.GwtWatchedSeries;
 
 import org.apache.thrift.TException;
 
-public class GetWatchedSeriesClientAction implements ClientAction {
+public class GetWatchedSeriesClientAction extends WatchedSeriesClientAction {
+
 	private List<GwtWatchedSeries> watched = new ArrayList<GwtWatchedSeries>();
-	private ImageStore imageStore;
 
 	public GetWatchedSeriesClientAction(ImageStore imageStore) {
-		this.imageStore = imageStore;
+		super(imageStore);
 	}
 
 	@Override
@@ -28,24 +28,7 @@ public class GetWatchedSeriesClientAction implements ClientAction {
 
 		List<Series> series = client.getWatching();
 		for (Series serie : series) {
-			watched.add(new GwtWatchedSeries(serie.getUid(), serie.getName()));
-
-			String imageStoreKey = serie.getName() + serie.getUid();
-			if (imageStore.contains(imageStoreKey))
-				continue;
-
-			ImageFile imageFile = client.getImageBySeriesId(serie.getUid(), ImageType.BANNER_THUMBNAIL);
-			if (imageFile.getData() == null || imageFile.getData().length == 0) {
-				continue;
-			}
-
-			String mimeType = imageFile.getMimetype();
-			if (mimeType == null || mimeType.isEmpty() || !mimeType.contains("image")) {
-				continue;
-			}
-
-			StoredImage storedImage = new StoredImage(imageFile.getMimetype(), imageFile.getData());
-			imageStore.storeImage(imageStoreKey, storedImage);
+			watched.add(createNewWatchedSeries(client, serie));
 		}
 	}
 
