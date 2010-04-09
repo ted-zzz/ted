@@ -111,7 +111,10 @@ public class EventRegistry {
 
 	public void unregisterClient(String clientId) {
 		synchronized (registry) {
-			registry.remove(clientId);
+			EventCache removed = registry.remove(clientId);
+			if (removed != null) {
+				System.out.println("Client Unregisterd: " + clientId);
+			}
 		}
 	}
 
