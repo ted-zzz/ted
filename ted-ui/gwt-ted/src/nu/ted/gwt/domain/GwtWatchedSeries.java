@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class GwtWatchedSeries implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private short uID;
 	private String name;
 

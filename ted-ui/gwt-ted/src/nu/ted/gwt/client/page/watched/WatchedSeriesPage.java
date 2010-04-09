@@ -1,6 +1,8 @@
 package nu.ted.gwt.client.page.watched;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -20,12 +22,15 @@ public class WatchedSeriesPage extends DefaultPage {
 
 	private WatchedSeriesPageController controller;
 	private FlowPanel watchedSeriesList;
+	private Map<Short, FlowPanel> watchedUIDToPanel;
 
 	public WatchedSeriesPage(WatchedSeriesPageController controller) {
 		this.controller = controller;
 
 		watchedSeriesList = new FlowPanel();
 		content.add(watchedSeriesList);
+
+		watchedUIDToPanel = new HashMap<Short, FlowPanel>();
 	}
 
 	@Override
@@ -39,47 +44,79 @@ public class WatchedSeriesPage extends DefaultPage {
 	}
 
 	public void setWatchedSeries(List<GwtWatchedSeries> watchedSeries) {
-		this.watchedSeriesList.clear();
+		clearPage();
 
 		if (watchedSeries.isEmpty()) {
-			watchedSeriesList.add(new Label("There are currently no series being watched."));
+			showNoWatchedSeriesMessage();
 			return;
 		}
 
 		for (final GwtWatchedSeries watched : watchedSeries) {
-			String thumbImgKey = watched.getName() + watched.getuID();
-			String thumbUrl = GWT.getModuleBaseURL() + "images?iid=" + thumbImgKey;
-			FlowPanel imagePanel = new FlowPanel();
-			imagePanel.setStyleName(Css.WatchedSeriesPage.WATCHED_SERIES_IMAGE);
-			imagePanel.add(new Image(thumbUrl));
-
-			Label info = new Label(watched.getName());
-			info.setStyleName(Css.WatchedSeriesPage.WATCHED_SERIES_INFO);
-
-			Image stopWatchingImage = new Image(Images.INSTANCE.stopWatchingIcon());
-			stopWatchingImage.setStyleName(Css.WatchedSeriesPage.WATCHED_SERIES_ACTION_ITEM);
-			stopWatchingImage.setTitle("Stop Watching");
-			stopWatchingImage.addClickHandler(new ClickHandler() {
-
-				@Override
-				public void onClick(ClickEvent event) {
-					controller.stopWatching(watched.getuID());
-				}
-
-			});
-
-			FlowPanel actionPanel = new FlowPanel();
-			actionPanel.setStyleName(Css.WatchedSeriesPage.WATCHED_SERIES_ACTIONS);
-			actionPanel.add(stopWatchingImage);
-
-			FlowPanel watchingPanel = new FlowPanel();
-			watchingPanel.setStyleName(Css.WatchedSeriesPage.WATCHED_SERIES);
-			watchingPanel.add(actionPanel);
-			watchingPanel.add(info);
-			watchingPanel.add(imagePanel);
-
-			watchedSeriesList.add(watchingPanel);
+			FlowPanel watchedSeriesPanel = createWatchedSeriesPanel(watched);
+			watchedUIDToPanel.put(watched.getuID(), watchedSeriesPanel);
+			watchedSeriesList.add(watchedSeriesPanel);
 		}
 	}
 
+	private void showNoWatchedSeriesMessage() {
+		watchedSeriesList.add(new Label("There are currently no series being watched."));
+	}
+
+	private FlowPanel createWatchedSeriesPanel(final GwtWatchedSeries watched) {
+		String thumbImgKey = watched.getName() + watched.getuID();
+		String thumbUrl = GWT.getModuleBaseURL() + "images?iid=" + thumbImgKey;
+		FlowPanel imagePanel = new FlowPanel();
+		imagePanel.setStyleName(Css.WatchedSeriesPage.WATCHED_SERIES_IMAGE);
+		imagePanel.add(new Image(thumbUrl));
+
+		Label info = new Label(watched.getName());
+		info.setStyleName(Css.WatchedSeriesPage.WATCHED_SERIES_INFO);
+
+		Image stopWatchingImage = new Image(Images.INSTANCE.stopWatchingIcon());
+		stopWatchingImage.setStyleName(Css.WatchedSeriesPage.WATCHED_SERIES_ACTION_ITEM);
+		stopWatchingImage.setTitle("Stop Watching");
+		stopWatchingImage.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				controller.stopWatching(watched.getuID());
+			}
+
+		});
+
+		FlowPanel actionPanel = new FlowPanel();
+		actionPanel.setStyleName(Css.WatchedSeriesPage.WATCHED_SERIES_ACTIONS);
+		actionPanel.add(stopWatchingImage);
+
+		FlowPanel watchingPanel = new FlowPanel();
+		watchingPanel.setStyleName(Css.WatchedSeriesPage.WATCHED_SERIES);
+		watchingPanel.add(actionPanel);
+		watchingPanel.add(info);
+		watchingPanel.add(imagePanel);
+
+		return watchingPanel;
+	}
+
+	/**
+	 * If the series exists, remove it from the list.
+	 *
+	 * @param getuID the UID of the series to be removed.
+	 */
+	public void removeSeriesFromList(Short seriesUID) {
+		if (watchedUIDToPanel.containsKey(seriesUID)) {
+			watchedUIDToPanel.get(seriesUID).removeFromParent();
+			watchedUIDToPanel.remove(seriesUID);
+
+			if (watchedUIDToPanel.isEmpty()) {
+				clearPage();
+				showNoWatchedSeriesMessage();
+			}
+		}
+	}
+
+	private void clearPage() {
+		this.watchedUIDToPanel.clear();
+		this.watchedSeriesList.clear();
+
+	}
 }
