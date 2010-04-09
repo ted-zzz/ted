@@ -43,6 +43,7 @@ public interface Css {
 		public static final String WATCHED_SERIES_INFO = WATCHED_SERIES + "-info";
 		public static final String WATCHED_SERIES_ACTIONS = WATCHED_SERIES + "-actions";
 		public static final String WATCHED_SERIES_ACTION_ITEM = WATCHED_SERIES + "-action-item";
+		public static final String EPISODE_CONTAINER = WATCHED_SERIES + "-episode";
 	}
 
 }

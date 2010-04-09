@@ -15,4 +15,5 @@ public class GwtTed implements EntryPoint {
 	public void onModuleLoad() {
 		PageLoader.getInstance().loadPage(TedPageId.SEARCH);
 	}
+
 }

@@ -19,14 +19,14 @@ public abstract class WatchedSeriesClientAction implements ClientAction {
 		this.imageStore = imageStore;
 	}
 
-	protected GwtWatchedSeries createNewWatchedSeries(Client ted, Series serie)
+	protected GwtWatchedSeries createNewWatchedSeries(Client ted, Series series)
 		throws TException {
-		GwtWatchedSeries watched = new GwtWatchedSeries(serie.getUid(), serie.getName());
+		GwtWatchedSeries watched = GwtWatchedSeriesFactory.create(series);
 
-		String imageStoreKey = serie.getName() + serie.getUid();
+		String imageStoreKey = series.getName() + series.getUid();
 		if (!imageStore.contains(imageStoreKey)) {
 
-			ImageFile imageFile = ted.getImageBySeriesId(serie.getUid(), ImageType.BANNER_THUMBNAIL);
+			ImageFile imageFile = ted.getImageBySeriesId(series.getUid(), ImageType.BANNER_THUMBNAIL);
 			if (imageFile.getData() == null || imageFile.getData().length == 0) {
 				return watched;
 			}

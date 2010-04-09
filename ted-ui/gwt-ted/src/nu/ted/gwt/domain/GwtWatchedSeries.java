@@ -1,6 +1,9 @@
 package nu.ted.gwt.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class GwtWatchedSeries implements Serializable {
 
@@ -9,12 +12,15 @@ public class GwtWatchedSeries implements Serializable {
 	private short uID;
 	private String name;
 
+	private List<GwtEpisode> episodes;
+
 	// Required by GWT.
 	public GwtWatchedSeries(){}
 
-	public GwtWatchedSeries(short uID, String name) {
+	public GwtWatchedSeries(short uID, String name, List<GwtEpisode> episodes) {
 		this.uID = uID;
 		this.name = name;
+		this.episodes = episodes;
 	}
 
 	public short getuID() {
@@ -31,6 +37,14 @@ public class GwtWatchedSeries implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public void setEpisodes(List<GwtEpisode> episodes) {
+		this.episodes = episodes;
+	}
+
+	public List<GwtEpisode> getEpisodes() {
+		return episodes;
 	}
 
 }

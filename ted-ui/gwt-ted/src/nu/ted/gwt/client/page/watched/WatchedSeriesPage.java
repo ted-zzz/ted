@@ -22,7 +22,7 @@ public class WatchedSeriesPage extends DefaultPage {
 
 	private WatchedSeriesPageController controller;
 	private FlowPanel watchedSeriesList;
-	private Map<Short, FlowPanel> watchedUIDToPanel;
+	private Map<Short, WatchedSeriesWidget> watchedUIDToPanel;
 
 	public WatchedSeriesPage(WatchedSeriesPageController controller) {
 		this.controller = controller;
@@ -30,7 +30,7 @@ public class WatchedSeriesPage extends DefaultPage {
 		watchedSeriesList = new FlowPanel();
 		content.add(watchedSeriesList);
 
-		watchedUIDToPanel = new HashMap<Short, FlowPanel>();
+		watchedUIDToPanel = new HashMap<Short, WatchedSeriesWidget>();
 	}
 
 	@Override
@@ -88,10 +88,19 @@ public class WatchedSeriesPage extends DefaultPage {
 		}
 	}
 
-	private void addWatchedSeriesPanel(GwtWatchedSeries watched) {
-		FlowPanel watchedSeriesPanel = createWatchedSeriesPanel(watched);
-		watchedUIDToPanel.put(watched.getuID(), watchedSeriesPanel);
-		watchedSeriesList.add(watchedSeriesPanel);
+	private void addWatchedSeriesPanel(final GwtWatchedSeries watched) {
+		ClickHandler stopWatchingClickHandler = new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				controller.stopWatching(watched.getuID());
+			}
+		};
+
+		WatchedSeriesWidget watchedSeriesWidget =
+			new WatchedSeriesWidget(watched, stopWatchingClickHandler);
+		watchedUIDToPanel.put(watched.getuID(), watchedSeriesWidget);
+		watchedSeriesList.add(watchedSeriesWidget);
 	}
 
 	private void showNoWatchedSeriesMessage() {

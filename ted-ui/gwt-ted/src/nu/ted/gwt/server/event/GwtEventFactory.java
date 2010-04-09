@@ -7,6 +7,7 @@ import nu.ted.gwt.domain.GwtWatchedSeries;
 import nu.ted.gwt.domain.event.GwtEvent;
 import nu.ted.gwt.domain.event.GwtEventType;
 import nu.ted.gwt.domain.event.WatchedSeriesEvent;
+import nu.ted.gwt.server.page.watched.GwtWatchedSeriesFactory;
 
 /**
  * Responsible for converting a TED API event into a GwtEvent.
@@ -28,8 +29,8 @@ public class GwtEventFactory {
 
 	private GwtEvent createWatchedSeriesEvent(Event tedServerEvent) {
 		Series series = tedServerEvent.getSeries();
-		GwtWatchedSeries gwtSeries = new GwtWatchedSeries(series.getUid(), series.getName());
-		return new WatchedSeriesEvent(GwtEventType.valueOf(tedServerEvent.getType().name()), gwtSeries);
+		return new WatchedSeriesEvent(GwtEventType.valueOf(tedServerEvent.getType().name()),
+				GwtWatchedSeriesFactory.create(series));
 	}
 
 }
