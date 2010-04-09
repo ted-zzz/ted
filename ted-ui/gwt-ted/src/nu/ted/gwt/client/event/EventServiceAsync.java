@@ -2,7 +2,7 @@ package nu.ted.gwt.client.event;
 
 import java.util.List;
 
-import nu.ted.gwt.domain.GwtEvent;
+import nu.ted.gwt.domain.event.GwtEvent;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 

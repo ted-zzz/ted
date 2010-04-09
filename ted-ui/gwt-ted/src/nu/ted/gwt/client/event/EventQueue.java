@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nu.ted.gwt.client.MessageCallback;
-import nu.ted.gwt.domain.GwtEvent;
+import nu.ted.gwt.domain.event.GwtEvent;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
 
 public class EventQueue {
+
+	// TODO: Make time configurable.
+	private static final int RETRY_DELAY = 8000;
 
 	private static final EventServiceAsync EVENT_SERVICE = GWT.create(EventService.class);
 
@@ -36,7 +39,7 @@ public class EventQueue {
 						checkForEvents();
 					}
 				};
-				timer.scheduleRepeating(8000);
+				timer.scheduleRepeating(RETRY_DELAY);
 			}
 
 		});

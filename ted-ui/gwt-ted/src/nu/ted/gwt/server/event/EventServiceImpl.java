@@ -8,7 +8,7 @@ import nu.ted.client.ClientAction;
 import nu.ted.client.JavaClient;
 import nu.ted.generated.TedService.Client;
 import nu.ted.gwt.client.event.EventService;
-import nu.ted.gwt.domain.GwtEvent;
+import nu.ted.gwt.domain.event.GwtEvent;
 import nu.ted.gwt.server.page.search.TedRemoteServiceServlet;
 
 public class EventServiceImpl extends TedRemoteServiceServlet implements EventService {

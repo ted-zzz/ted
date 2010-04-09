@@ -8,7 +8,8 @@ import org.apache.thrift.TException;
 import nu.ted.client.ClientAction;
 import nu.ted.generated.Event;
 import nu.ted.generated.TedService.Client;
-import nu.ted.gwt.domain.GwtEvent;
+import nu.ted.gwt.domain.event.GwtEvent;
+import nu.ted.gwt.domain.event.GwtEventType;
 
 public class GetEventsClientAction implements ClientAction {
 
@@ -23,9 +24,11 @@ public class GetEventsClientAction implements ClientAction {
 	@Override
 	public void run(Client client) throws TException {
 		List<Event> serverEvents = client.getEvents(clientId);
-		// Found events on the server, not convert them to GWT events.
+
+		// Found events on the server, now convert them to GWT events.
+		GwtEventFactory eventFactory = new GwtEventFactory();
 		for(Event serverEvent : serverEvents) {
-			events.add(new GwtEvent());
+			events.add(eventFactory.createEvent(serverEvent));
 		}
 	}
 
