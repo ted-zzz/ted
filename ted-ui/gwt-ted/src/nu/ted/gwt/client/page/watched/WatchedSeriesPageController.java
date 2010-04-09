@@ -13,6 +13,7 @@ import nu.ted.gwt.domain.event.GwtEventType;
 import nu.ted.gwt.domain.event.WatchedSeriesEvent;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class WatchedSeriesPageController extends PageController<WatchedSeriesPage> {
 
@@ -74,8 +75,25 @@ public class WatchedSeriesPageController extends PageController<WatchedSeriesPag
 	}
 
 	private void addSeriesToList(GwtWatchedSeries series) {
-		// TODO [MS] Check to see if it already exists in the page's list.
-		// TODO [MS] If not, get the data from the server, and add it to the page.
+		if (!page.isShowingSeries(series.getuID())) {
+			watchedSeriesService.getWatchedSeriesInfo(series.getuID(),
+				new AsyncCallback<GwtWatchedSeries>() {
+
+					@Override
+					public void onSuccess(GwtWatchedSeries watched) {
+						if (watched == null) {
+							return;
+						}
+						page.addSeriesToList(watched);
+					}
+					@Override
+					public void onFailure(Throwable caught) {
+						// Do nothing.
+					}
+
+				}
+			);
+		}
 	}
 
 	private void removeSeriesFromList(GwtWatchedSeries series) {

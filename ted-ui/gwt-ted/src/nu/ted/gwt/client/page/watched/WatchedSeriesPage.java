@@ -52,10 +52,46 @@ public class WatchedSeriesPage extends DefaultPage {
 		}
 
 		for (final GwtWatchedSeries watched : watchedSeries) {
-			FlowPanel watchedSeriesPanel = createWatchedSeriesPanel(watched);
-			watchedUIDToPanel.put(watched.getuID(), watchedSeriesPanel);
-			watchedSeriesList.add(watchedSeriesPanel);
+			addWatchedSeriesPanel(watched);
 		}
+	}
+
+	/**
+	 * If the series exists, remove it from the list.
+	 *
+	 * @param getuID the UID of the series to be removed.
+	 */
+	public void removeSeriesFromList(Short seriesUID) {
+		if (watchedUIDToPanel.containsKey(seriesUID)) {
+			watchedUIDToPanel.get(seriesUID).removeFromParent();
+			watchedUIDToPanel.remove(seriesUID);
+
+			if (watchedUIDToPanel.isEmpty()) {
+				clearPage();
+				showNoWatchedSeriesMessage();
+			}
+		}
+	}
+
+	public boolean isShowingSeries(short seriesUid) {
+		return watchedUIDToPanel.containsKey(seriesUid);
+	}
+
+	public void addSeriesToList(GwtWatchedSeries watched) {
+		if (!isShowingSeries(watched.getuID())) {
+
+			if (watchedUIDToPanel.isEmpty()) {
+				clearPage();
+			}
+
+			addWatchedSeriesPanel(watched);
+		}
+	}
+
+	private void addWatchedSeriesPanel(GwtWatchedSeries watched) {
+		FlowPanel watchedSeriesPanel = createWatchedSeriesPanel(watched);
+		watchedUIDToPanel.put(watched.getuID(), watchedSeriesPanel);
+		watchedSeriesList.add(watchedSeriesPanel);
 	}
 
 	private void showNoWatchedSeriesMessage() {
@@ -97,26 +133,8 @@ public class WatchedSeriesPage extends DefaultPage {
 		return watchingPanel;
 	}
 
-	/**
-	 * If the series exists, remove it from the list.
-	 *
-	 * @param getuID the UID of the series to be removed.
-	 */
-	public void removeSeriesFromList(Short seriesUID) {
-		if (watchedUIDToPanel.containsKey(seriesUID)) {
-			watchedUIDToPanel.get(seriesUID).removeFromParent();
-			watchedUIDToPanel.remove(seriesUID);
-
-			if (watchedUIDToPanel.isEmpty()) {
-				clearPage();
-				showNoWatchedSeriesMessage();
-			}
-		}
-	}
-
 	private void clearPage() {
 		this.watchedUIDToPanel.clear();
 		this.watchedSeriesList.clear();
-
 	}
 }
