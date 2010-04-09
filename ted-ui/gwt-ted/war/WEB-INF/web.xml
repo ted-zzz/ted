@@ -17,6 +17,16 @@
 	</servlet-mapping>
 
 	<servlet>
+		<servlet-name>eventService</servlet-name>
+		<servlet-class>nu.ted.gwt.server.event.EventServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>eventService</servlet-name>
+		<url-pattern>/gwtted/events</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
 		<servlet-name>watchedSeriesService</servlet-name>
 		<servlet-class>nu.ted.gwt.server.page.watched.WatchedSeriesServiceImpl</servlet-class>
 	</servlet>

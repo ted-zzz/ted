@@ -27,7 +27,7 @@ public class JavaClient {
 		catch (TException e) {
 			// TODO [MS] Throw an exception here so it can be handled
 			// by the caller.
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		finally {
 			transport.close();
