@@ -142,4 +142,9 @@ public class TedServiceImpl implements Iface
 		return eventRegistry.getEvents(eventRegistryClientId);
 	}
 
+	@Override
+	public Series getSeries(short uID) throws TException {
+		return findWatched(uID);
+	}
+
 }

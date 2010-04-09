@@ -159,4 +159,20 @@ public class TedTests
 		assertEquals(1, events.size());
 		assertEquals(EventType.WATCHED_SERIES_REMOVED, events.get(0).getType());
 	}
+
+	@Test
+	public void ensureGetSeriesReturnsWatchedSeries() throws Exception {
+		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
+		short seriesId = ted.startWatching("E");
+		Series series = ted.getSeries(seriesId);
+		assertNotNull("Series was not found.", series);
+		assertEquals(seriesId, series.getUid());
+	}
+
+	@Test
+	public void ensureNullWhenGetSeriesDoesNotFindSeriesWithSpecifiedId() throws Exception {
+		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
+		Series series = ted.getSeries(new Short("123"));
+		assertNull("Series should not have been found.", series);
+	}
 }

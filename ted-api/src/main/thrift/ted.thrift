@@ -105,6 +105,10 @@ service TedService
 	list<Series> getWatching();
 		# TODO: throws?
 
+	# get a single serie by uID.
+	Series getSeries(1: i16 uID);
+		# TODO: throws?
+
 	ImageFile getImageByGuideId(1: string searchUID, 2: ImageType type);
 		# TODO: throws?
 
