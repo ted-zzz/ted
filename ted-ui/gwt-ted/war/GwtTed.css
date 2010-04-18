@@ -25,10 +25,13 @@ body { /* text-align: center; !important */
 
 .ted-header-logo {
 	cursor: pointer;
+	background: url("img/header.png");
+	width: 1024px;
+	height: 100px;
 }
 
 .ted-menu {
-	background-color: black;
+	background-color: #aa7347;
 	width: 1012px;
 	height: 22px;
 	margin-bottom: 2px;

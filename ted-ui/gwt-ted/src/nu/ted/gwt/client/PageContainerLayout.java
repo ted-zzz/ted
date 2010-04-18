@@ -29,19 +29,20 @@ public class PageContainerLayout extends DefaultPageContainerLayout {
 	protected FlowPanel createHeader() {
 		FlowPanel header = new FlowPanel();
 		header.setStyleName(Application.TED_HEADER);
-		Image headerImage = new Image(Images.INSTANCE.headerLogo());
+//		Image headerImage = new Image(Images.INSTANCE.headerLogo());
+		FlowPanel headerImage = new FlowPanel();
 		headerImage.setStyleName(Css.Application.TED_HEADER_LOGO);
-		headerImage.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				PageLoader.getInstance().loadPage(TedPageId.WATCHED_SERIES);
-			}
-		});
+//		headerImage.addClickHandler(new ClickHandler() {
+//			@Override
+//			public void onClick(ClickEvent event) {
+//				PageLoader.getInstance().loadPage(TedPageId.WATCHED_SERIES);
+//			}
+//		});
 		header.add(headerImage);
 
-		Label title = new Label(TedMessages.INSTANCE.headerTitle());
-		title.setStyleName(Application.TED_HEADER_TITLE);
-		header.add(title);
+//		Label title = new Label(TedMessages.INSTANCE.headerTitle());
+//		title.setStyleName(Application.TED_HEADER_TITLE);
+//		header.add(title);
 		header.add(createMenu());
 		return header;
 	}
