@@ -3,9 +3,13 @@ package nu.ted;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
+import nu.ted.domain.TedBackendWrapper;
 import nu.ted.generated.Series;
 import nu.ted.generated.Ted;
 import nu.ted.generated.TedConfig;
@@ -36,6 +40,9 @@ import com.martiansoftware.jsap.JSAPResult;
 import com.martiansoftware.jsap.Switch;
 
 public class Server {
+
+	private static TedServiceImpl service;
+	private static Ted ted;
 
 	private byte[] readFileToBytes(final File file) throws IOException {
 
@@ -124,10 +131,17 @@ public class Server {
 		start(createDefaultTed());
 	}
 
+	private static class EpisodeUpdater implements Runnable {
+		public void run() {
+			new TedBackendWrapper(ted).updateSeries(Calendar.getInstance());
+		}
+	}
+
 	private void start(Ted ted)
 	{
 		try
 		{
+			Server.ted = ted;
 			TedConfig config = ted.getConfig();
 
 			TServerSocket serverTransport = new TServerSocket(config.getPort());
@@ -141,7 +155,10 @@ public class Server {
 			GuideFactory.addGuide(new TVRage());
 
 			GuideDB guide = GuideFactory.getGuide(TVDB.NAME);
-			TedServiceImpl service = new TedServiceImpl(ted, guide);
+			service = new TedServiceImpl(ted, guide);
+
+			Executors.newScheduledThreadPool(1).scheduleAtFixedRate(
+					new EpisodeUpdater(), 10, 3600, TimeUnit.SECONDS);
 
 			// TODO: Dependency Injection?
 			TedService.Processor processor = new TedService.Processor(service);
