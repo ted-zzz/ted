@@ -59,7 +59,7 @@ public class TVDB implements GuideDB
 		List<Episode> newOnes = new LinkedList<Episode>();
 		Episode last = lastEpisode;
 		while (true) {
-			Episode e = series.getNextEpisode(last, EpisodeStatus.SEARCHING);
+			Episode e = series.getNextEpisode(last);
 			if (e == null)
 				break;
 			if (e.getAired().getValue() > date.getTimeInMillis())

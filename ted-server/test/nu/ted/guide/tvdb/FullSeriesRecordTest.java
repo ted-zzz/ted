@@ -26,8 +26,7 @@ public class FullSeriesRecordTest
 		this.xml = new TestSeriesXml();
 	}
 
-	private void assertEpisode(Episode episode, short season, short epnum, Calendar aired, String name) throws ParseException
-	{
+	private void assertEpisode(Episode episode, short season, short epnum, Calendar aired, String name) {
 		Assert.assertEquals(season, episode.getSeason());
 		Assert.assertEquals(epnum, episode.getNumber());
 
@@ -66,7 +65,7 @@ public class FullSeriesRecordTest
 
 		FullSeriesRecord list = FullSeriesRecord.create(xml.toStream());
 
-		Episode result = list.getNextEpisode(now, EpisodeStatus.SEARCHING);
+		Episode result = list.getNextEpisode(now);
 		Assert.assertNotNull(result);
 		assertEpisode(result, (short) 1, (short) 3, thenCompare, "Name");
 	}
@@ -90,7 +89,7 @@ public class FullSeriesRecordTest
 		Calendar afterCompare = DatatypeConverter.parseDate(afterPrintDate);
 		FullSeriesRecord list = FullSeriesRecord.create(xml.toStream());
 
-		Episode result = list.getNextEpisode(now, EpisodeStatus.SEARCHING);
+		Episode result = list.getNextEpisode(now);
 
 		Assert.assertNotNull(result);
 		assertEpisode(result, (short) 1, (short) 4, afterCompare, "Name2");
@@ -111,11 +110,11 @@ public class FullSeriesRecordTest
 		TVDBEpisode episode = new TVDBEpisode(1, 3, now, "EP1");
 
 		Episode matching = new Episode((short) 1, (short) 3,
-				new Date(now.getTimeInMillis()), EpisodeStatus.SEARCHING);
+				new Date(now.getTimeInMillis()));
 		Episode wrongSeason = new Episode((short) 2, (short) 3,
-				new Date(now.getTimeInMillis()), EpisodeStatus.SEARCHING);
+				new Date(now.getTimeInMillis()));
 		Episode wrongNumber = new Episode((short) 2, (short) 3,
-				new Date(now.getTimeInMillis()), EpisodeStatus.SEARCHING);
+				new Date(now.getTimeInMillis()));
 
 		Assert.assertTrue(episode.equalsEpisode(matching));
 		Assert.assertFalse(episode.equalsEpisode(wrongSeason));

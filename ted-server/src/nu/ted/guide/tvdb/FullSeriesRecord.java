@@ -74,7 +74,7 @@ public class FullSeriesRecord {
 			return season;
 		}
 
-		public int getEpisode()
+		public int getEpisodeNumber()
 		{
 			return number;
 		}
@@ -101,9 +101,9 @@ public class FullSeriesRecord {
 			return title;
 		}
 
-		Episode getEpisode(EpisodeStatus status) {
-			return new Episode((short) getSeason(), (short) getEpisode(),
-					new Date(getFirstAired()), status);
+		Episode getEpisode() {
+			return new Episode((short) getSeason(), (short) getEpisodeNumber(),
+					new Date(getFirstAired()));
 		}
 	}
 
@@ -114,14 +114,14 @@ public class FullSeriesRecord {
 		public int compare(final TVDBEpisode ep1, final TVDBEpisode ep2)
 		{
 			final int season1 = ep1.getSeason();
-			final int season2 = ep2.getEpisode();
+			final int season2 = ep2.getSeason();
 
 			if (season1 != season2) {
 				return season1 - season2;
 			}
 
-			final int num1 = ep1.getEpisode();
-			final int num2 = ep2.getEpisode();
+			final int num1 = ep1.getEpisodeNumber();
+			final int num2 = ep2.getEpisodeNumber();
 
 			if (num1 != num2) {
 				return num1 - num2;
@@ -138,23 +138,23 @@ public class FullSeriesRecord {
 	@XmlElement(name = "Episode")
 	private List<TVDBEpisode> episodeList = new ArrayList<TVDBEpisode>();
 
-	public Episode getNextEpisode(Calendar date, EpisodeStatus status)
+	public Episode getNextEpisode(Calendar date)
 	{
 		long checkDate = date.getTimeInMillis();
 		for (TVDBEpisode e : episodeList) {
 			if (e.getFirstAired() > checkDate) {
-				return e.getEpisode(status);
+				return e.getEpisode();
 			}
 		}
 		return null; // TODO: should throw exception
 	}
 
-	public Episode getNextEpisode(final Episode last, EpisodeStatus newStatus)
+	public Episode getNextEpisode(final Episode last)
 	{
 		boolean takeThisOne = false;
 		for (TVDBEpisode e : episodeList) {
 			if (takeThisOne)
-				return e.getEpisode(newStatus);
+				return e.getEpisode();
 			else if (e.equalsEpisode(last))
 				takeThisOne = true;
 		}

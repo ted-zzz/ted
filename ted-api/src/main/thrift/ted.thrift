@@ -28,11 +28,11 @@ enum EpisodeStatus
 
 struct Episode
 {
-	1: i16			season,
-	2: i16			number,
-	3: Date			aired,
+	1: i16				season,
+	2: i16				number,
+	3: Date				aired,
 
-	4: EpisodeStatus	status
+	4: optional EpisodeStatus	status
 }
 
 struct Series

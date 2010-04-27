@@ -71,7 +71,7 @@ public class TestGuide implements GuideDB
 		oneDayAgo.add(Calendar.DAY_OF_MONTH, -1);
 		List<Episode> episodes = new LinkedList<Episode>();
 		episodes.add(new Episode(LAST_EPISODE_SEASON, (short) (LAST_EPISODE_NUMBER + 1),
-				new Date(oneDayAgo.getTimeInMillis()), EpisodeStatus.UNKNOWN));
+				new Date(oneDayAgo.getTimeInMillis())));
 		return episodes;
 	}
 

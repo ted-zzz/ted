@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import nu.ted.generated.Episode;
+import nu.ted.generated.EpisodeStatus;
 import nu.ted.generated.Series;
 import nu.ted.guide.DataSourceException;
 import nu.ted.guide.GuideDB;
@@ -42,6 +43,8 @@ public class SeriesBackendWrapper
 		try {
 			newEpisodes = guide.getNewAiredEpisodes(guideId, calendar, last);
 			for (Episode e : newEpisodes) {
+				// TODO: need a better way to enforce Status is set here.
+				e.setStatus(EpisodeStatus.SEARCHING);
 				series.addToEpisodes(e);
 			}
 		} catch (DataSourceException e1) {
