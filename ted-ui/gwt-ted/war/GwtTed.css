@@ -125,10 +125,7 @@ body { /* text-align: center; !important */
 	clear: both;
 }
 
-ted-watched-series-image {
-	float: left;
-	width: 300px;
-}
+
 
 .ted-watched-series-info {
 	float: right;
@@ -148,4 +145,39 @@ ted-watched-series-image {
 
 .ted-watched-series-episode {
 	padding-bottom: 4px;
+}
+
+.ted-watched-series-LHS {
+	float: right;
+	background: url("img/watched-left.png") no-repeat;
+	width: 11px;
+	height: 73px;
+}
+
+.ted-watched-series-RHS {
+	float: right;
+	background: url("img/watched-right.png") no-repeat;
+	padding-left: 14px;
+	padding-top: 10px;
+	width: 45px;
+	height: 73px;
+}
+
+.ted-watched-series-CONTENT {
+	float: right;
+	background: red url("img/watched-bg.png") repeat-x;
+	width: 300px;
+	height: 73px;
+}
+
+.ted-watched-series-image {
+	background: url("img/watched-image-bg.png") repeat-x;
+	float: right;
+	width: 316px;
+	height: 73px;
+}
+
+.ted-watched-series-image img{
+	position: relative;
+	top: 7px;
 }
