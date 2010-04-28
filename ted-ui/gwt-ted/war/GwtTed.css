@@ -126,12 +126,6 @@ body { /* text-align: center; !important */
 	clear: both;
 }
 
-
-.ted-watched-list .gwt-DisclosurePanel{
-	margin: auto;
-	padding-bottom: 4px;
-}
-
 .ted-watched-series-info {
 	margin-left: 6px;
 	margin-top: 4px;
@@ -156,14 +150,16 @@ body { /* text-align: center; !important */
 
 .ted-watched-series-LHS {
 	float: right;
-	background: url("img/watched-left.gif") no-repeat;
-	width: 10px;
+	background: url("img/watched-left.png") no-repeat;
+	width: 11px;
 	height: 73px;
 }
 
 .ted-watched-series-RHS {
 	float: right;
-	background: url("img/watched-right.gif") no-repeat;
+	background: url("img/watched-right.png") no-repeat;
+	padding-left: 14px;
+	padding-top: 10px;
 	width: 45px;
 	height: 73px;
 }
@@ -171,7 +167,7 @@ body { /* text-align: center; !important */
 .ted-watched-series-CONTENT {
 	float: right;
 	background: red url("img/watched-bg.png") repeat-x;
-	width: 540px;
+	width: 300px;
 	height: 73px;
 }
 
@@ -185,18 +181,4 @@ body { /* text-align: center; !important */
 .ted-watched-series-image img{
 	position: relative;
 	top: 7px;
-}
-
-.gwt-DisclosurePanel .content {
-	padding: 6px 6px !important;
-	border-left: 2px dotted black !important;
-	margin-left: 10px !important;
-	border-right: 2px dotted black !important;
-	margin-right: 10px !important;
-	border-bottom: 2px solid black;
-}
-
-.gwt-DisclosurePanel .header {
-	background: blue;
-	outline: none;
 }
