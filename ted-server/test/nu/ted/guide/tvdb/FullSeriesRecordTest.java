@@ -65,7 +65,7 @@ public class FullSeriesRecordTest
 
 		FullSeriesRecord list = FullSeriesRecord.create(xml.toStream());
 
-		Episode result = list.getNextEpisode(now);
+		Episode result = list.getNextEpisode(new Date(now.getTimeInMillis()));
 		Assert.assertNotNull(result);
 		assertEpisode(result, (short) 1, (short) 3, thenCompare, "Name");
 	}
@@ -89,7 +89,7 @@ public class FullSeriesRecordTest
 		Calendar afterCompare = DatatypeConverter.parseDate(afterPrintDate);
 		FullSeriesRecord list = FullSeriesRecord.create(xml.toStream());
 
-		Episode result = list.getNextEpisode(now);
+		Episode result = list.getNextEpisode(new Date(now.getTimeInMillis()));
 
 		Assert.assertNotNull(result);
 		assertEpisode(result, (short) 1, (short) 4, afterCompare, "Name2");

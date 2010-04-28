@@ -138,9 +138,9 @@ public class FullSeriesRecord {
 	@XmlElement(name = "Episode")
 	private List<TVDBEpisode> episodeList = new ArrayList<TVDBEpisode>();
 
-	public Episode getNextEpisode(Calendar date)
+	public Episode getNextEpisode(Date date)
 	{
-		long checkDate = date.getTimeInMillis();
+		long checkDate = date.getValue();
 		for (TVDBEpisode e : episodeList) {
 			if (e.getFirstAired() > checkDate) {
 				return e.getEpisode();

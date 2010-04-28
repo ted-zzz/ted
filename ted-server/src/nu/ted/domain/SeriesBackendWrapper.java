@@ -3,6 +3,7 @@ package nu.ted.domain;
 import java.util.Calendar;
 import java.util.List;
 
+import nu.ted.generated.Date;
 import nu.ted.generated.Episode;
 import nu.ted.generated.EpisodeStatus;
 import nu.ted.generated.Series;
@@ -35,18 +36,21 @@ public class SeriesBackendWrapper
 	}
 
 	public void update(Calendar calendar) {
-		Episode last = getLastEpisode();
+		Date after = series.getLastCheck();
+		Date before = new Date(calendar.getTimeInMillis());
+
 		GuideDB guide = getGuide();
 		String guideId = series.getGuideId();
 
 		List<Episode> newEpisodes;
 		try {
-			newEpisodes = guide.getNewAiredEpisodes(guideId, calendar, last);
+			newEpisodes = guide.getAiredEpisodesBetween(guideId, after, before);
 			for (Episode e : newEpisodes) {
 				// TODO: need a better way to enforce Status is set here.
 				e.setStatus(EpisodeStatus.SEARCHING);
 				series.addToEpisodes(e);
 			}
+			series.setLastCheck(before);
 		} catch (DataSourceException e1) {
 			// TODO: log or rethrow?
 		}

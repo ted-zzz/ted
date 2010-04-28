@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
+import nu.ted.generated.Date;
 import nu.ted.generated.Episode;
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.ImageType;
@@ -86,10 +87,9 @@ public class TVRage implements GuideDB {
 	}
 
 	@Override
-	public List<Episode> getNewAiredEpisodes(String guideId, Calendar date,
-			Episode lastEpisode) throws DataSourceException {
+	public List<Episode> getAiredEpisodesBetween(String guideId,
+			Date after, Date before) throws DataSourceException {
 		throw new UnsupportedOperationException("Not yet implemented");
-		// TODO Auto-generated method stub
 	}
 
 }

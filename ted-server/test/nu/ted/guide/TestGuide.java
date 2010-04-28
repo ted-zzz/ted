@@ -65,13 +65,12 @@ public class TestGuide implements GuideDB
 	}
 
 	@Override
-	public List<Episode> getNewAiredEpisodes(String guideId, Calendar date,
-			Episode lastEpisode) throws DataSourceException {
-		Calendar oneDayAgo = (Calendar) date.clone();
-		oneDayAgo.add(Calendar.DAY_OF_MONTH, -1);
+	public List<Episode> getAiredEpisodesBetween(String guideId,
+			Date after, Date before) throws DataSourceException {
+
 		List<Episode> episodes = new LinkedList<Episode>();
 		episodes.add(new Episode(LAST_EPISODE_SEASON, (short) (LAST_EPISODE_NUMBER + 1),
-				new Date(oneDayAgo.getTimeInMillis())));
+				new Date(before.getValue() - 10))) ;
 		return episodes;
 	}
 
@@ -95,4 +94,6 @@ public class TestGuide implements GuideDB
 			return new ImageFile();
 		}
 	}
+
+
 }

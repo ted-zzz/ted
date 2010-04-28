@@ -6,7 +6,6 @@ import java.util.List;
 
 import nu.ted.generated.Date;
 import nu.ted.generated.Episode;
-import nu.ted.generated.EpisodeStatus;
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.ImageType;
 import nu.ted.generated.Series;
@@ -52,20 +51,14 @@ public class TVDB implements GuideDB
 	}
 
 	@Override
-	public List<Episode> getNewAiredEpisodes(String guideId, Calendar date,
-			final Episode lastEpisode) throws DataSourceException {
-
+	public List<Episode> getAiredEpisodesBetween(String guideId, Date after,
+			Date before) throws DataSourceException {
 		FullSeriesRecord series = dataSource.getFullSeriesRecord(guideId);
 		List<Episode> newOnes = new LinkedList<Episode>();
-		Episode last = lastEpisode;
-		while (true) {
-			Episode e = series.getNextEpisode(last);
-			if (e == null)
-				break;
-			if (e.getAired().getValue() > date.getTimeInMillis())
-				break;
+
+		Episode e = series.getNextEpisode(after);
+		while (e != null && e.getAired().getValue() <= before.getValue()) {
 			newOnes.add(e);
-			last = e;
 		}
 		return newOnes;
 	}
