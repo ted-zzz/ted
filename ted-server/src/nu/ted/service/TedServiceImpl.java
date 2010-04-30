@@ -34,7 +34,7 @@ public class TedServiceImpl implements Iface
 	public TedServiceImpl(Ted ted, GuideDB seriesSource) {
 		this.ted = ted;
 		this.seriesSource = seriesSource;
-		this.eventRegistry = new EventRegistry(60000L, 30000L);
+		this.eventRegistry = EventRegistry.createEventRegistry(60000L, 30000L);
 	}
 
 	@Override

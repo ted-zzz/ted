@@ -10,7 +10,7 @@ public class EventRegistryCleanerTest {
 
 	@Test
 	public void ensureCacheCleanerCleansExpiredClients() throws Exception {
-		EventRegistry registry = new TestEventRegistry(0L, 0L);
+		EventRegistry registry = new TestEventRegistry();
 		String c1 = registry.registerClient();
 		String c2 = registry.registerClient();
 
@@ -33,16 +33,9 @@ public class EventRegistryCleanerTest {
 
 	private class TestEventRegistry extends EventRegistry {
 
-		public TestEventRegistry(long maxClientIdleTime, long wait) {
-			super(maxClientIdleTime, wait);
+		protected TestEventRegistry() {
+			super(new ClientIdGenerator());
 		}
-
-		@Override
-		protected void startRegistryCleaner(long maxClientIdleTime, long wait) {
-			// Don't start the cleaner automatically.
-		}
-
-
 
 	}
 }

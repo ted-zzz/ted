@@ -14,18 +14,24 @@ public class EventRegistry {
 	private ClientIdGenerator idGenerator;
 	private Map<String, EventCache> registry;
 
-	public EventRegistry(long maxClientIdleTime, long wait) {
-		this(new ClientIdGenerator(), maxClientIdleTime, wait);
+	public static EventRegistry createEventRegistry(long maxClientIdleTime, long wait) {
+		return createEventRegistry(new ClientIdGenerator(), maxClientIdleTime, wait);
 	}
 
-	public EventRegistry(ClientIdGenerator clientIdGenerator, long maxClientIdleTime, long wait) {
+	public static EventRegistry createEventRegistry(ClientIdGenerator clientIdGenerator, long maxClientIdleTime,
+			long wait) {
+		EventRegistry registry = new EventRegistry(clientIdGenerator);
+		startRegistryCleaner(registry, maxClientIdleTime, wait);
+		return registry;
+	}
+
+	protected EventRegistry(ClientIdGenerator clientIdGenerator) {
 		this.idGenerator = clientIdGenerator;
 		this.registry = new HashMap<String, EventCache>();
-		startRegistryCleaner(maxClientIdleTime, wait);
 	}
 
-	protected void startRegistryCleaner(long maxClientIdleTime, long wait) {
-		EventRegistryCleaner cleaner = new EventRegistryCleaner(this, wait,
+	protected static void startRegistryCleaner(EventRegistry reg, long maxClientIdleTime, long wait) {
+		EventRegistryCleaner cleaner = new EventRegistryCleaner(reg, wait,
 				maxClientIdleTime);
 		cleaner.start();
 	}
