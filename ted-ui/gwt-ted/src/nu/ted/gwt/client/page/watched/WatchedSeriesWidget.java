@@ -48,11 +48,6 @@ public class WatchedSeriesWidget extends Composite {
 		actionPanel.setStyleName(Css.WatchedSeriesPage.WATCHED_SERIES_ACTIONS);
 		actionPanel.add(stopWatchingImage);
 
-		FlowPanel watchingPanel = new FlowPanel();
-//		watchingPanel.setStyleName(Css.WatchedSeriesPage.WATCHED_SERIES);
-//		watchingPanel.add(actionPanel);
-//		watchingPanel.add(info);
-//		watchingPanel.add(imagePanel);
 
 		FlowPanel lhs = new FlowPanel();
 		lhs.setStyleName("ted-watched-series-LHS");
@@ -61,11 +56,13 @@ public class WatchedSeriesWidget extends Composite {
 		rhs.setStyleName("ted-watched-series-RHS");
 		rhs.add(stopWatchingImage);
 
-		FlowPanel stuff = new FlowPanel();
-		stuff.setStyleName("ted-watched-series-CONTENT");
+		FlowPanel seriesContent = new FlowPanel();
+		seriesContent.setStyleName("ted-watched-series-CONTENT");
+		seriesContent.add(info);
 
+		FlowPanel watchingPanel = new FlowPanel();
 		watchingPanel.add(rhs);
-		watchingPanel.add(stuff);
+		watchingPanel.add(seriesContent);
 		watchingPanel.add(imagePanel);
 		watchingPanel.add(lhs);
 		return watchingPanel;

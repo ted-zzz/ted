@@ -3,7 +3,7 @@ body { /* text-align: center; !important */
 	margin: 0px;
 	height: 100%;
 	vertical-align: top;
-	background-color: #EEEEEE;
+	background-color: #ffe9b3 !important;
 }
 
 .ted-content {
@@ -88,6 +88,7 @@ body { /* text-align: center; !important */
 }
 
 .ted-series-list {
+	background-color: white;
 	border: 1px solid black;
 	margin-top: 4px;
 	height: 500px;
@@ -126,12 +127,16 @@ body { /* text-align: center; !important */
 }
 
 
+.ted-watched-list .gwt-DisclosurePanel{
+	margin: auto;
+	padding-bottom: 4px;
+}
 
 .ted-watched-series-info {
-	float: right;
-	width: 694px;
 	margin-left: 6px;
-	font-size: 19pt;
+	margin-top: 4px;
+	font-size: 16pt;
+	font-weight: bold;
 }
 
 .ted-watched-series-actions {
@@ -141,6 +146,8 @@ body { /* text-align: center; !important */
 
 .ted-watched-series-action-item {
 	cursor: pointer;
+	margin-left: 14px;
+	margin-top: 10px;
 }
 
 .ted-watched-series-episode {
@@ -149,16 +156,14 @@ body { /* text-align: center; !important */
 
 .ted-watched-series-LHS {
 	float: right;
-	background: url("img/watched-left.png") no-repeat;
-	width: 11px;
+	background: url("img/watched-left.gif") no-repeat;
+	width: 10px;
 	height: 73px;
 }
 
 .ted-watched-series-RHS {
 	float: right;
-	background: url("img/watched-right.png") no-repeat;
-	padding-left: 14px;
-	padding-top: 10px;
+	background: url("img/watched-right.gif") no-repeat;
 	width: 45px;
 	height: 73px;
 }
@@ -166,7 +171,7 @@ body { /* text-align: center; !important */
 .ted-watched-series-CONTENT {
 	float: right;
 	background: red url("img/watched-bg.png") repeat-x;
-	width: 300px;
+	width: 540px;
 	height: 73px;
 }
 
@@ -180,4 +185,18 @@ body { /* text-align: center; !important */
 .ted-watched-series-image img{
 	position: relative;
 	top: 7px;
+}
+
+.gwt-DisclosurePanel .content {
+	padding: 6px 6px !important;
+	border-left: 2px dotted black !important;
+	margin-left: 10px !important;
+	border-right: 2px dotted black !important;
+	margin-right: 10px !important;
+	border-bottom: 2px solid black;
+}
+
+.gwt-DisclosurePanel .header {
+	background: blue;
+	outline: none;
 }

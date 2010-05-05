@@ -28,6 +28,7 @@ public class WatchedSeriesPage extends DefaultPage {
 		this.controller = controller;
 
 		watchedSeriesList = new FlowPanel();
+		watchedSeriesList.setStyleName("ted-watched-list");
 		content.add(watchedSeriesList);
 
 		watchedUIDToPanel = new HashMap<Short, WatchedSeriesWidget>();
