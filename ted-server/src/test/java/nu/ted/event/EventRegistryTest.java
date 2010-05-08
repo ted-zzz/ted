@@ -90,7 +90,7 @@ public class EventRegistryTest {
 		String clientId1 = registry.registerClient();
 		String clientId2 = registry.registerClient();
 
-		Event watchedListChanged = new Event(EventType.WATCHED_SERIES_ADDED, null);
+		Event watchedListChanged = EventFactory.createWatchedSeriesAddedEvent(null);
 		registry.addEvent(watchedListChanged);
 
 		List<Event> client1Events = registry.getEvents(clientId1);
@@ -118,7 +118,7 @@ public class EventRegistryTest {
 
 		String clientId1 = registry.registerClient();
 
-		Event watchedListChanged = new Event(EventType.WATCHED_SERIES_ADDED, null);
+		Event watchedListChanged = EventFactory.createWatchedSeriesAddedEvent(null);
 		registry.addEvent(watchedListChanged);
 
 		List<Event> client1Events = registry.getEvents(clientId1);
@@ -138,7 +138,7 @@ public class EventRegistryTest {
 
 		String clientId1 = registry.registerClient();
 
-		Event watchedListChanged = new Event(EventType.WATCHED_SERIES_ADDED, null);
+		Event watchedListChanged = EventFactory.createWatchedSeriesAddedEvent(null);
 		registry.addEvent(watchedListChanged);
 
 		assertFalse(0L == registry.getLastPollTime(clientId1));

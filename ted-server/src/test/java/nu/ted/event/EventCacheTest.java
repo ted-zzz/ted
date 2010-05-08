@@ -28,7 +28,7 @@ public class EventCacheTest {
 	@Test
 	public void ensureGetEventsReturnsDetachedListOfEvents() {
 		EventCache cache = new EventCache();
-		cache.addEvent(new Event(EventType.WATCHED_SERIES_ADDED, null));
+		cache.addEvent(EventFactory.createWatchedSeriesAddedEvent(null));
 		List<Event> fetched = cache.getEvents();
 		assertEquals(1, fetched.size());
 		cache.clear();

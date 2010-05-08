@@ -4,13 +4,11 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.thrift.TException;
-
 import nu.ted.domain.SeriesBackendWrapper;
+import nu.ted.event.EventFactory;
 import nu.ted.event.EventRegistry;
 import nu.ted.generated.Constants;
 import nu.ted.generated.Event;
-import nu.ted.generated.EventType;
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.ImageType;
 import nu.ted.generated.InvalidOperation;
@@ -21,22 +19,20 @@ import nu.ted.generated.TedService.Iface;
 import nu.ted.guide.DataSourceException;
 import nu.ted.guide.GuideDB;
 
+import org.apache.thrift.TException;
+
 public class TedServiceImpl implements Iface
 {
-	GuideDB seriesSource;
+	private static EventRegistry eventRegistry = EventRegistry.createEventRegistry(60000L, 30000L);
+
+	private GuideDB seriesSource;
 	private Ted ted;
-	// TODO [MS] This is not the right place for this. Currently the Ted
-	//           class is generated, however it feels like it should be
-	//           the main application class for Ted. The registry belongs
-	//           with it.
-	private EventRegistry eventRegistry;
 
 	static short nextUID = 1; // TODO: static across restarts
 
 	public TedServiceImpl(Ted ted, GuideDB seriesSource) {
 		this.ted = ted;
 		this.seriesSource = seriesSource;
-		this.eventRegistry = EventRegistry.createEventRegistry(60000L, 30000L);
 	}
 
 	@Override
@@ -86,7 +82,7 @@ public class TedServiceImpl implements Iface
 		}
 		nextUID++;
 		ted.getSeries().add(s);
-		eventRegistry.addEvent(new Event(EventType.WATCHED_SERIES_ADDED, s));
+		registerEvent(EventFactory.createWatchedSeriesAddedEvent(s));
 		return s.getUid();
 	}
 
@@ -98,7 +94,7 @@ public class TedServiceImpl implements Iface
 			// TODO throw exception?
 			return;
 		}
-		eventRegistry.addEvent(new Event(EventType.WATCHED_SERIES_REMOVED, watchMatch));
+		registerEvent(EventFactory.createWatchedSeriesRemovedEvent(watchMatch));
 	}
 
 	@Override
@@ -167,6 +163,10 @@ public class TedServiceImpl implements Iface
 	 */
 	@Override
 	public void logout() throws TException {
+	}
+
+	public static void registerEvent(Event event) {
+		eventRegistry.addEvent(event);
 	}
 
 }

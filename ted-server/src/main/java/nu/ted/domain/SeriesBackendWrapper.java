@@ -3,13 +3,17 @@ package nu.ted.domain;
 import java.util.Calendar;
 import java.util.List;
 
+import nu.ted.event.EventFactory;
 import nu.ted.generated.Date;
 import nu.ted.generated.Episode;
 import nu.ted.generated.EpisodeStatus;
+import nu.ted.generated.Event;
+import nu.ted.generated.EventType;
 import nu.ted.generated.Series;
 import nu.ted.guide.DataSourceException;
 import nu.ted.guide.GuideDB;
 import nu.ted.guide.GuideFactory;
+import nu.ted.service.TedServiceImpl;
 
 /**
  * This is a representation of a TV Series.
@@ -59,6 +63,7 @@ public class SeriesBackendWrapper
 				// TODO: need a better way to enforce Status is set here.
 				e.setStatus(EpisodeStatus.SEARCHING);
 				series.addToEpisodes(e);
+				TedServiceImpl.registerEvent(EventFactory.createEpisodeAddedEvent(series, e));
 			}
 			series.setLastCheck(before);
 		} catch (DataSourceException e1) {

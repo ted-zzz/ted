@@ -14,7 +14,7 @@ public class EventRegistryCleanerTest {
 		String c1 = registry.registerClient();
 		String c2 = registry.registerClient();
 
-		registry.addEvent(new Event(EventType.WATCHED_SERIES_ADDED, null));
+		registry.addEvent(EventFactory.createWatchedSeriesAddedEvent(null));
 		assertEquals(1, registry.getEvents(c1).size());
 		assertEquals(1, registry.getEvents(c2).size());
 
