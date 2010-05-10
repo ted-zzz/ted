@@ -88,6 +88,10 @@ service TedService
 	# Get the server protocol version
 	i32 getVersion();
 
+	# Authentication Functions
+
+	void logout();  # Called automatically on disconnect
+
 	# Find a show
 	list<SeriesSearchResult> search(1: string name);
 		# TODO: throws?

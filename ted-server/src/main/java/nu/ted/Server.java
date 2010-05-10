@@ -6,7 +6,10 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import nu.ted.domain.TedBackendWrapper;
@@ -21,6 +24,7 @@ import nu.ted.guide.tvdb.TVDB;
 import nu.ted.guide.tvdb.datasource.direct.DirectDataSource;
 import nu.ted.guide.tvrage.TVRage;
 import nu.ted.service.TedServiceImpl;
+import nu.ted.thrift.TThreadPoolServer;
 import nu.ted.www.DirectPageLoader;
 
 import org.apache.thrift.TDeserializer;
@@ -30,7 +34,6 @@ import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TJSONProtocol;
 import org.apache.thrift.protocol.TBinaryProtocol.Factory;
 import org.apache.thrift.server.TServer;
-import org.apache.thrift.server.TThreadPoolServer;
 import org.apache.thrift.transport.TServerSocket;
 import org.apache.thrift.transport.TTransportException;
 
@@ -160,10 +163,30 @@ public class Server {
 			Executors.newScheduledThreadPool(1).scheduleAtFixedRate(
 					new EpisodeUpdater(), 10, 3600, TimeUnit.SECONDS);
 
+			// Create an executor service that will always call the logout
+			// after the client disconnects.
+			ExecutorService executor = new ThreadPoolExecutor(5, Integer.MAX_VALUE,
+					60,
+					TimeUnit.SECONDS,
+					new SynchronousQueue<Runnable>()) {
+
+						@Override
+						protected void afterExecute(Runnable r, Throwable t) {
+							super.afterExecute(r, t);
+							try {
+								service.logout();
+							} catch (TException e) {
+								throw new RuntimeException("Error logging out thread", e);
+							}
+						}
+
+			};
+
 			// TODO: Dependency Injection?
 			TedService.Processor processor = new TedService.Processor(service);
 			Factory protFactory = new TBinaryProtocol.Factory(true, true);
-			TServer server = new TThreadPoolServer(processor, serverTransport, protFactory);
+			TServer server = new TThreadPoolServer(processor, serverTransport, protFactory,
+					executor);
 			System.out.println("Starting server on port " + config.getPort() + " ...");
 			server.serve();
 		}

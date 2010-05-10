@@ -147,4 +147,11 @@ public class TedServiceImpl implements Iface
 		return findWatched(uID);
 	}
 
+	/**
+	 * Wipe all client specific data in logout. The thread may be reused.
+	 */
+	@Override
+	public void logout() throws TException {
+	}
+
 }
