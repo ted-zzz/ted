@@ -48,6 +48,7 @@ public class Server {
 
 	private static TedServiceImpl service;
 	private static Ted ted;
+	private static Boolean secure = true;
 
 	private byte[] readFileToBytes(final File file) throws IOException {
 
@@ -151,11 +152,14 @@ public class Server {
 
 			TServerTransport serverTransport;
 
-			// TODO: use secure socket when so configured.
-			if (false) {
+			String verifier = config.getVerifier();
+			String salt = config.getSalt();
+			if (secure && verifier != null && verifier.length() > 0 &&
+					salt != null && salt.length() > 0) {
 				serverTransport = new TedServerSecureSocket(config.getPort(),
 						config.getVerifier(), config.getSalt());
 			} else {
+				System.err.println("Warning: Running unencrypted protocol.");
 				serverTransport = new TServerSocket(config.getPort());
 			}
 
@@ -233,9 +237,15 @@ public class Server {
 		help.setLongFlag("help");
 		help.setHelp("Show this page");
 
+		Switch insecure = new Switch("Insecure");
+		insecure.setShortFlag('v');
+		insecure.setLongFlag("insecure");
+		insecure.setHelp("Run unencrypted protocol");
+
 		JSAP jsap = new JSAP();
 		jsap.registerParameter(data);
 		jsap.registerParameter(help);
+		jsap.registerParameter(insecure);
 
 		JSAPResult config = jsap.parse(args);
 
@@ -258,6 +268,10 @@ public class Server {
 			System.err.println();
 			System.err.println(jsap.getHelp());
 			System.exit(1);
+		}
+
+		if (config.getBoolean("insecure")) {
+			secure = false;
 		}
 
 		if (!config.contains("data")) {
