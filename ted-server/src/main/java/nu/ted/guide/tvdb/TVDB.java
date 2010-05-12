@@ -59,6 +59,7 @@ public class TVDB implements GuideDB
 		Episode e = series.getNextEpisode(after);
 		while (e != null && e.getAired().getValue() <= before.getValue()) {
 			newOnes.add(e);
+			e = series.getNextEpisode(e);
 		}
 		return newOnes;
 	}

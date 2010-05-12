@@ -10,7 +10,6 @@ import junit.framework.Assert;
 import nu.ted.domain.TestSeriesXml;
 import nu.ted.generated.Date;
 import nu.ted.generated.Episode;
-import nu.ted.generated.EpisodeStatus;
 import nu.ted.guide.tvdb.FullSeriesRecord.TVDBEpisode;
 
 import org.junit.Before;
@@ -31,14 +30,6 @@ public class FullSeriesRecordTest
 		Assert.assertEquals(epnum, episode.getNumber());
 
 		aired.set(Calendar.MILLISECOND, 0);
-
-		Calendar cal = Calendar.getInstance();
-		cal.setTimeInMillis(episode.getAired().getValue());
-		cal.set(Calendar.MILLISECOND, 0);
-
-		Calendar cal2 = Calendar.getInstance();
-		cal2.setTimeInMillis(episode.getAired().getValue());
-		cal2.set(Calendar.MILLISECOND, 0);
 
 		Assert.assertEquals(aired.getTimeInMillis(), episode.getAired().getValue());
 	}
@@ -119,6 +110,33 @@ public class FullSeriesRecordTest
 		Assert.assertTrue(episode.equalsEpisode(matching));
 		Assert.assertFalse(episode.equalsEpisode(wrongSeason));
 		Assert.assertFalse(episode.equalsEpisode(wrongNumber));
+	}
+
+	@Test
+	public void testMissingFirstAired()
+	{
+		String ep = "  <Episode>\n";
+		ep += "    <SeasonNumber>4</SeasonNumber>\n";
+		ep += "    <EpisodeNumber>2</EpisodeNumber>\n";
+		// No First Aired
+		ep += "    <EpisodeName>Bad Ep</EpisodeName>\n";
+		ep += "  </Episode>\n";
+		xml.addXml(ep);
+
+		Calendar now = Calendar.getInstance();
+		zeroTimeOnCal(now);
+
+		Calendar then = (Calendar) now.clone();
+		then.add(Calendar.DAY_OF_MONTH, 1);
+		String thenPrintDate = DatatypeConverter.printDate(then);
+
+		xml.addEpisode(4, 3, thenPrintDate, "Good Ep");
+
+		FullSeriesRecord record = FullSeriesRecord.create(xml.toStream());
+		Episode e = record.getNextEpisode(new Date(now.getTimeInMillis()));
+
+		Assert.assertNotNull(e);
+		assertEpisode(e, (short)4, (short)3, DatatypeConverter.parseDate(thenPrintDate), "Good Ep");
 	}
 
 	// TODO: decide if NextEpisode() on the date return this ep, or next

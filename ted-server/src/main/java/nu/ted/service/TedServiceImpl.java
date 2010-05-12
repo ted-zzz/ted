@@ -65,7 +65,9 @@ public class TedServiceImpl implements Iface
 	{
 		Series s;
 		try {
-			s = seriesSource.getSeries(guideId, nextUID, Calendar.getInstance());
+			Calendar startDate = Calendar.getInstance();
+			startDate.add(Calendar.DAY_OF_YEAR, -14);
+			s = seriesSource.getSeries(guideId, nextUID, startDate);
 		} catch (DataSourceException e) {
 			throw new TException(e);
 		}

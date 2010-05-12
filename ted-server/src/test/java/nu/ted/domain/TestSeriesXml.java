@@ -36,6 +36,14 @@ public class TestSeriesXml {
 		xml.append("  </Episode>\n");
 	}
 
+	/**
+	 * To manually supply your own XML.
+	 */
+	public void addXml(String xml)
+	{
+		this.xml.append(xml);
+	}
+
 	public String toString()
 	{
 		return xml.toString() + "</Data>";

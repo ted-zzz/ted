@@ -92,6 +92,9 @@ public class FullSeriesRecord {
 
 		public long getFirstAired()
 		{
+			if (firstAired == null) {
+				return 0;
+			}
 			zeroTimeOnFirstAired();
 			return firstAired.getTimeInMillis();
 		}
