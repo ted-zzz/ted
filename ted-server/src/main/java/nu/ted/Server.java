@@ -24,6 +24,7 @@ import nu.ted.guide.tvdb.TVDB;
 import nu.ted.guide.tvdb.datasource.direct.DirectDataSource;
 import nu.ted.guide.tvrage.TVRage;
 import nu.ted.service.TedServiceImpl;
+import nu.ted.thrift.TedServerSecureSocket;
 import nu.ted.thrift.TThreadPoolServer;
 import nu.ted.www.DirectPageLoader;
 
@@ -35,6 +36,7 @@ import org.apache.thrift.protocol.TJSONProtocol;
 import org.apache.thrift.protocol.TBinaryProtocol.Factory;
 import org.apache.thrift.server.TServer;
 import org.apache.thrift.transport.TServerSocket;
+import org.apache.thrift.transport.TServerTransport;
 import org.apache.thrift.transport.TTransportException;
 
 import com.martiansoftware.jsap.FlaggedOption;
@@ -147,7 +149,15 @@ public class Server {
 			Server.ted = ted;
 			TedConfig config = ted.getConfig();
 
-			TServerSocket serverTransport = new TServerSocket(config.getPort());
+			TServerTransport serverTransport;
+
+			// TODO: use secure socket when so configured.
+			if (false) {
+				serverTransport = new TedServerSecureSocket(config.getPort(),
+						config.getVerifier(), config.getSalt());
+			} else {
+				serverTransport = new TServerSocket(config.getPort());
+			}
 
 			try {
 				GuideFactory.addGuide(new TVDB(new DirectDataSource(new DirectPageLoader())));

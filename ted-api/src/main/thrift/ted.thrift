@@ -49,7 +49,11 @@ struct Series
 
 struct TedConfig
 {
-	1: i16			port = DEFAULT_PORT	# Listening Port
+	1: i16			port = DEFAULT_PORT,	# Listening Port
+
+	# Password for Secure Remote Passwords
+	2: string		verifier,
+	3: string		salt
 }
 
 struct Ted
