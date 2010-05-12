@@ -139,7 +139,12 @@ public class Server {
 
 	private static class EpisodeUpdater implements Runnable {
 		public void run() {
-			new TedBackendWrapper(ted).updateSeries(Calendar.getInstance());
+			try {
+				new TedBackendWrapper(ted).updateSeries(Calendar.getInstance());
+			} catch (Throwable ex) {
+				System.err.println("EpisodeUpdater crashed: ");
+				ex.printStackTrace();
+			}
 		}
 	}
 
