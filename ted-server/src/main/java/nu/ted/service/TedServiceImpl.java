@@ -6,12 +6,14 @@ import java.util.List;
 
 import org.apache.thrift.TException;
 
+import nu.ted.domain.SeriesBackendWrapper;
 import nu.ted.event.EventRegistry;
 import nu.ted.generated.Constants;
 import nu.ted.generated.Event;
 import nu.ted.generated.EventType;
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.ImageType;
+import nu.ted.generated.InvalidOperation;
 import nu.ted.generated.Series;
 import nu.ted.generated.SeriesSearchResult;
 import nu.ted.generated.Ted;
@@ -60,8 +62,9 @@ public class TedServiceImpl implements Iface
 		return Collections.unmodifiableList(ted.getSeries());
 	}
 
+	// TODO: throw more specific exception when DSE is fixed.
 	@Override
-	public short startWatching(String guideId) throws TException
+	public short startWatching(String guideId) throws InvalidOperation, TException
 	{
 		Series s;
 		try {
@@ -70,6 +73,16 @@ public class TedServiceImpl implements Iface
 			s = seriesSource.getSeries(guideId, nextUID, startDate);
 		} catch (DataSourceException e) {
 			throw new TException(e);
+		}
+
+		synchronized (ted.getSeries()) {
+			SeriesBackendWrapper sb = new SeriesBackendWrapper(s);
+			for (Series existingSeries : ted.getSeries()) {
+				if (sb.isSameSeries(existingSeries)) {
+					throw new InvalidOperation("Series already exists on watched list and cannot be added again");
+				}
+			}
+
 		}
 		nextUID++;
 		ted.getSeries().add(s);

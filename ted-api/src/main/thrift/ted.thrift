@@ -8,6 +8,19 @@ const i32	PROTOCOL_VERSION = 1
 
 const i16	DEFAULT_PORT = 9030
 
+# Standard API errors. These should have clear messages so UI
+# designers can fix.
+#
+# These must be fixable in the UI, and are not to be used for
+# exceptions that the UI is unable to predict.
+#
+# Example exceptions:
+#   * Passing a NULL as a parameter where it wasn't expected
+#   * Calling stopWatching on a non-watched show
+exception InvalidOperation {
+	1: string	message
+}
+
 struct Date {
 	1: i64			value
 }
@@ -102,8 +115,8 @@ service TedService
 
 	# subscribe to the show
 	# Returns the Ted-UID of the show.
-	i16 startWatching(1: string searchUID);
-		# TODO: throws? should be void and just throw?
+	i16 startWatching(1: string searchUID)
+		throws (1:InvalidOperation invalidOperation);
 
 	# unsubscribe to a show
 	void stopWatching(1: i16 uID);

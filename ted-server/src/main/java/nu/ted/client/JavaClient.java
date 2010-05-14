@@ -1,5 +1,6 @@
 package nu.ted.client;
 
+import nu.ted.generated.InvalidOperation;
 import nu.ted.generated.TedService.Client;
 
 import org.apache.thrift.TException;
@@ -25,6 +26,10 @@ public class JavaClient {
 			action.run(client);
 		}
 		catch (TException e) {
+			// TODO [MS] Throw an exception here so it can be handled
+			// by the caller.
+			//e.printStackTrace();
+		} catch (InvalidOperation e) {
 			// TODO [MS] Throw an exception here so it can be handled
 			// by the caller.
 			//e.printStackTrace();

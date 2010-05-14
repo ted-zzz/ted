@@ -10,6 +10,7 @@ import nu.ted.generated.Event;
 import nu.ted.generated.EventType;
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.ImageType;
+import nu.ted.generated.InvalidOperation;
 import nu.ted.generated.Series;
 import nu.ted.generated.SeriesSearchResult;
 import nu.ted.guide.TestGuide;
@@ -59,7 +60,7 @@ public class TedTests
 	}
 
 	@Test
-	public void shouldBeAbleToWatchOneValidShow() throws TException {
+	public void shouldBeAbleToWatchOneValidShow() throws TException, InvalidOperation {
 		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
 
 		ted.startWatching("E");
@@ -76,7 +77,7 @@ public class TedTests
 
 
 	@Test
-	public void shouldBeAbleToStopWatchingAShowYourWatching() throws TException {
+	public void shouldBeAbleToStopWatchingAShowYourWatching() throws TException, InvalidOperation {
 		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
 		short id = ted.startWatching("E");
 
@@ -107,7 +108,7 @@ public class TedTests
 	}
 
 	@Test
-	public void shouldLoadBannerForValidSeriesId() throws TException {
+	public void shouldLoadBannerForValidSeriesId() throws TException, InvalidOperation {
 		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
 		short id = ted.startWatching("E");
 
@@ -118,7 +119,7 @@ public class TedTests
 	}
 
 	@Test
-	public void shouldLoadBannerThumbnailForValidSeriesId() throws TException {
+	public void shouldLoadBannerThumbnailForValidSeriesId() throws TException, InvalidOperation {
 		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
 		short id = ted.startWatching("E");
 
@@ -136,7 +137,7 @@ public class TedTests
 	}
 
 	@Test
-	public void shouldRegisterWatchedListChangedEventIfStartWatching() throws TException{
+	public void shouldRegisterWatchedListChangedEventIfStartWatching() throws TException, InvalidOperation{
 		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
 		String eventClientId = ted.registerClientWithEventRegistry();
 
@@ -147,7 +148,20 @@ public class TedTests
 	}
 
 	@Test
-	public void shouldRegisterWatchedListChangedEventIfStopWatching() throws TException {
+	public void shouldOnlyAllowShowsToBeAddedOnce() throws TException, InvalidOperation{
+		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
+
+		ted.startWatching("E");
+		try {
+			ted.startWatching("E");
+		} catch (InvalidOperation e) {
+			return; /* pass */
+		}
+		fail("Shouldn't be able to add show twice.");
+	}
+
+	@Test
+	public void shouldRegisterWatchedListChangedEventIfStopWatching() throws TException, InvalidOperation {
 		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
 		String eventClientId = ted.registerClientWithEventRegistry();
 		short id = ted.startWatching("E");

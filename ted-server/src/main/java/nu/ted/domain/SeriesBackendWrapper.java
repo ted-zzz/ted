@@ -35,6 +35,16 @@ public class SeriesBackendWrapper
 
 	}
 
+	public boolean isSameSeries(Series other) {
+		if (series.getGuideName() != other.getGuideName())
+			return false;
+
+		if (series.getGuideId() != other.getGuideId())
+			return false;
+
+		return true;
+	}
+
 	public void update(Calendar calendar) {
 		Date after = series.getLastCheck();
 		Date before = new Date(calendar.getTimeInMillis());
