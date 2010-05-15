@@ -39,6 +39,8 @@ import org.apache.thrift.transport.TServerSocket;
 import org.apache.thrift.transport.TServerTransport;
 import org.apache.thrift.transport.TTransportException;
 
+import com.jordanzimmerman.SRPFactory;
+import com.jordanzimmerman.SRPVerifier;
 import com.martiansoftware.jsap.FlaggedOption;
 import com.martiansoftware.jsap.JSAP;
 import com.martiansoftware.jsap.JSAPResult;
@@ -48,7 +50,12 @@ public class Server {
 
 	private static TedServiceImpl service;
 	private static Ted ted;
+
 	private static Boolean secure = true;
+
+	private static boolean overridePassword = false;
+	private static String verifier;
+	private static String salt;
 
 	private byte[] readFileToBytes(final File file) throws IOException {
 
@@ -157,12 +164,20 @@ public class Server {
 
 			TServerTransport serverTransport;
 
-			String verifier = config.getVerifier();
-			String salt = config.getSalt();
+			String verifier;
+			String salt;
+			if (overridePassword = true) {
+				verifier = Server.verifier;
+				salt = Server.salt;
+			} else {
+				verifier = config.getVerifier();
+				salt = config.getSalt();
+
+			}
 			if (secure && verifier != null && verifier.length() > 0 &&
 					salt != null && salt.length() > 0) {
 				serverTransport = new TedServerSecureSocket(config.getPort(),
-						config.getVerifier(), config.getSalt());
+						verifier, salt);
 			} else {
 				System.err.println("Warning: Running unencrypted protocol.");
 				serverTransport = new TServerSocket(config.getPort());
@@ -247,10 +262,16 @@ public class Server {
 		insecure.setLongFlag("insecure");
 		insecure.setHelp("Run unencrypted protocol");
 
+		FlaggedOption password = new FlaggedOption("password");
+		password.setShortFlag('p');
+		password.setLongFlag("password");
+		password.setHelp("Set password (insecure)");
+
 		JSAP jsap = new JSAP();
 		jsap.registerParameter(data);
 		jsap.registerParameter(help);
 		jsap.registerParameter(insecure);
+		jsap.registerParameter(password);
 
 		JSAPResult config = jsap.parse(args);
 
@@ -275,8 +296,16 @@ public class Server {
 			System.exit(1);
 		}
 
-		if (config.getBoolean("insecure")) {
+		if (config.contains("insecure") && config.getBoolean("insecure")) {
 			secure = false;
+		} else if (config.contains("password")) {
+			String pw = config.getString("password");
+
+			SRPVerifier srpVerifier = SRPFactory.getInstance().makeVerifier(pw.getBytes());
+
+			overridePassword = true;
+			verifier = srpVerifier.verifier_v.toString(16);
+			salt = srpVerifier.salt_s.toString(16);
 		}
 
 		if (!config.contains("data")) {
