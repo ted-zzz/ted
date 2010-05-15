@@ -1,5 +1,9 @@
 package nu.ted.gwt.server.page.search;
 
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;
@@ -10,6 +14,7 @@ import net.bugsquat.diservlet.ImageServlet;
 import net.bugsquat.diservlet.ImageStore;
 import nu.ted.generated.TedService.Client;
 import nu.ted.generated.TedService.Iface;
+import nu.ted.thrift.TedSecureSocket;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -18,14 +23,33 @@ public class TedRemoteServiceServlet extends RemoteServiceServlet {
 	private static final long serialVersionUID = 1L;
 	// private static final String CONNECTION_ATTR_NAME = "tedConnection";
 
+	private static boolean secure = false;
+
 	private static Iface client;
+	private static TTransport transport;
 
 	public synchronized Iface getTedClient() throws TTransportException {
-		if (client == null) {
-			TTransport transport = new TSocket("localhost", 9030);
+
+		if (client == null || !transport.isOpen()) {
+
+			TTransport transport;
+			if (secure) {
+				Socket socket;
+				try {
+					socket = new Socket("localhost", 9030);
+				} catch (UnknownHostException e) {
+					throw new TTransportException(e);
+				} catch (IOException e) {
+					throw new TTransportException(e);
+				}
+				transport = new TedSecureSocket(socket, "password");
+			} else {
+				transport = new TSocket("localhost", 9030);
+				transport.open();
+			}
 			TProtocol protocol = new TBinaryProtocol(transport);
-			transport.open();
 			client = new Client(protocol);
+			TedRemoteServiceServlet.transport = transport;
 		}
 		return client;
 	}
