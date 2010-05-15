@@ -175,9 +175,9 @@ public class TedServiceImpl implements Iface
 	}
 
 	@Override
-	public List<Event> getEvents(String eventRegistryClientId)
+	public List<Event> getEvents()
 			throws TException {
-		return eventRegistry.getEvents(eventRegistryClientId);
+		return eventRegistry.getEvents(ClientHolder.getClient().getId());
 	}
 
 	@Override

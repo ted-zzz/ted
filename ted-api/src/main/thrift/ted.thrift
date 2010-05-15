@@ -144,7 +144,7 @@ service TedService
 	string registerClientWithEventRegistry();
 		# TODO: throws?
 
-	list<Event> getEvents(1: string eventRegistryClientId);
+	list<Event> getEvents();
 		# TODO: throws?
 
 }

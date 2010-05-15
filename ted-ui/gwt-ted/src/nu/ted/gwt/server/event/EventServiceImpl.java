@@ -20,7 +20,7 @@ public class EventServiceImpl extends TedRemoteServiceServlet implements EventSe
 		List<Event> serverEvents;
 		try {
 			Iface client = getTedClient();
-			serverEvents = client.getEvents(clientId);
+			serverEvents = client.getEvents();
 			List<GwtEvent> events = new ArrayList<GwtEvent>();
 
 			// Found events on the server, now convert them to GWT events.

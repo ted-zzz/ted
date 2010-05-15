@@ -142,7 +142,7 @@ public class TedTests
 		String eventClientId = ted.registerClientWithEventRegistry();
 
 		ted.startWatching("E");
-		List<Event> events = ted.getEvents(eventClientId);
+		List<Event> events = ted.getEvents();
 		assertEquals(1, events.size());
 		assertEquals(EventType.WATCHED_SERIES_ADDED, events.get(0).getType());
 	}
@@ -166,10 +166,10 @@ public class TedTests
 		String eventClientId = ted.registerClientWithEventRegistry();
 		short id = ted.startWatching("E");
 		// Flush the registry for this client.
-		ted.getEvents(eventClientId);
+		ted.getEvents();
 
 		ted.stopWatching(id);
-		List<Event> events = ted.getEvents(eventClientId);
+		List<Event> events = ted.getEvents();
 		assertEquals(1, events.size());
 		assertEquals(EventType.WATCHED_SERIES_REMOVED, events.get(0).getType());
 	}
