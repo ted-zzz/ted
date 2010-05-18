@@ -3,7 +3,6 @@ package nu.ted.gwt.server.event;
 import nu.ted.generated.Event;
 import nu.ted.generated.EventType;
 import nu.ted.generated.Series;
-import nu.ted.gwt.domain.GwtWatchedSeries;
 import nu.ted.gwt.domain.event.EpisodeAddedEvent;
 import nu.ted.gwt.domain.event.GwtEvent;
 import nu.ted.gwt.domain.event.GwtEventType;

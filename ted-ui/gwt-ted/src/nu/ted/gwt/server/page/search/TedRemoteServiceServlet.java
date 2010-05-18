@@ -1,17 +1,59 @@
 package nu.ted.gwt.server.page.search;
 
+import org.apache.thrift.protocol.TBinaryProtocol;
+import org.apache.thrift.protocol.TProtocol;
+import org.apache.thrift.transport.TSocket;
+import org.apache.thrift.transport.TTransport;
+import org.apache.thrift.transport.TTransportException;
+
 import net.bugsquat.diservlet.ImageServlet;
 import net.bugsquat.diservlet.ImageStore;
-import nu.ted.client.JavaClient;
+import nu.ted.generated.TedService.Client;
+import nu.ted.generated.TedService.Iface;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public class TedRemoteServiceServlet extends RemoteServiceServlet {
 
-	protected JavaClient getTedClient() {
-		return new JavaClient("localhost", 9030);
+	private static final long serialVersionUID = 1L;
+	// private static final String CONNECTION_ATTR_NAME = "tedConnection";
+
+	private static Iface client;
+
+	public synchronized Iface getTedClient() throws TTransportException {
+		if (client == null) {
+			TTransport transport = new TSocket("localhost", 9030);
+			TProtocol protocol = new TBinaryProtocol(transport);
+			transport.open();
+			client = new Client(protocol);
+		}
+		return client;
 	}
 
+	// TODO: I'd like to store this is the session, but I'm not sure
+	// how that works with GWT and these servlets. If it would be added
+	// by one then used by another this probably wouldn't work. Perhaps
+	// we need a static object to track the client connection?
+//		Iface client;
+//		HttpSession session = getThreadLocalRequest().getSession(true);
+//		synchronized (session) {
+//			client = (Iface) session.getAttribute(CONNECTION_ATTR_NAME);
+//
+//			if (client == null) {
+//				TTransport transport = new TSocket("localhost", 9030);
+//				TProtocol protocol = new TBinaryProtocol(transport);
+//				transport.open();
+//				client = new Client(protocol);
+//				session.setAttribute(CONNECTION_ATTR_NAME, client);
+//			}
+//		}
+//
+//		return client;
+// 	}
+
+	// TODO: This may be used to call methods on a different servlet. Apparently
+	// this is bad and we should be using a RequestDispatcher instead. Should look
+	// into that as a solution.
 	protected ImageStore getImageStore() {
 		return (ImageStore) getServletContext().getAttribute(ImageServlet.IMAGE_STORE_ATTR_KEY);
 	}
