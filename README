@@ -1,8 +1,126 @@
-Ted
+ted
+
+[GitHub]
+
+The ted project is currently hosted in GitHub. If you have a GitHub account and
+would like to contribute we recommend you fork this repository. If you just want
+the latest source you can clone from: git://github.com/ted/ted.git.
+
+For developers that are using GitHub, this is some information that may make it
+easier to submit changes and keep in sync.
+
+First you have to know about remotes. A remote is simply a remote repository.
+Where non-distributed VCS use one remote, Git allows you to have any number. So
+changes can be pushed and pulled from/to many different locations. To keep it
+simple(er) here we're just going to use two. We'll get into them in a minute.
+
+We're going to create a Fork of the main git repository. With Git everyone has
+all the source, and anyone can create a fork. So if you decide you can write a
+better ted, do so, and people may start forking your repository instead of the
+ted/ted repository. To fork the main repository log in to GitHub and browse to
+http://github.com/ted/ted. Click the 'Fork' button. After a slight delay you'll
+end up with your own <username>/ted fork.
+
+This <username>/ted fork is yours. You can do whatever you like in there.
+General Git etiquette says that you shouldn't rewrite history that you've
+published, but it's your repository so you don't have to follow any etiquette.
+It's unlikely anyone will fork your repository when they could easily fork
+ted/ted, and if they do then the rewritten history is their problem.
+
+Next we'll clone the <username>/ted repository on to your local machine. That
+repository will be called <local>/ted for the remainder of this document. It's
+worth noting that the <local>/ted repository is another full clone of the source
+code. Any of these three repositories contains all the history of the project,
+and can survive the deletion of the others. To create the local clone run:
+
+    $ git clone git@github.com:<username>/ted.git
+
+After creating a local copy of the source Git will setup the first remote. This
+remote will be called 'origin' and will point back to <username>/ted on GitHub.
+By default Git will use this remote when you don't specify one.
+
+To make keeping up to date with ted/ted and changes from other developers we'll
+next add a remote that points back to that repository. To do this run:
+
+    $ git remote add upstream git://github.com/ted/ted.git
+    $ git fetch upstream
+
+Now there are a lot of ways you could go from here depending on your Git
+experience. We'll explain one workflow, but feel free follow your own. As long
+as we get a patch from you, we don't care how your repository looks.
+
+Branch-per-feature:
+
+For this workflow we're going to keep <username>/master always tracking
+ted/master, and never commit any changes to it. As soon as you start committing
+changes to <username>/master you have to start dealing with merging ted/master
+changes in, and that can get confusing. So to get <local>/master up-to-date with
+ted/master, and then push that update to <username>/ted, every so often do the
+following:
+
+    Update Master:
+    $ git checkout master
+    $ git pull upstream master
+    $ git push origin master
+
+To write a feature (or fix a bug), do the following:
+
+    Doing Work:
+    $ <do 'Update Master'>
+    $ git checkout -b <branchname>
+     Loop:
+       $ <work>
+       $ git add <changed file>
+       $ git add <changed file>
+       $ git commit
+    $ git push origin <branchname>
+
+Do the work loop as many times as makes sense. You can also amend patches, or
+squash some together, or whatever else. When ready to publish that branch to the
+outside work the last command will push it to <username>/ted/<branchname>. You
+can continue pushing to this branch as often as you like, and when it's ready to
+be include in ted send simply send a pull request from the GitHub UI.
+
+When the pull request is accepted and your patches included in the ted/ted
+repository you may delete your local branch. The commits in your local branch
+will be slightly different from the commits added to the ted/ted repository
+because the ted/ted branches were committed at a different time (likely by a
+different person). Don't worry, you'll still be listed as the author on any
+patches you send. To delete the branch at <username>/ted/<branchname> do the
+following:
+
+    $ git push origin :<branchname>
+
+While working in this branch you find changes made to ted/ted/master that you
+would like to include in your branch. There are a couple ways to do this. Here
+we will show the way to do it rewriting history. This is not what you'd normally
+want to do on a published branch because other people could have commits that
+extend that branch. Do not do this if you've sent a 'Pull Request', or at least
+send a message asking us to abort the pull.
+
+    Rewrite history to move changes ahead:
+    $ <do 'Update Master'>
+    $ git checkout <branchanme>
+    $ git rebase master
+       -- may have to fix commits here if there's conflicts
+    $ git push -f origin <branchname>
+
+The reason we're showing a rewrite of history instead of doing a merge is
+because if you find a conflict in the rebase you can fix that one commit and
+keep a linear history, whereas if you find a conflict in the merge the fix will
+instead be included in the merge commit. The '-f' to the push will force this
+push to happen, even though it rewrites history.
+
+Either way, moving a branch will hopefully be a rare occurrence. If kept small
+we should be able to pull in these branches and have them disappear quite often.
+
+If you have any Git or GitHub questions please send me (KenMacD) a message on
+GitHub directly.
+
 
 [Building]
 
-Currently to build Ted requires the following steps be followed:
+Currently to build ted requires the following steps be followed:
 
  1. Install Apache Thrift, and Apache Ant for you platform.
  2. Enter the ted-api directory: $ cd ted-api
@@ -29,13 +147,3 @@ use the simplest and shortest names for an item:
 
  * Series  
  * Episode
-
-Data that is passed through the API may use longer names as not to
-conflict with domain types.
-
- * WatchedSeries: A series of which you are currently interested in
-                  tracking the episodes.
- * AiredEpisode:  An episode that has aired on a WatchedSeries while
-                  it was a WatchedSeries. This does not include
-                  episodes that may have aired before the Series became
-                  a WatchedSeries (Unless manually added later).
