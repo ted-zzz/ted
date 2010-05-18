@@ -3,13 +3,12 @@ package nu.ted.gwt.server.event;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.thrift.TException;
-
 import nu.ted.client.ClientAction;
 import nu.ted.generated.Event;
 import nu.ted.generated.TedService.Client;
 import nu.ted.gwt.domain.event.GwtEvent;
-import nu.ted.gwt.domain.event.GwtEventType;
+
+import org.apache.thrift.TException;
 
 public class GetEventsClientAction implements ClientAction {
 

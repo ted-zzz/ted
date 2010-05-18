@@ -108,41 +108,6 @@ public class WatchedSeriesPage extends DefaultPage {
 		watchedSeriesList.add(new Label("There are currently no series being watched."));
 	}
 
-	private FlowPanel createWatchedSeriesPanel(final GwtWatchedSeries watched) {
-		String thumbImgKey = watched.getName() + watched.getuID();
-		String thumbUrl = GWT.getModuleBaseURL() + "images?iid=" + thumbImgKey;
-		FlowPanel imagePanel = new FlowPanel();
-		imagePanel.setStyleName(Css.WatchedSeriesPage.WATCHED_SERIES_IMAGE);
-		imagePanel.add(new Image(thumbUrl));
-
-		Label info = new Label(watched.getName());
-		info.setStyleName(Css.WatchedSeriesPage.WATCHED_SERIES_INFO);
-
-		Image stopWatchingImage = new Image(Images.INSTANCE.stopWatchingIcon());
-		stopWatchingImage.setStyleName(Css.WatchedSeriesPage.WATCHED_SERIES_ACTION_ITEM);
-		stopWatchingImage.setTitle("Stop Watching");
-		stopWatchingImage.addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				controller.stopWatching(watched.getuID());
-			}
-
-		});
-
-		FlowPanel actionPanel = new FlowPanel();
-		actionPanel.setStyleName(Css.WatchedSeriesPage.WATCHED_SERIES_ACTIONS);
-		actionPanel.add(stopWatchingImage);
-
-		FlowPanel watchingPanel = new FlowPanel();
-		watchingPanel.setStyleName(Css.WatchedSeriesPage.WATCHED_SERIES);
-		watchingPanel.add(actionPanel);
-		watchingPanel.add(info);
-		watchingPanel.add(imagePanel);
-
-		return watchingPanel;
-	}
-
 	private void clearPage() {
 		this.watchedUIDToPanel.clear();
 		this.watchedSeriesList.clear();

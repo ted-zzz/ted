@@ -12,18 +12,22 @@ import nu.ted.gwt.domain.GwtEpisode;
 import nu.ted.gwt.domain.GwtEpisodeStatus;
 import nu.ted.gwt.domain.GwtWatchedSeries;
 
-public class GwtWatchedSeriesFactory {
+public class GwtTedObjectFactory {
 
 	public static GwtWatchedSeries create(Series series) {
 		List<GwtEpisode> episodes = createGwtEpisodes(series.getEpisodes());
 		return new GwtWatchedSeries(series.getUid(), series.getName(), episodes);
 	}
 
+	public static GwtEpisode create(Episode episode) {
+		return new GwtEpisode(episode.getSeason(), episode.getNumber(),
+				convertDate(episode.getAired()), convertStatus(episode.getStatus()));
+	}
+
 	private static List<GwtEpisode> createGwtEpisodes(List<Episode> episodes) {
 		List<GwtEpisode> converted = new ArrayList<GwtEpisode>();
 		for (Episode e : episodes) {
-			converted.add(new GwtEpisode(e.getSeason(), e.getNumber(),
-					convertDate(e.getAired()), convertStatus(e.getStatus())));
+			converted.add(create(e));
 		}
 		return converted;
 	}

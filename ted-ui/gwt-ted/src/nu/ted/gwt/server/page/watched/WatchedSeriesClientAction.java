@@ -21,7 +21,7 @@ public abstract class WatchedSeriesClientAction implements ClientAction {
 
 	protected GwtWatchedSeries createNewWatchedSeries(Client ted, Series series)
 		throws TException {
-		GwtWatchedSeries watched = GwtWatchedSeriesFactory.create(series);
+		GwtWatchedSeries watched = GwtTedObjectFactory.create(series);
 
 		String imageStoreKey = series.getName() + series.getUid();
 		if (!imageStore.contains(imageStoreKey)) {

@@ -15,6 +15,7 @@ import java.io.Serializable;
 public enum GwtEventType implements Serializable {
 
 	WATCHED_SERIES_ADDED,
-	WATCHED_SERIES_REMOVED;
+	WATCHED_SERIES_REMOVED,
+	EPISODE_ADDED;
 
 }
