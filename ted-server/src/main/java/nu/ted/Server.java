@@ -2,6 +2,8 @@ package nu.ted;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Iterator;
@@ -52,12 +54,29 @@ public class Server {
 	private static Ted ted;
 
 	private static Boolean secure = true;
-
 	private static boolean overridePassword = false;
 	private static String verifier;
 	private static String salt;
 
-	private byte[] readFileToBytes(final File file) throws IOException {
+	private static void writeFileFromBytes(final File file, final byte[] data) throws IOException {
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+
+		if (!file.isFile()) {
+			throw new IOException("Cannot write to non-file: " + file.getAbsolutePath());
+		}
+
+		FileOutputStream out;
+		try {
+			out = new FileOutputStream(file);
+		} catch (FileNotFoundException e) {
+			throw new IOException("File not found", e);
+		}
+		out.write(data);
+	}
+
+	private static byte[] readFileToBytes(final File file) throws IOException {
 
 		if (file.isDirectory())
 			throw new RuntimeException("Unsupported operation, file "
@@ -135,6 +154,8 @@ public class Server {
 				e.printStackTrace();
 			}
 		}
+		Executors.newScheduledThreadPool(1).scheduleAtFixedRate(
+				new TedSaver(fileLocation), 30, 90, TimeUnit.SECONDS);
 		start(ted);
 	}
 
@@ -142,6 +163,26 @@ public class Server {
 	{
 		System.err.println("Warning: Data will not be persisted. See '-h'.");
 		start(createDefaultTed());
+	}
+
+	private static class TedSaver implements Runnable {
+		private String location;
+
+		public TedSaver(String location) {
+			this.location = location;
+		}
+
+		@Override
+		public void run() {
+			byte[] data = serializeTed(ted);
+			try {
+				Server.writeFileFromBytes(new File(location), data);
+			} catch (IOException e) {
+				System.err.println("Unable to save file");
+				throw new RuntimeException(e);
+			}
+		}
+
 	}
 
 	private static class EpisodeUpdater implements Runnable {
