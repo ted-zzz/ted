@@ -3,6 +3,8 @@ package nu.ted.event;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertFalse;
 
+import nu.ted.client.ClientIdGenerator;
+
 import org.junit.Test;
 
 public class ClientIdGeneratorTest {

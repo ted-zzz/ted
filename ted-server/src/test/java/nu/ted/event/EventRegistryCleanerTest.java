@@ -1,5 +1,6 @@
 package nu.ted.event;
 
+import nu.ted.client.ClientIdGenerator;
 import nu.ted.generated.Event;
 import nu.ted.generated.EventType;
 
@@ -11,8 +12,11 @@ public class EventRegistryCleanerTest {
 	@Test
 	public void ensureCacheCleanerCleansExpiredClients() throws Exception {
 		EventRegistry registry = new TestEventRegistry();
-		String c1 = registry.registerClient();
-		String c2 = registry.registerClient();
+		String c1 = "a";
+		String c2 = "b";
+
+		registry.registerClient(c1);
+		registry.registerClient(c2);
 
 		registry.addEvent(EventFactory.createWatchedSeriesAddedEvent(null));
 		assertEquals(1, registry.getEvents(c1).size());
@@ -34,7 +38,7 @@ public class EventRegistryCleanerTest {
 	private class TestEventRegistry extends EventRegistry {
 
 		protected TestEventRegistry() {
-			super(new ClientIdGenerator());
+			super();
 		}
 
 	}

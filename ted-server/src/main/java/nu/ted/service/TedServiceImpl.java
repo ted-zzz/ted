@@ -4,6 +4,10 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.thrift.TException;
+
+import nu.ted.client.Client;
+import nu.ted.client.ClientIdGenerator;
 import nu.ted.domain.SeriesBackendWrapper;
 import nu.ted.event.EventFactory;
 import nu.ted.event.EventRegistry;
@@ -27,6 +31,27 @@ public class TedServiceImpl implements Iface
 
 	private GuideDB seriesSource;
 	private Ted ted;
+
+	private static ClientIdGenerator idGenerator = new ClientIdGenerator();
+	private static final class ClientHolder {
+		// Not using an initialValue here because the clientHolder will be
+		// cleaned after every connection, but the thread will remain.
+		// initialValue would only be called the first time.
+		private static ThreadLocal<Client> clientHolder = new ThreadLocal<Client>();
+
+		public static Client getClient() {
+			Client client = clientHolder.get();
+			if (client == null) {
+				client = new Client(idGenerator.generateClientId());
+			}
+			clientHolder.set(client);
+			return client;
+		}
+
+		public static void clearClient() {
+			clientHolder.set(null);
+		}
+	}
 
 	static short nextUID = 1; // TODO: static across restarts
 
@@ -144,7 +169,9 @@ public class TedServiceImpl implements Iface
 
 	@Override
 	public String registerClientWithEventRegistry() throws TException {
-		return eventRegistry.registerClient();
+		Client client = ClientHolder.getClient();
+		eventRegistry.registerClient(client.getId());
+		return client.getId();
 	}
 
 	@Override
@@ -163,6 +190,7 @@ public class TedServiceImpl implements Iface
 	 */
 	@Override
 	public void logout() throws TException {
+		ClientHolder.clearClient();
 	}
 
 	public static void registerEvent(Event event) {

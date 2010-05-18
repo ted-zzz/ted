@@ -11,22 +11,15 @@ public class EventRegistry {
 
 	protected static final int MAX_TRIES = 50;
 
-	private ClientIdGenerator idGenerator;
 	private Map<String, EventCache> registry;
 
 	public static EventRegistry createEventRegistry(long maxClientIdleTime, long wait) {
-		return createEventRegistry(new ClientIdGenerator(), maxClientIdleTime, wait);
-	}
-
-	public static EventRegistry createEventRegistry(ClientIdGenerator clientIdGenerator, long maxClientIdleTime,
-			long wait) {
-		EventRegistry registry = new EventRegistry(clientIdGenerator);
+		EventRegistry registry = new EventRegistry();
 		startRegistryCleaner(registry, maxClientIdleTime, wait);
 		return registry;
 	}
 
-	protected EventRegistry(ClientIdGenerator clientIdGenerator) {
-		this.idGenerator = clientIdGenerator;
+	protected EventRegistry() {
 		this.registry = new HashMap<String, EventCache>();
 	}
 
@@ -36,33 +29,9 @@ public class EventRegistry {
 		cleaner.start();
 	}
 
-	public String registerClient() {
+	public void registerClient(String Id) {
 		synchronized (registry) {
-			String generatedId = null;
-			;
-			int count = 1;
-
-			// Adding a max tries just to be certain that if the generator ever
-			// messed up, we don't get caught in an infinite loop.
-			//
-			// NOTE: THIS IS NOT LIKELY TO EVER HAPPEN (BETTER SAFE THAN SORRY).
-			while (count != MAX_TRIES) {
-				generatedId = this.idGenerator.generateClientId();
-				if (registry.containsKey(generatedId)) {
-					count++;
-					continue;
-				}
-				break;
-			}
-
-			if (count == MAX_TRIES) {
-				// TODO [MS] Throw properly typed exception here?
-				throw new RuntimeException(
-						"Unable to generate unique client ID for Client.");
-			}
-
-			registry.put(generatedId, new EventCache());
-			return generatedId;
+			registry.put(Id, new EventCache());
 		}
 	}
 
