@@ -1,1 +1,7 @@
-Run 'mvn -P thrift' to build and install the ted-api jar.
+Run 'mvn' to build and install the ted-api jar.
+
+It will also generate the python sources in "src/main/python", these
+are currently not installed to anywhere, so they need to be added
+to your PYTHONPATH to be usable. If Thrift did not install its
+libraries to a default location you may also have to add this to your
+PYTHONPATH. Look for the location of Thrift.py.
