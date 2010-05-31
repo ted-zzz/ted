@@ -129,7 +129,19 @@ Currently to build ted requires the following steps be followed:
  5. Have Ant/Ivy pull down the dependencies: $ ant
  6. In Eclipse set a classpath variable TED_LIB_DIR to point
     to the newly created lib directory.
- 7. Open projects in Eclipse.
+ 7. In eclipse install GWT:
+    https://code.google.com/webtoolkit/usingeclipse.html
+ 8. Open projects in Eclipse.
+
+[Running]
+
+The ted-server can be run from inside eclipse running the nu.ted.Server class.
+This will start the server running on localhost port 9030. Any client written
+using the ted.thrift API should be able to talk to the service on this port.
+
+To run the gwt-ted UI right-click that project and select:
+RunAs->Web Application. This will run the debug webapp. When we deploy we may
+include something like jetty to run the web ui.
 
 [Lexicon]
 
