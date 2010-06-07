@@ -17,9 +17,7 @@ import nu.ted.guide.tvdb.TestMirrorXml;
 import nu.ted.guide.tvdb.datasource.direct.Mirrors.Mask;
 import nu.ted.www.PageLoader;
 
-// TODO: [kmd] don't have time to fix all these test I broke now, will look later.
 public class DirectDataSourceTest {
-
 
 	TestMirrorXml mirrorXml;
 
