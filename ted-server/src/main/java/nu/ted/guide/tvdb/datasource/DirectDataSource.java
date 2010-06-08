@@ -1,4 +1,4 @@
-package nu.ted.guide.tvdb.datasource.direct;
+package nu.ted.guide.tvdb.datasource;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -14,8 +14,7 @@ import nu.ted.guide.DataUnavailableException;
 import nu.ted.guide.tvdb.FullSeriesRecord;
 import nu.ted.guide.tvdb.SearchResults;
 import nu.ted.guide.tvdb.SearchResults.TVDBSeries;
-import nu.ted.guide.tvdb.datasource.DataSource;
-import nu.ted.guide.tvdb.datasource.direct.Mirrors.NoMirrorException;
+import nu.ted.guide.tvdb.datasource.Mirrors.NoMirrorException;
 import nu.ted.www.PageLoader;
 
 public class DirectDataSource implements DataSource {

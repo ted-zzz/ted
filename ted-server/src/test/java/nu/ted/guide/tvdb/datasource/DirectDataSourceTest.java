@@ -1,4 +1,4 @@
-package nu.ted.guide.tvdb.datasource.direct;
+package nu.ted.guide.tvdb.datasource;
 
 import static org.junit.Assert.*;
 
@@ -14,7 +14,8 @@ import nu.ted.generated.ImageType;
 import nu.ted.guide.DataTransferException;
 import nu.ted.guide.DataUnavailableException;
 import nu.ted.guide.tvdb.TestMirrorXml;
-import nu.ted.guide.tvdb.datasource.direct.Mirrors.Mask;
+import nu.ted.guide.tvdb.datasource.DirectDataSource;
+import nu.ted.guide.tvdb.datasource.Mirrors.Mask;
 import nu.ted.www.PageLoader;
 
 public class DirectDataSourceTest {

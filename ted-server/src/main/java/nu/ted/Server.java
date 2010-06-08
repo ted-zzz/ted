@@ -23,7 +23,7 @@ import nu.ted.guide.DataTransferException;
 import nu.ted.guide.GuideDB;
 import nu.ted.guide.GuideFactory;
 import nu.ted.guide.tvdb.TVDB;
-import nu.ted.guide.tvdb.datasource.direct.DirectDataSource;
+import nu.ted.guide.tvdb.datasource.DirectDataSource;
 import nu.ted.guide.tvrage.TVRage;
 import nu.ted.service.TedServiceImpl;
 import nu.ted.thrift.TedServerSecureSocket;
