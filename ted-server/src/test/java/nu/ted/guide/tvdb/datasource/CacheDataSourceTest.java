@@ -89,6 +89,27 @@ public class CacheDataSourceTest {
 		assertSame(two, result);
 	}
 
+	@Test
+	public void shouldBeAbleToRemoveInvalidItemsFromCache() throws DataSourceException {
+		List<FullSeriesRecord> records = new LinkedList<FullSeriesRecord>();
+
+		FullSeriesRecord one = new FullSeriesRecord();
+		records.add(one);
+
+		FullSeriesRecord two = new FullSeriesRecord();
+		records.add(two);
+
+		CacheDataSource cache = new CacheDataSource(new WrappedService(records));
+
+		FullSeriesRecord result;
+		result = cache.getFullSeriesRecord("A");
+
+		cache.remove("A");
+
+		result = cache.getFullSeriesRecord("A");
+		assertSame(two, result);
+	}
+
 	// Other tests: limit cache size (and keep recent at front) - images - searches
 	// maybe a way to evaluate memory usage?
 }

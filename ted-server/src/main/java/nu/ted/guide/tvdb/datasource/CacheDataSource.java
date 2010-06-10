@@ -45,4 +45,8 @@ public class CacheDataSource implements DataSource {
 		throw new NotImplementedException();
 	}
 
+	public void remove(String id) {
+		recordCache.remove(id);
+	}
+
 }
