@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.junit.Test;
 
 import nu.ted.generated.ImageFile;
@@ -21,9 +20,19 @@ public class CacheDataSourceTest {
 	private static class WrappedService implements DataSource {
 
 		Queue<FullSeriesRecord> records;
+		Queue<ImageFile> images;
 
-		public WrappedService(List<FullSeriesRecord> records) {
-			this.records = new LinkedList<FullSeriesRecord>(records);
+		public WrappedService(List<FullSeriesRecord> records,
+				List<ImageFile> images) {
+			if (records != null)
+				this.records = new LinkedList<FullSeriesRecord>(records);
+			else
+				this.records = null;
+
+			if (images != null)
+				this.images = new LinkedList<ImageFile>(images);
+			else
+				this.images = null;
 		}
 
 		@Override
@@ -35,13 +44,13 @@ public class CacheDataSourceTest {
 		@Override
 		public ImageFile getImage(String guideId, ImageType type)
 				throws DataSourceException {
-			throw new NotImplementedException();
+			return images.poll();
 		}
 
 		@Override
 		public List<SeriesSearchResult> search(String name)
 				throws DataSourceException {
-			throw new NotImplementedException();
+			throw new UnsupportedOperationException();
 		}
 
 	}
@@ -59,7 +68,7 @@ public class CacheDataSourceTest {
 		FullSeriesRecord two = new FullSeriesRecord();
 		records.add(two);
 
-		CacheDataSource cache = new CacheDataSource(new WrappedService(records));
+		CacheDataSource cache = new CacheDataSource(new WrappedService(records, null));
 
 		FullSeriesRecord result;
 		result = cache.getFullSeriesRecord("doesn't matter");
@@ -79,7 +88,7 @@ public class CacheDataSourceTest {
 		FullSeriesRecord two = new FullSeriesRecord();
 		records.add(two);
 
-		CacheDataSource cache = new CacheDataSource(new WrappedService(records));
+		CacheDataSource cache = new CacheDataSource(new WrappedService(records, null));
 
 		FullSeriesRecord result;
 		result = cache.getFullSeriesRecord("A");
@@ -90,7 +99,7 @@ public class CacheDataSourceTest {
 	}
 
 	@Test
-	public void shouldBeAbleToRemoveInvalidItemsFromCache() throws DataSourceException {
+	public void shouldBeAbleToRemoveInvalidRecordsFromCache() throws DataSourceException {
 		List<FullSeriesRecord> records = new LinkedList<FullSeriesRecord>();
 
 		FullSeriesRecord one = new FullSeriesRecord();
@@ -99,7 +108,7 @@ public class CacheDataSourceTest {
 		FullSeriesRecord two = new FullSeriesRecord();
 		records.add(two);
 
-		CacheDataSource cache = new CacheDataSource(new WrappedService(records));
+		CacheDataSource cache = new CacheDataSource(new WrappedService(records, null));
 
 		FullSeriesRecord result;
 		result = cache.getFullSeriesRecord("A");
@@ -110,6 +119,64 @@ public class CacheDataSourceTest {
 		assertSame(two, result);
 	}
 
-	// Other tests: limit cache size (and keep recent at front) - images - searches
+	@Test
+	public void shouldReturnCachedImages() throws DataSourceException {
+		List<ImageFile> images = new LinkedList<ImageFile>();
+		images.add(new ImageFile("Num1", "abc".getBytes()));
+		images.add(new ImageFile("Num2", "abc".getBytes()));
+
+		CacheDataSource cache = new CacheDataSource(new WrappedService(null, images));
+		ImageFile result;
+
+		result = cache.getImage("id", ImageType.BANNER);
+		assertEquals("Num1", result.getMimetype());
+
+		result = cache.getImage("id", ImageType.BANNER);
+		assertEquals("Num1", result.getMimetype());
+	}
+
+	@Test
+	public void shouldReturnOnlyOnExactSameImage() throws DataSourceException {
+		List<ImageFile> images = new LinkedList<ImageFile>();
+		images.add(new ImageFile("Num1", "abc".getBytes()));
+		images.add(new ImageFile("Num2", "abc".getBytes()));
+		images.add(new ImageFile("Num3", "abc".getBytes()));
+
+		CacheDataSource cache = new CacheDataSource(new WrappedService(null, images));
+		ImageFile result;
+
+		result = cache.getImage("id", ImageType.BANNER);
+		assertEquals("Num1", result.getMimetype());
+
+		// Same key, but different type
+		result = cache.getImage("id", ImageType.BANNER_THUMBNAIL);
+		assertEquals("Num2", result.getMimetype());
+
+		// Different key, same type
+		result = cache.getImage("different id", ImageType.BANNER);
+		assertEquals("Num3", result.getMimetype());
+	}
+
+	// Don't remove the images as they're not critical to operation.
+	@Test
+	public void removeShouldLeaveImagesAlone() throws DataSourceException {
+		List<ImageFile> images = new LinkedList<ImageFile>();
+		images.add(new ImageFile("Num1", "abc".getBytes()));
+		images.add(new ImageFile("Num2", "abc".getBytes()));
+
+		CacheDataSource cache = new CacheDataSource(new WrappedService(null, images));
+		ImageFile result;
+
+		result = cache.getImage("id", ImageType.BANNER);
+		assertEquals("Num1", result.getMimetype());
+
+		cache.remove("id");
+
+		result = cache.getImage("id", ImageType.BANNER);
+		assertEquals("Num1", result.getMimetype());
+
+	}
+
+	// Other tests: limit cache size (and keep recent at front) - searches
 	// maybe a way to evaluate memory usage?
 }

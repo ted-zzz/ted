@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.NotImplementedException;
-
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.ImageType;
 import nu.ted.generated.SeriesSearchResult;
@@ -16,12 +14,16 @@ public class CacheDataSource implements DataSource {
 
 	private DataSource source;
 	private Map<String, FullSeriesRecord> recordCache;
+	private Map<String, ImageFile> bannerCache;
+	private Map<String, ImageFile> bannerThumbCache;
 
 	//FullSeriesRecord cachedRecord;
 
 	public CacheDataSource(DataSource source) {
 		this.source = source;
 		this.recordCache = new HashMap<String, FullSeriesRecord>();
+		this.bannerCache = new HashMap<String, ImageFile>();
+		this.bannerThumbCache = new HashMap<String, ImageFile>();
 	}
 
 	@Override
@@ -36,13 +38,25 @@ public class CacheDataSource implements DataSource {
 	@Override
 	public ImageFile getImage(String guideId, ImageType type)
 			throws DataSourceException {
-		throw new NotImplementedException();
+		Map<String, ImageFile> cache;
+		if (type == ImageType.BANNER)
+			cache = bannerCache;
+		else if (type == ImageType.BANNER_THUMBNAIL)
+			cache = bannerThumbCache;
+		else
+			throw new UnsupportedOperationException("Invalid Imagetype: " + type.toString());
+
+		if (!cache.containsKey(guideId)) {
+			cache.put(guideId, source.getImage(guideId, type));
+		}
+		return cache.get(guideId);
 	}
 
 	@Override
 	public List<SeriesSearchResult> search(String name)
 			throws DataSourceException {
-		throw new NotImplementedException();
+
+		throw new UnsupportedOperationException();
 	}
 
 	public void remove(String id) {
