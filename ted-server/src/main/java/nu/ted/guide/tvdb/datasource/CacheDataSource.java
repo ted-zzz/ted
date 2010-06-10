@@ -56,7 +56,7 @@ public class CacheDataSource implements DataSource {
 	public List<SeriesSearchResult> search(String name)
 			throws DataSourceException {
 
-		throw new UnsupportedOperationException();
+		return source.search(name);
 	}
 
 	public void remove(String id) {
