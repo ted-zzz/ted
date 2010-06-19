@@ -23,6 +23,7 @@ import nu.ted.guide.DataTransferException;
 import nu.ted.guide.GuideDB;
 import nu.ted.guide.GuideFactory;
 import nu.ted.guide.tvdb.TVDB;
+import nu.ted.guide.tvdb.datasource.CacheDataSource;
 import nu.ted.guide.tvdb.datasource.DirectDataSource;
 import nu.ted.guide.tvrage.TVRage;
 import nu.ted.service.TedServiceImpl;
@@ -225,7 +226,8 @@ public class Server {
 			}
 
 			try {
-				GuideFactory.addGuide(new TVDB(new DirectDataSource(new DirectPageLoader())));
+				GuideFactory.addGuide(new TVDB(
+						new CacheDataSource(new DirectDataSource(new DirectPageLoader()))));
 			} catch (DataTransferException e) {
 				// For now bring it all down. If we have no TVDB we're likely sunk.
 				throw new RuntimeException("Unable to connect to TVDB", e);
