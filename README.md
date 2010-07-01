@@ -177,3 +177,26 @@ Either way, moving a branch will hopefully be a rare occurrence. If kept small
 we should be able to pull in these branches and have them disappear quite often.
 
 If you have any Git or GitHub questions please send me ([KenMacD](http://github.com/inbox/new/KenMacD)) a message on GitHub directly.
+
+## Third Party Licenses ########################################################
+
+Quick list of jars pulled down by Ivy, and their license (current 6/10):
+
+ * commons-lang-2.4.jar        --  The Apache Software License, Version 2.0
+ * diservlet-1.0-SNAPSHOT.jar  --  <missing - written by Mike>
+ * gwt-dev-2.0.3.jar           --  The Apache Software License, Version 2.0
+ * gwt-servlet-2.0.3.jar       --  The Apache Software License, Version 2.0
+ * gwt-user-2.0.3.jar          --  The Apache Software License, Version 2.0
+ * gwtsite-0.1-SNAPSHOT.jar    --  <missing - written by Mike>
+ * jdom-1.0.jar                --  Apache-like
+ * jsap-2.1.jar                --  LGPL (with extra info allowing subclassing)
+ * junit-4.8.1-sources.jar     --  Common Public License - v 1.0
+ * junit-4.8.1.jar             --  Common Public License - v 1.0
+ * rome-1.0.0-javadoc.jar      --  The Apache Software License, Version 2.0
+ * rome-1.0.0-sources.jar      --  The Apache Software License, Version 2.0
+ * rome-1.0.0.jar              --  The Apache Software License, Version 2.0
+ * servlet-api-2.5.jar         --  <unknown - by Sun, part of Glassfish>
+ * slf4j-api-1.5.8.jar         --  MIT license (X license, X11 license)
+ * slf4j-simple-1.5.8.jar      --  MIT license (X license, X11 license)
+ * srpforjava-1.0.jar          --  The Apache Software License, Version 2.0
+ * thrift-0.2.0.jar            --  The Apache Software License, Version 2.0
