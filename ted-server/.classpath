@@ -12,5 +12,8 @@
 	<classpathentry kind="var" path="TED_LIB_DIR/ted-api-0.1-SNAPSHOT.jar" sourcepath="/TED_LIB_DIR/ted-api-0.1-SNAPSHOT-sources.jar"/>
 	<classpathentry kind="var" path="TED_LIB_DIR/jsap-2.1.jar"/>
 	<classpathentry kind="var" path="TED_LIB_DIR/srpforjava-1.0.jar"/>
+	<classpathentry kind="var" path="TED_LIB_DIR/rome-1.0.0.jar"/>
+	<classpathentry kind="var" path="TED_LIB_DIR/rome-1.0.0-javadoc.jar"/>
+	<classpathentry kind="var" path="TED_LIB_DIR/rome-1.0.0-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
