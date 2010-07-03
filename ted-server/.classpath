@@ -15,5 +15,6 @@
 	<classpathentry kind="var" path="TED_LIB_DIR/rome-1.0.0.jar"/>
 	<classpathentry kind="var" path="TED_LIB_DIR/rome-1.0.0-javadoc.jar"/>
 	<classpathentry kind="var" path="TED_LIB_DIR/rome-1.0.0-sources.jar"/>
+	<classpathentry kind="var" path="TED_LIB_DIR/jdom-1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
