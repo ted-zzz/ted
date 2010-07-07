@@ -15,18 +15,11 @@ public class EventRegistry {
 
 	public static EventRegistry createEventRegistry(long maxClientIdleTime, long wait) {
 		EventRegistry registry = new EventRegistry();
-		startRegistryCleaner(registry, maxClientIdleTime, wait);
 		return registry;
 	}
 
 	protected EventRegistry() {
 		this.registry = new HashMap<String, EventCache>();
-	}
-
-	protected static void startRegistryCleaner(EventRegistry reg, long maxClientIdleTime, long wait) {
-		EventRegistryCleaner cleaner = new EventRegistryCleaner(reg, wait,
-				maxClientIdleTime);
-		cleaner.start();
 	}
 
 	public void registerClient(String Id) {
