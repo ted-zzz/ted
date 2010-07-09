@@ -6,8 +6,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.SynchronousQueue;
@@ -19,6 +22,7 @@ import nu.ted.generated.Series;
 import nu.ted.generated.Ted;
 import nu.ted.generated.TedConfig;
 import nu.ted.generated.TedService;
+import nu.ted.generated.TorrentSource;
 import nu.ted.guide.DataTransferException;
 import nu.ted.guide.GuideDB;
 import nu.ted.guide.GuideFactory;
@@ -112,7 +116,13 @@ public class Server {
 	public static Ted createDefaultTed()
 	{
 		Ted ted = new Ted();
-		ted.setConfig(new TedConfig());
+
+		TedConfig config = new TedConfig();
+		Map<String, List<TorrentSource>> sourceMap = new HashMap<String, List<TorrentSource>>();
+		config.setTorrentSources(sourceMap);
+
+		// TODO: will probably want to create some default TorrentSources around here or in TedConfig()
+		ted.setConfig(config);
 		ted.setSeries(new LinkedList<Series>());
 		return ted;
 	}

@@ -2,7 +2,9 @@ package nu.ted.service;
 
 import static org.junit.Assert.*;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import nu.ted.Server;
 import nu.ted.domain.SeriesBackendWrapper;
@@ -13,6 +15,7 @@ import nu.ted.generated.ImageType;
 import nu.ted.generated.InvalidOperation;
 import nu.ted.generated.Series;
 import nu.ted.generated.SeriesSearchResult;
+import nu.ted.generated.TorrentSource;
 import nu.ted.guide.TestGuide;
 
 import org.apache.thrift.TException;
@@ -188,5 +191,65 @@ public class TedTests
 		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
 		Series series = ted.getSeries(new Short("123"));
 		assertNull("Series should not have been found.", series);
+	}
+
+	// This test might not make sense if we have a default list created.
+	@Test
+	public void ensureNoTorrentSourcesExistByDefault() throws Exception {
+		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
+
+		Map<String, List<TorrentSource>> allTorrentSources = ted.getAllTorrentSources();
+		assertNotNull(allTorrentSources);
+		assertEquals("Should have no sources by default", 0, allTorrentSources.size());
+	}
+
+	@Test
+	public void ensureGettingNonExistentTorrentSourceReturnsEmptyListButDoesntCreateIt() throws Exception {
+		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
+
+		List<TorrentSource> sources = ted.getTorrentSources("Test");
+		assertNotNull(sources);
+		assertEquals(0, sources.size());
+
+		Map<String, List<TorrentSource>> allTorrentSources = ted.getAllTorrentSources();
+		assertNotNull(allTorrentSources);
+		assertEquals("Should not have created the non-existent", 0, allTorrentSources.size());
+	}
+
+	@Test
+	public void ensureAddingTorrentSourceWorks() throws Exception {
+		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
+
+		TorrentSource source = new TorrentSource("type", "name", "location");
+		List<TorrentSource> torrentSourceList = new LinkedList<TorrentSource>();
+		torrentSourceList.add(source);
+
+		ted.editTorrentSources("Test", torrentSourceList);
+
+		List<TorrentSource> sources = ted.getTorrentSources("Test");
+		assertNotNull(sources);
+		assertEquals("Should have the one I entered", 1, sources.size());
+		assertEquals("And it's values should be correct", "location", sources.get(0).getLocation());
+
+		Map<String, List<TorrentSource>> allTorrentSources = ted.getAllTorrentSources();
+		assertNotNull(allTorrentSources);
+		assertEquals("Should have one by now", 1, allTorrentSources.size());
+		assertTrue(allTorrentSources.containsKey("Test"));
+	}
+
+	@Test
+	public void ensureRemovingTorrentSourceWorks() throws Exception {
+		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
+
+		TorrentSource source = new TorrentSource("type", "name", "location");
+		List<TorrentSource> torrentSourceList = new LinkedList<TorrentSource>();
+		torrentSourceList.add(source);
+
+		ted.editTorrentSources("Test", torrentSourceList);
+		ted.removeTorrentSources("Test");
+
+		Map<String, List<TorrentSource>> allTorrentSources = ted.getAllTorrentSources();
+		assertNotNull(allTorrentSources);
+		assertEquals("Should have removed it, so none left", 0, allTorrentSources.size());
 	}
 }

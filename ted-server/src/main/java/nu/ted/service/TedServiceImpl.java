@@ -1,8 +1,13 @@
 package nu.ted.service;
 
+import static java.util.Collections.unmodifiableMap;
+import static java.util.Collections.unmodifiableList;
+
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.thrift.TException;
 
@@ -20,10 +25,9 @@ import nu.ted.generated.Series;
 import nu.ted.generated.SeriesSearchResult;
 import nu.ted.generated.Ted;
 import nu.ted.generated.TedService.Iface;
+import nu.ted.generated.TorrentSource;
 import nu.ted.guide.DataSourceException;
 import nu.ted.guide.GuideDB;
-
-import org.apache.thrift.TException;
 
 public class TedServiceImpl implements Iface
 {
@@ -195,6 +199,38 @@ public class TedServiceImpl implements Iface
 
 	public static void registerEvent(Event event) {
 		eventRegistry.addEvent(event);
+	}
+
+	public Map<String, List<TorrentSource>> getAllTorrentSources() throws TException {
+		// Map value is already unmodifiable
+		return unmodifiableMap(ted.getConfig().getTorrentSources());
+	}
+
+	@Override
+	public List<TorrentSource> getTorrentSources(String name)
+			throws TException {
+
+		List<TorrentSource> tsList;
+
+		tsList = ted.getConfig().getTorrentSources().get(name);
+
+		if (tsList == null) {
+			return new LinkedList<TorrentSource>();
+		} else {
+			return tsList;
+		}
+	}
+
+	@Override
+	public void editTorrentSources(String name,
+			List<TorrentSource> torrentSources) throws TException {
+		// TODO: should we validate anything here?
+		ted.getConfig().getTorrentSources().put(name, unmodifiableList(torrentSources));
+	}
+
+	@Override
+	public void removeTorrentSources(String name) throws TException {
+		ted.getConfig().getTorrentSources().remove(name);
 	}
 
 }

@@ -48,6 +48,20 @@ struct Episode
 	4: optional EpisodeStatus	status
 }
 
+struct TorrentSource
+{
+	1: string		type,	# Unique identifer for type
+	2: string		name,
+	3: string		location
+}
+
+struct TorrentSourceUnion
+{
+	# One or the other should be set, never both:
+	1: string		name,
+	2: list<TorrentSource>	sources
+}
+
 struct Series
 {
 	1: i16			uid,
@@ -57,7 +71,11 @@ struct Series
 	4: string		guideName,
 	5: string		guideId,
 
-	6: list<Episode>	episodes
+	6: list<Episode>	episodes,
+
+	# If not set the 'default' profile is used.
+	7: optional TorrentSourceUnion	sources
+
 }
 
 struct TedConfig
@@ -66,7 +84,10 @@ struct TedConfig
 
 	# Password for Secure Remote Passwords
 	2: string		verifier,
-	3: string		salt
+	3: string		salt,
+
+	# Torrent Source information
+	4: map<string, list<TorrentSource>> torrentSources
 }
 
 struct Ted
@@ -146,5 +167,15 @@ service TedService
 
 	list<Event> getEvents();
 		# TODO: throws?
+
+	# --- Commands related to Torrent Source profiles ---
+
+	map<string, list<TorrentSource>> getAllTorrentSources(); # TODO: throw
+	list<TorrentSource> getTorrentSources(1: string name); # TODO: throw
+
+	# Creates the entry if it doesn't exist
+	void editTorrentSources(1: string name, 2: list<TorrentSource> torrentSources); # TODO: throw
+
+	void removeTorrentSources(1: string name); # TODO: throw
 
 }
