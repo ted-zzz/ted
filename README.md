@@ -1,7 +1,67 @@
 ted
+===
 
-[GitHub]
+## Building ####################################################################
 
+### Requirements ###############################################################
+ * [Apache Thrift](http://incubator.apache.org/thrift/) 0.2.0
+ * [Ant](http://ant.apache.org/)
+ * [Maven](http://maven.apache.org/)
+
+### Source #####################################################################
+Check-out the sources from GitHub:
+
+    $ git clone git://github.com/ted/ted.git
+
+### Build ######################################################################
+Currently to build ted, both ant and maven are required:
+
+    $ cd ted/ted-api
+    $ mvn
+    $ cd ..
+    $ ant
+
+## Running #####################################################################
+Ted can be run from eclipse by following these steps:
+
+ 1. In Eclipse set a classpath variable `TED_LIB_DIR` to point to the newly
+ created `lib` directory in ted.
+ 2. In Eclipse install [GWT](https://code.google.com/webtoolkit/usingeclipse.html)
+ 3. Open projects in Eclipse.
+ 4. Run `ted-server` from inside eclipse running the `nu.ted.Server` class.
+This will start the server running on localhost port `9030`. Any client written
+using the ted.thrift API should be able to talk to the service on this port.
+ 5. Run `gwt-ted` from inside eclipse.
+   * compile gwt-ted project: right-click the project -> Google -> GWT Compile
+   -> Compile
+   * run the gwt-ted UI: right-click the project -> RunAs -> Web Application.
+   This will run the debug webapp. When we deploy we may include something like
+   jetty to run the web ui.
+
+## Lexicon #####################################################################
+
+Or what in the world I'm talking about.
+
+ * [ted-api](http://github.com/ted/ted/tree/master/ted-api): The Thrift based
+ API allowing clients in many languages to talk with the ted-server.
+ * [ted-server](http://github.com/ted/ted/tree/master/ted-server): The back-end
+ daemon that looks for and downloads torrents.
+ * [ted-ui](http://github.com/ted/ted/tree/master/ted-ui): The UIs included in
+ the Ted project.
+ * [gwt-ted](http://github.com/ted/ted/tree/master/ted-ui/gwt-ted): The GWT UI
+ to talk to the ted-server.
+
+In Ted there is a back-end domain model. This is the data that will be
+persisted between restarts of the ted-server. When possible they will
+use the simplest and shortest names for an item:
+
+ * Series
+ * Episode
+
+GitHub
+=====
+
+##### Following are some details for those of you who would like to contribute to the development of ted.
 The ted project is currently hosted in GitHub. If you have a GitHub account and
 would like to contribute we recommend you fork this repository. If you just want
 the latest source you can clone from: git://github.com/ted/ted.git.
@@ -114,48 +174,4 @@ push to happen, even though it rewrites history.
 Either way, moving a branch will hopefully be a rare occurrence. If kept small
 we should be able to pull in these branches and have them disappear quite often.
 
-If you have any Git or GitHub questions please send me (KenMacD) a message on
-GitHub directly.
-
-
-[Building]
-
-Currently to build ted requires the following steps be followed:
-
- 1. Install Apache Thrift, and Apache Ant for you platform.
- 2. Enter the ted-api directory: $ cd ted-api
- 3. Install ted-api to your local maven repo: $ mvn
- 4. Change back to the main directory: $ cd ..
- 5. Have Ant/Ivy pull down the dependencies: $ ant
- 6. In Eclipse set a classpath variable TED_LIB_DIR to point
-    to the newly created lib directory.
- 7. In eclipse install GWT:
-    https://code.google.com/webtoolkit/usingeclipse.html
- 8. Open projects in Eclipse.
-
-[Running]
-
-The ted-server can be run from inside eclipse running the nu.ted.Server class.
-This will start the server running on localhost port 9030. Any client written
-using the ted.thrift API should be able to talk to the service on this port.
-
-To run the gwt-ted UI right-click that project and select:
-RunAs->Web Application. This will run the debug webapp. When we deploy we may
-include something like jetty to run the web ui.
-
-[Lexicon]
-
-Or what in the world I'm talking about.
-
- * ted-api:    The Thrift based API allowing clients in many languages
-               to talk with the ted-server.
- * ted-server: The back-end daemon that looks for and downloads torrents.
- * ted-gui:    The UIs included in the Ted project.
- * gwt-ted:    The GWT UI to talk to the Ted-server.
-
-In Ted there is a back-end domain model. This is the data that will be
-persisted between restarts of the ted-server. When possible they will
-use the simplest and shortest names for an item:
-
- * Series  
- * Episode
+If you have any Git or GitHub questions please send me ([KenMacD](http://github.com/inbox/new/KenMacD)) a message on GitHub directly.
