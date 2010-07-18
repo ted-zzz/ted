@@ -20,6 +20,8 @@ Currently to build ted, both ant and maven are required:
     $ mvn
     $ cd ..
     $ ant
+    $ cd ted-ui/gwt-ted
+    $ ant
 
 ## Running #####################################################################
 Ted can be run from eclipse by following these steps:
