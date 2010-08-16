@@ -208,7 +208,7 @@ public class Server {
 
 			String verifier;
 			String salt;
-			if (overridePassword = true) {
+			if (overridePassword) {
 				verifier = Server.verifier;
 				salt = Server.salt;
 			} else {
