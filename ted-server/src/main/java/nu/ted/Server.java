@@ -13,11 +13,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import nu.ted.domain.SeriesBackendWrapper;
 import nu.ted.domain.TedBackendWrapper;
+import nu.ted.generated.Episode;
 import nu.ted.generated.Series;
 import nu.ted.generated.Ted;
 import nu.ted.generated.TedConfig;
@@ -196,10 +199,59 @@ public class Server {
 
 	}
 
+	private static class EpisodeSearcher implements Runnable {
+		private static Boolean scheduled;
+		private static ScheduledExecutorService executor;
+
+		public void run() {
+			if (executor == null) {
+				throw new RuntimeException("Unable to run EpisodeSearcher without an executor set.");
+			}
+
+			List<Series> series = new TedBackendWrapper(ted).getSeriesWithMissingEpisodes();
+			for (Series s : series) {
+				new SeriesBackendWrapper(s).searchForMissingEpisodes();
+			}
+
+			if (new TedBackendWrapper(ted).hasMissingEpisodes()) {
+				// Reschedule for an hour later
+				// TODO: config?
+				scheduleRun(1, TimeUnit.HOURS);
+			}
+		}
+
+		public static void setExecutor(ScheduledExecutorService executor) {
+			EpisodeSearcher.executor = executor;
+		}
+
+		public static void scheduleRun(long delay, TimeUnit timeUnit) {
+			if (executor == null) {
+				throw new RuntimeException("Unable to schedule EpisodeSearcher without an executor set.");
+			}
+			synchronized (scheduled) {
+				if (scheduled == false) {
+					executor.schedule(new EpisodeSearcher(), delay, timeUnit);
+					scheduled = true;
+				}
+			}
+		}
+
+		public static void scheduleRun() {
+			if (executor == null) {
+				throw new RuntimeException("Unable to schedule EpisodeSearcher without an executor set.");
+			}
+			scheduleRun(0, TimeUnit.SECONDS);
+		}
+	}
+
 	private static class EpisodeUpdater implements Runnable {
+
 		public void run() {
 			try {
-				new TedBackendWrapper(ted).updateSeries(Calendar.getInstance());
+				if (new TedBackendWrapper(ted).updateSeries(Calendar.getInstance()) == true) {
+					EpisodeSearcher.scheduleRun();
+				}
+
 			} catch (Throwable ex) {
 				System.err.println("EpisodeUpdater crashed: ");
 				ex.printStackTrace();
@@ -247,8 +299,14 @@ public class Server {
 			GuideDB guide = GuideFactory.getGuide(TVDB.NAME);
 			service = new TedServiceImpl(ted, guide);
 
-			Executors.newScheduledThreadPool(1).scheduleAtFixedRate(
-					new EpisodeUpdater(), 10, 3600, TimeUnit.SECONDS);
+			// Setup the worker thread:
+			ScheduledExecutorService searcher = Executors.newScheduledThreadPool(1);
+			EpisodeSearcher.setExecutor(searcher);
+
+			if (new TedBackendWrapper(ted).hasMissingEpisodes() == true) {
+				searcher.schedule(new EpisodeSearcher(), 20, TimeUnit.SECONDS);
+			}
+			searcher.scheduleAtFixedRate(new EpisodeUpdater(), 10, 3600, TimeUnit.SECONDS);
 
 			// Create an executor service that will always call the logout
 			// after the client disconnects.
