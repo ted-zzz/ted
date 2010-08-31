@@ -2,6 +2,7 @@ package nu.ted.guide.tvdb.datasource;
 
 import static org.junit.Assert.*;
 
+import java.nio.ByteBuffer;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -122,8 +123,8 @@ public class CacheDataSourceTest {
 	@Test
 	public void shouldReturnCachedImages() throws DataSourceException {
 		List<ImageFile> images = new LinkedList<ImageFile>();
-		images.add(new ImageFile("Num1", "abc".getBytes()));
-		images.add(new ImageFile("Num2", "abc".getBytes()));
+		images.add(new ImageFile("Num1", ByteBuffer.wrap("abc".getBytes())));
+		images.add(new ImageFile("Num2", ByteBuffer.wrap("abc".getBytes())));
 
 		CacheDataSource cache = new CacheDataSource(new WrappedService(null, images));
 		ImageFile result;
@@ -138,9 +139,9 @@ public class CacheDataSourceTest {
 	@Test
 	public void shouldReturnOnlyOnExactSameImage() throws DataSourceException {
 		List<ImageFile> images = new LinkedList<ImageFile>();
-		images.add(new ImageFile("Num1", "abc".getBytes()));
-		images.add(new ImageFile("Num2", "abc".getBytes()));
-		images.add(new ImageFile("Num3", "abc".getBytes()));
+		images.add(new ImageFile("Num1", ByteBuffer.wrap("abc".getBytes())));
+		images.add(new ImageFile("Num2", ByteBuffer.wrap("abc".getBytes())));
+		images.add(new ImageFile("Num3", ByteBuffer.wrap("abc".getBytes())));
 
 		CacheDataSource cache = new CacheDataSource(new WrappedService(null, images));
 		ImageFile result;
@@ -161,8 +162,8 @@ public class CacheDataSourceTest {
 	@Test
 	public void removeShouldLeaveImagesAlone() throws DataSourceException {
 		List<ImageFile> images = new LinkedList<ImageFile>();
-		images.add(new ImageFile("Num1", "abc".getBytes()));
-		images.add(new ImageFile("Num2", "abc".getBytes()));
+		images.add(new ImageFile("Num1", ByteBuffer.wrap("abc".getBytes())));
+		images.add(new ImageFile("Num2", ByteBuffer.wrap("abc".getBytes())));
 
 		CacheDataSource cache = new CacheDataSource(new WrappedService(null, images));
 		ImageFile result;

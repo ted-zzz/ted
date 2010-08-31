@@ -1,5 +1,6 @@
 package nu.ted.guide;
 
+import java.nio.ByteBuffer;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
@@ -85,10 +86,10 @@ public class TestGuide implements GuideDB
 
 	private ImageFile getImageFile(ImageType type) {
 		if (type == ImageType.BANNER) {
-			return new ImageFile("image/banner", "BANNER".getBytes());
+			return new ImageFile("image/banner", ByteBuffer.wrap("BANNER".getBytes()));
 		}
 		else if (type == ImageType.BANNER_THUMBNAIL) {
-			return new ImageFile("image/thumbnail", "THUMBNAIL".getBytes());
+			return new ImageFile("image/thumbnail", ByteBuffer.wrap("THUMBNAIL".getBytes()));
 		}
 		else {
 			return new ImageFile();

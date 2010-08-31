@@ -32,9 +32,11 @@ import java.net.Socket;
 import java.net.SocketException;
 
 /**
- * Version of TServerSocket that allows access to the createTSocket
+ * Wrapper around a wrapper around ServerSocket for Thrift.
  *
- * Keep in sync with Thrift
+ * Adds createTSocket and has 'result2 =' use it.
+ * Replace all TServerSocket with TedServerSocket.
+ * Adds need imports.
  */
 public class TedServerSocket extends TServerTransport {
 
@@ -44,6 +46,11 @@ private static final Logger LOGGER = LoggerFactory.getLogger(TedServerSocket.cla
    * Underlying serversocket object
    */
 private ServerSocket serverSocket_ = null;
+
+/**
+   * Port to listen on
+   */
+private int port_ = 0;
 
 /**
    * Timeout for client sockets from accept
@@ -77,6 +84,7 @@ public TedServerSocket(int port) throws TTransportException {
    */
 public TedServerSocket(int port, int clientTimeout) throws TTransportException {
 	this(new InetSocketAddress(port), clientTimeout);
+	port_ = port;
 }
 
 public TedServerSocket(InetSocketAddress bindAddr) throws TTransportException {

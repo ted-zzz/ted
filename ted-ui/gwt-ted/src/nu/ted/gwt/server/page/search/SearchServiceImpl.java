@@ -61,7 +61,7 @@ public class SearchServiceImpl extends TedRemoteServiceServlet implements
 		try {
 			Iface client = getTedClient();
 			ImageFile imageFile = client.getImageByGuideId(guideId, ImageType.BANNER);
-			if (imageFile.getData() == null || imageFile.getData().length == 0) {
+			if (imageFile.getData() == null || imageFile.getData().array().length == 0) {
 				return false;
 			}
 
@@ -70,7 +70,7 @@ public class SearchServiceImpl extends TedRemoteServiceServlet implements
 				return false;
 			}
 
-			StoredImage image = new StoredImage(mimeType, imageFile.getData());
+			StoredImage image = new StoredImage(mimeType, imageFile.getData().array());
 			store.storeImage(guideId, image);
 			return true;
 		} catch (TException e) {

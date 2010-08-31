@@ -3,6 +3,7 @@ package nu.ted.guide.tvdb.datasource;
 import static org.junit.Assert.*;
 
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -80,7 +81,7 @@ public class DirectDataSourceTest {
 		loader.addFullSeriesRecord("test-url/api/" + DirectDataSource.APIKEY + "/series/1000/all/", testXml);
 
 		// Add Banner
-		ImageFile testImage = new ImageFile("image/test", "abcd".getBytes());
+		ImageFile testImage = new ImageFile("image/test", ByteBuffer.wrap("abcd".getBytes()));
 		loader.addImage("banner_url/banners/graphical/73244-g9.jpg", testImage);
 
 		DirectDataSource dds = new DirectDataSource(loader);
@@ -88,7 +89,7 @@ public class DirectDataSourceTest {
 
 		assertNotNull(image);
 		assertEquals("image/test", image.getMimetype());
-		assertArrayEquals("abcd".getBytes(), image.getData());
+		assertArrayEquals("abcd".getBytes(), image.getData().array());
 
 	}
 
@@ -105,7 +106,7 @@ public class DirectDataSourceTest {
 		loader.addFullSeriesRecord("test-url/api/" + DirectDataSource.APIKEY + "/series/1000/all/", testXml);
 
 		// Add Banner
-		ImageFile testImage = new ImageFile("image/test", "abcd".getBytes());
+		ImageFile testImage = new ImageFile("image/test", ByteBuffer.wrap("abcd".getBytes()));
 		loader.addImage("banner_url/banners/_cache/graphical/73244-g9.jpg", testImage);
 
 		DirectDataSource dds = new DirectDataSource(loader);
@@ -113,7 +114,7 @@ public class DirectDataSourceTest {
 
 		assertNotNull(image);
 		assertEquals("image/test", image.getMimetype());
-		assertArrayEquals("abcd".getBytes(), image.getData());
+		assertArrayEquals("abcd".getBytes(), image.getData().array());
 
 	}
 
