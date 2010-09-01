@@ -14,6 +14,9 @@ import nu.ted.gwt.domain.SearchSeriesInfo;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -45,6 +48,15 @@ public class SearchPage extends DefaultPage {
 		FlowPanel searchPanel = new FlowPanel();
 
 		final TextBox searchBox = new TextBox();
+		searchBox.addKeyDownHandler(new KeyDownHandler() {
+
+			@Override
+			public void onKeyDown(KeyDownEvent event) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER)
+					controller.search(searchBox.getText());
+			}
+		});
+
 		// TODO [MS] Get this value from a resource bundle.
 		Button searchButton = new Button("Search");
 		searchButton.addClickHandler(new ClickHandler() {
