@@ -5,8 +5,6 @@ import static org.junit.Assert.*;
 import java.util.List;
 
 import nu.ted.generated.Event;
-import nu.ted.generated.EventType;
-
 import org.junit.Test;
 
 public class EventCacheTest {

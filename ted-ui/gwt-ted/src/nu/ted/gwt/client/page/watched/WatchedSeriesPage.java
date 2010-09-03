@@ -4,17 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
 import net.bugsquat.gwtsite.client.page.PageId;
-import nu.ted.gwt.client.Css;
 import nu.ted.gwt.client.TedPageId;
-import nu.ted.gwt.client.image.Images;
 import nu.ted.gwt.client.page.DefaultPage;
 import nu.ted.gwt.domain.GwtWatchedSeries;
 

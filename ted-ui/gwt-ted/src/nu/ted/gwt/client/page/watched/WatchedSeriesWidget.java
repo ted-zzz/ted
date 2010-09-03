@@ -7,7 +7,6 @@ import nu.ted.gwt.client.event.EventListener;
 import nu.ted.gwt.client.event.EventQueue;
 import nu.ted.gwt.client.image.Images;
 import nu.ted.gwt.domain.GwtEpisode;
-import nu.ted.gwt.domain.GwtEpisodeStatus;
 import nu.ted.gwt.domain.GwtWatchedSeries;
 import nu.ted.gwt.domain.event.EpisodeAddedEvent;
 import nu.ted.gwt.domain.event.GwtEventType;

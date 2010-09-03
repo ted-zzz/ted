@@ -4,14 +4,10 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.sun.org.apache.xml.internal.utils.UnImplNode;
-
 import nu.ted.event.EventFactory;
 import nu.ted.generated.Date;
 import nu.ted.generated.Episode;
 import nu.ted.generated.EpisodeStatus;
-import nu.ted.generated.Event;
-import nu.ted.generated.EventType;
 import nu.ted.generated.Series;
 import nu.ted.generated.TorrentSource;
 import nu.ted.generated.TorrentSourceUnion;
@@ -20,7 +16,6 @@ import nu.ted.guide.GuideDB;
 import nu.ted.guide.GuideFactory;
 import nu.ted.service.TedServiceImpl;
 import nu.ted.torrent.search.TorrentSourceTypeIndex;
-import nu.ted.torrent.search.TorrentSourceType;
 
 /**
  * This is a representation of a TV Series.
@@ -47,10 +42,10 @@ public class SeriesBackendWrapper
 	}
 
 	public boolean isSameSeries(Series other) {
-		if (series.getGuideName() != other.getGuideName())
+		if (!series.getGuideName().equals(other.getGuideName()))
 			return false;
 
-		if (series.getGuideId() != other.getGuideId())
+		if (!series.getGuideId().equals(other.getGuideId()))
 			return false;
 
 		return true;

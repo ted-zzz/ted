@@ -131,7 +131,7 @@ public class DirectDataSourceTest {
 
 		DirectDataSource dds = new DirectDataSource(loader);
 
-		ImageFile image = dds.getImage("1000", ImageType.BANNER);
+		dds.getImage("1000", ImageType.BANNER);
 
 	}
 

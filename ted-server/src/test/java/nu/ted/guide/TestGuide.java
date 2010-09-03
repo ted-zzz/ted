@@ -7,7 +7,6 @@ import java.util.List;
 
 import nu.ted.generated.Date;
 import nu.ted.generated.Episode;
-import nu.ted.generated.EpisodeStatus;
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.ImageType;
 import nu.ted.generated.Series;

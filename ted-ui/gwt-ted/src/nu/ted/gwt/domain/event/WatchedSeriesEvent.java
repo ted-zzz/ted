@@ -4,6 +4,7 @@ import nu.ted.gwt.domain.GwtWatchedSeries;
 
 public class WatchedSeriesEvent extends GwtEvent {
 
+	private static final long serialVersionUID = 1L;
 	private GwtWatchedSeries series;
 
 	// Required by GWT.

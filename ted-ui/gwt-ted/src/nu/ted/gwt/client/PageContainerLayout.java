@@ -3,8 +3,6 @@ package nu.ted.gwt.client;
 import net.bugsquat.gwtsite.client.PageLoader;
 import net.bugsquat.gwtsite.client.layout.DefaultPageContainerLayout;
 
-import nu.ted.gwt.client.i18n.TedMessages;
-import nu.ted.gwt.client.image.Images;
 import nu.ted.gwt.client.Css.Application;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -14,7 +12,6 @@ import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 

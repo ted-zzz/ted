@@ -142,7 +142,7 @@ public class TedTests
 	@Test
 	public void shouldRegisterWatchedListChangedEventIfStartWatching() throws TException, InvalidOperation{
 		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
-		String eventClientId = ted.registerClientWithEventRegistry();
+		ted.registerClientWithEventRegistry();
 
 		ted.startWatching("E");
 		List<Event> events = ted.getEvents();
@@ -150,23 +150,19 @@ public class TedTests
 		assertEquals(EventType.WATCHED_SERIES_ADDED, events.get(0).getType());
 	}
 
-	@Test
+	@Test(expected = InvalidOperation.class)
 	public void shouldOnlyAllowShowsToBeAddedOnce() throws TException, InvalidOperation{
 		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
 
 		ted.startWatching("E");
-		try {
-			ted.startWatching("E");
-		} catch (InvalidOperation e) {
-			return; /* pass */
-		}
+		ted.startWatching("E");
 		fail("Shouldn't be able to add show twice.");
 	}
 
 	@Test
 	public void shouldRegisterWatchedListChangedEventIfStopWatching() throws TException, InvalidOperation {
 		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
-		String eventClientId = ted.registerClientWithEventRegistry();
+		ted.registerClientWithEventRegistry();
 		short id = ted.startWatching("E");
 		// Flush the registry for this client.
 		ted.getEvents();

@@ -20,7 +20,6 @@ import java.util.concurrent.TimeUnit;
 
 import nu.ted.domain.SeriesBackendWrapper;
 import nu.ted.domain.TedBackendWrapper;
-import nu.ted.generated.Episode;
 import nu.ted.generated.Series;
 import nu.ted.generated.Ted;
 import nu.ted.generated.TedConfig;
@@ -68,7 +67,9 @@ public class Server {
 
 	private static void writeFileFromBytes(final File file, final byte[] data) throws IOException {
 		if (!file.exists()) {
-			file.createNewFile();
+			if (!file.createNewFile()) {
+				throw new IOException("Problem creating file: " + file.getAbsolutePath());
+			}
 		}
 
 		if (!file.isFile()) {
@@ -82,6 +83,7 @@ public class Server {
 			throw new IOException("File not found", e);
 		}
 		out.write(data);
+		out.close();
 	}
 
 	private static byte[] readFileToBytes(final File file) throws IOException {
@@ -201,6 +203,7 @@ public class Server {
 
 	private static class EpisodeSearcher implements Runnable {
 		private static Boolean scheduled;
+		private static Object scheduledLock = new Object();
 		private static ScheduledExecutorService executor;
 
 		public void run() {
@@ -228,7 +231,7 @@ public class Server {
 			if (executor == null) {
 				throw new RuntimeException("Unable to schedule EpisodeSearcher without an executor set.");
 			}
-			synchronized (scheduled) {
+			synchronized (scheduledLock) {
 				if (scheduled == false) {
 					executor.schedule(new EpisodeSearcher(), delay, timeUnit);
 					scheduled = true;

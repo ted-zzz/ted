@@ -1,7 +1,5 @@
 package nu.ted.guide.tvdb;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
 import junit.framework.Assert;

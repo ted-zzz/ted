@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public abstract class GwtEvent implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private GwtEventType type;
 
 	// Required by GWT.

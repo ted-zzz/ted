@@ -16,7 +16,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import nu.ted.generated.Date;
 import nu.ted.generated.Episode;
-import nu.ted.generated.EpisodeStatus;
 
 @XmlRootElement(name = "Data")
 public class FullSeriesRecord {

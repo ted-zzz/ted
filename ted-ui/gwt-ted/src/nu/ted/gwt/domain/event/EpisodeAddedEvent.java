@@ -5,6 +5,8 @@ import nu.ted.gwt.domain.GwtWatchedSeries;
 
 public class EpisodeAddedEvent extends GwtEvent {
 
+	private static final long serialVersionUID = 1L;
+
 	private GwtWatchedSeries series;
 	private GwtEpisode episode;
 

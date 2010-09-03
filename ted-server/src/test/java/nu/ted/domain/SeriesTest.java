@@ -1,13 +1,5 @@
 package nu.ted.domain;
 
-import static org.junit.Assert.*;
-
-import java.util.Calendar;
-
-import org.junit.Test;
-
-import nu.ted.guide.TestGuide;
-
 public class SeriesTest {
 
 //	@Test
