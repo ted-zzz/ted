@@ -111,9 +111,16 @@ public class SeriesBackendWrapper
 
 		for (Episode e : missings) {
 			for (TorrentSource source : sources) {
-				TorrentSourceTypeIndex.getTorrentSourceType(source.getType()).searchEpisode(e);
+				TorrentSourceTypeIndex.getTorrentSourceType(source.getType()).searchEpisode(this, e);
 			}
 
 		}
+	}
+
+	/**
+	 * For now just split the terms on space. Could be configurable later.
+	 */
+	public String[] getSearchTerms() {
+		return series.getName().split(" ");
 	}
 }

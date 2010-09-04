@@ -2,6 +2,8 @@ package nu.ted.torrent.search;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,12 +13,14 @@ import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.SyndFeedInput;
 
+import nu.ted.domain.SeriesBackendWrapper;
+import nu.ted.generated.Episode;
 import nu.ted.guide.DataTransferException;
 import nu.ted.torrent.Torrent;
 import nu.ted.www.DirectPageLoader;
 import nu.ted.www.PageLoader;
 
-public class Rss {
+public class Rss implements TorrentSourceType {
 
 	public static interface RssSource {
 		public List<Torrent> getTorrents();
@@ -77,6 +81,43 @@ public class Rss {
 
 		for (Torrent torrent : torrents) {
 			if (torrent.getTitle().contains(term)) {
+				results.add(torrent);
+			}
+		}
+
+		return results;
+	}
+
+	@Override
+	public String getName() {
+		return "RSS";
+	}
+
+	@Override
+	public List<Torrent> searchEpisode(SeriesBackendWrapper series, Episode episode) {
+
+		NumberFormat formatter = new DecimalFormat("00");
+
+		// TODO: abstract this out somewhere later
+		String searchNumber = "S" + formatter.format(episode.getSeason()) +
+				"E" + formatter.format(episode.getNumber());
+
+		List<Torrent> torrents = source.getTorrents();
+		List<Torrent> results = new LinkedList<Torrent>();
+
+		for (Torrent torrent : torrents) {
+			String title = torrent.getTitle();
+			Boolean valid = true;
+			for (String term : series.getSearchTerms()) {
+				if (!title.contains(term)) {
+					valid = false;
+					break;
+				}
+			}
+			if (!valid)
+				continue;
+
+			if (title.contains(searchNumber)) {
 				results.add(torrent);
 			}
 		}

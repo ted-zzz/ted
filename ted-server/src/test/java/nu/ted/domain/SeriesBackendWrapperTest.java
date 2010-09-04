@@ -54,7 +54,7 @@ public class SeriesBackendWrapperTest {
 		}
 
 		@Override
-		public List<Torrent> searchEpisode(Episode e) {
+		public List<Torrent> searchEpisode(SeriesBackendWrapper series, Episode e) {
 			searchedEpisodes.add(e);
 			return new LinkedList<Torrent>();
 		}
@@ -109,6 +109,14 @@ public class SeriesBackendWrapperTest {
 
 		new SeriesBackendWrapper(s2).searchForMissingEpisodes();
 		assertTrue(testTorrentSource.searchedEpisodes.isEmpty());
+	}
+
+	@Test
+	public void ensureSearchTermsAreReturnedCorrectly() {
+		Series series = new Series((short) 0, "name with lots of spaces", null, null, null, null);
+		SeriesBackendWrapper wrapper = new SeriesBackendWrapper(series);
+
+		assertArrayEquals(new String[] {"name", "with", "lots", "of", "spaces"}, wrapper.getSearchTerms());
 	}
 
 }
