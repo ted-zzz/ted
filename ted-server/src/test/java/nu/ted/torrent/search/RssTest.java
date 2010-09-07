@@ -2,6 +2,7 @@ package nu.ted.torrent.search;
 
 import static junit.framework.Assert.*;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class RssTest {
 
 		Rss rss = new Rss(testRssSource);
 
-		torrents = rss.search("A-name");
+		torrents = rss.search(Arrays.asList("A-name"));
 		assertNotNull(torrents);
 		assertEquals(2, torrents.size());
 

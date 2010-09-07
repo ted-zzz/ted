@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -75,12 +76,21 @@ public class Rss implements TorrentSourceType {
 		this.source = new RomeRssSource(location);
 	}
 
-	public List<Torrent> search(String term) {
+	private boolean titleContainsTerms(Torrent torrent, List<String> terms) {
+		for (String term : terms) {
+			if (!torrent.getTitle().contains(term)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public List<Torrent> search(List<String> terms) {
 		List<Torrent> torrents = source.getTorrents();
 		List<Torrent> results = new LinkedList<Torrent>();
 
 		for (Torrent torrent : torrents) {
-			if (torrent.getTitle().contains(term)) {
+			if (titleContainsTerms(torrent, terms)) {
 				results.add(torrent);
 			}
 		}
@@ -96,33 +106,17 @@ public class Rss implements TorrentSourceType {
 	@Override
 	public List<Torrent> searchEpisode(SeriesBackendWrapper series, Episode episode) {
 
+		List<String> terms = new LinkedList<String>(Arrays.asList(series.getSearchTerms()));
+
 		NumberFormat formatter = new DecimalFormat("00");
 
 		// TODO: abstract this out somewhere later
 		String searchNumber = "S" + formatter.format(episode.getSeason()) +
 				"E" + formatter.format(episode.getNumber());
 
-		List<Torrent> torrents = source.getTorrents();
-		List<Torrent> results = new LinkedList<Torrent>();
+		terms.add(searchNumber);
 
-		for (Torrent torrent : torrents) {
-			String title = torrent.getTitle();
-			Boolean valid = true;
-			for (String term : series.getSearchTerms()) {
-				if (!title.contains(term)) {
-					valid = false;
-					break;
-				}
-			}
-			if (!valid)
-				continue;
-
-			if (title.contains(searchNumber)) {
-				results.add(torrent);
-			}
-		}
-
-		return results;
+		return search(terms);
 	}
 
 }
