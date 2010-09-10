@@ -51,16 +51,17 @@ struct Episode
 struct TorrentSource
 {
 	1: string		type,	# Unique identifer for type
-	2: string		name,
+	2: string		name,   # Unique name for source
 	3: string		location
 }
 
-struct TorrentSourceUnion
-{
-	# One or the other should be set, never both:
-	1: string		name,
-	2: list<TorrentSource>	sources
-}
+# Not currently used, left as idea for how to include custom sources later
+#struct TorrentSourceUnion
+#{
+#	# One or the other should be set, never both:
+#	1: string		name,
+#	2: list<TorrentSource>	sources
+#}
 
 struct Series
 {
@@ -71,11 +72,7 @@ struct Series
 	4: string		guideName,
 	5: string		guideId,
 
-	6: list<Episode>	episodes,
-
-	# If not set the 'default' profile is used.
-	7: optional TorrentSourceUnion	sources
-
+	6: list<Episode>	episodes
 }
 
 struct TedConfig
@@ -86,8 +83,8 @@ struct TedConfig
 	2: string		verifier,
 	3: string		salt,
 
-	# Torrent Source information
-	4: map<string, list<TorrentSource>> torrentSources
+	# Where to look for torrents
+	4: list<TorrentSource>	torrentSources
 }
 
 struct Ted
@@ -168,14 +165,7 @@ service TedService
 	list<Event> getEvents();
 		# TODO: throws?
 
-	# --- Commands related to Torrent Source profiles ---
-
-	map<string, list<TorrentSource>> getAllTorrentSources(); # TODO: throw
-	list<TorrentSource> getTorrentSources(1: string name); # TODO: throw
-
-	# Creates the entry if it doesn't exist
-	void editTorrentSources(1: string name, 2: list<TorrentSource> torrentSources); # TODO: throw
-
-	void removeTorrentSources(1: string name); # TODO: throw
-
+	# --- Commands related to Torrent Sources ---
+	list<TorrentSource> 	getTorrentSources(); # TODO: throw
+	void			updateTorrentSources(1: list<TorrentSource> sources); #throw
 }

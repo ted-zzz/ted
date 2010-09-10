@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import nu.ted.Server;
 import nu.ted.domain.SeriesBackendWrapper;
@@ -194,58 +193,52 @@ public class TedTests
 	public void ensureNoTorrentSourcesExistByDefault() throws Exception {
 		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
 
-		Map<String, List<TorrentSource>> allTorrentSources = ted.getAllTorrentSources();
+		List<TorrentSource> allTorrentSources = ted.getTorrentSources();
 		assertNotNull(allTorrentSources);
 		assertEquals("Should have no sources by default", 0, allTorrentSources.size());
 	}
 
 	@Test
-	public void ensureGettingNonExistentTorrentSourceReturnsEmptyListButDoesntCreateIt() throws Exception {
+	public void ensureReplacingTorrentSourceWorks() throws Exception {
 		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
 
-		List<TorrentSource> sources = ted.getTorrentSources("Test");
-		assertNotNull(sources);
-		assertEquals(0, sources.size());
+		TorrentSource source1 = new TorrentSource("type", "name1", "location1");
+		TorrentSource source2 = new TorrentSource("type", "name2", "location2");
+		TorrentSource source3 = new TorrentSource("type", "name3", "location3");
 
-		Map<String, List<TorrentSource>> allTorrentSources = ted.getAllTorrentSources();
-		assertNotNull(allTorrentSources);
-		assertEquals("Should not have created the non-existent", 0, allTorrentSources.size());
-	}
-
-	@Test
-	public void ensureAddingTorrentSourceWorks() throws Exception {
-		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
-
-		TorrentSource source = new TorrentSource("type", "name", "location");
 		List<TorrentSource> torrentSourceList = new LinkedList<TorrentSource>();
-		torrentSourceList.add(source);
+		torrentSourceList.add(source1);
 
-		ted.editTorrentSources("Test", torrentSourceList);
+		ted.updateTorrentSources(torrentSourceList);
 
-		List<TorrentSource> sources = ted.getTorrentSources("Test");
+		List<TorrentSource> sources = ted.getTorrentSources();
 		assertNotNull(sources);
 		assertEquals("Should have the one I entered", 1, sources.size());
-		assertEquals("And it's values should be correct", "location", sources.get(0).getLocation());
+		assertEquals("And it's values should be correct", "location1", sources.get(0).getLocation());
 
-		Map<String, List<TorrentSource>> allTorrentSources = ted.getAllTorrentSources();
-		assertNotNull(allTorrentSources);
-		assertEquals("Should have one by now", 1, allTorrentSources.size());
-		assertTrue(allTorrentSources.containsKey("Test"));
+		torrentSourceList = new LinkedList<TorrentSource>();
+		torrentSourceList.add(source2);
+		torrentSourceList.add(source3);
+
+		ted.updateTorrentSources(torrentSourceList);
+
+		sources = ted.getTorrentSources();
+		assertNotNull(sources);
+		assertEquals("Should have the two new ones", 2, sources.size());
+		assertFalse("location1 shouldn't be included", sources.get(0).getLocation().equals("location1"));
+		assertFalse("location1 shouldn't be included", sources.get(1).getLocation().equals("location1"));
 	}
 
 	@Test
-	public void ensureRemovingTorrentSourceWorks() throws Exception {
+	public void ensureNullTorrentListIsError() throws Exception {
 		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
 
-		TorrentSource source = new TorrentSource("type", "name", "location");
-		List<TorrentSource> torrentSourceList = new LinkedList<TorrentSource>();
-		torrentSourceList.add(source);
+		ted.updateTorrentSources(null);
 
-		ted.editTorrentSources("Test", torrentSourceList);
-		ted.removeTorrentSources("Test");
+		List<TorrentSource> sources = ted.getTorrentSources();
+		assertNotNull(sources);
+		assertEquals("Should have 0 elements", 0, sources.size());
 
-		Map<String, List<TorrentSource>> allTorrentSources = ted.getAllTorrentSources();
-		assertNotNull(allTorrentSources);
-		assertEquals("Should have removed it, so none left", 0, allTorrentSources.size());
+
 	}
 }

@@ -10,7 +10,6 @@ import nu.ted.generated.Episode;
 import nu.ted.generated.EpisodeStatus;
 import nu.ted.generated.Series;
 import nu.ted.generated.TorrentSource;
-import nu.ted.generated.TorrentSourceUnion;
 import nu.ted.guide.DataSourceException;
 import nu.ted.guide.GuideDB;
 import nu.ted.guide.GuideFactory;
@@ -85,23 +84,10 @@ public class SeriesBackendWrapper
 		return false;
 	}
 
-	private List<TorrentSource> getTorrentSources() {
-		TorrentSourceUnion tsu = series.getSources();
-
-		if (tsu.getName() != null) {
-			// TODO: fix this
-			throw new UnsupportedOperationException("Not yet complete, only works with sources directly on series");
-		} else {
-			return tsu.getSources();
-		}
-	}
-
-	public void searchForMissingEpisodes() {
+	public void searchForMissingEpisodes(List<TorrentSource> sources) {
 
 		if (!hasMissingEpisodes())
 			return;
-
-		List<TorrentSource> sources = getTorrentSources();
 
 		List<Episode> missings = new LinkedList<Episode>();
 		for (Episode e : series.getEpisodes()) {

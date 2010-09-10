@@ -12,7 +12,6 @@ import nu.ted.generated.Event;
 import nu.ted.generated.EventType;
 import nu.ted.generated.Series;
 import nu.ted.generated.TorrentSource;
-import nu.ted.generated.TorrentSourceUnion;
 import nu.ted.guide.GuideFactory;
 import nu.ted.guide.TestGuide;
 import nu.ted.service.TedServiceImpl;
@@ -69,8 +68,6 @@ public class SeriesBackendWrapperTest {
 		TorrentSource torrentSource = new TorrentSource(testTorrentSource.getName(), "freetv", "freetv.invalid");
 		List<TorrentSource> sources = new LinkedList<TorrentSource>();
 		sources.add(torrentSource);
-		TorrentSourceUnion torrentSourceUnion = new TorrentSourceUnion();
-		torrentSourceUnion.setSources(sources);
 
 		Episode s1e1 = new Episode((short) 1, (short) 2, new Date(12345));
 		s1e1.setStatus(EpisodeStatus.SEARCHING);
@@ -89,17 +86,15 @@ public class SeriesBackendWrapperTest {
 		s1Eplist.add(s1e2);
 		s1Eplist.add(s1e3);
 		Series s1 = new Series((short) 1, "name", new Date(12344), "guideName", "guideId", s1Eplist);
-		s1.setSources(torrentSourceUnion);
 
 		List<Episode> s2EpList = new LinkedList<Episode>();
 		s2EpList.add(s2e1);
 		Series s2 = new Series((short) 2, "name", new Date(12346), "guideName", "guildId", s2EpList);
-		s2.setSources(torrentSourceUnion);
 
 		assertTrue(new SeriesBackendWrapper(s1).hasMissingEpisodes());
 		assertFalse(new SeriesBackendWrapper(s2).hasMissingEpisodes());
 
-		new SeriesBackendWrapper(s1).searchForMissingEpisodes();
+		new SeriesBackendWrapper(s1).searchForMissingEpisodes(sources);
 		assertEquals(2, testTorrentSource.searchedEpisodes.size());
 		assertTrue(testTorrentSource.searchedEpisodes.contains(s1e1));
 		assertTrue(testTorrentSource.searchedEpisodes.contains(s1e2));
@@ -107,7 +102,7 @@ public class SeriesBackendWrapperTest {
 
 		testTorrentSource.searchedEpisodes.clear();
 
-		new SeriesBackendWrapper(s2).searchForMissingEpisodes();
+		new SeriesBackendWrapper(s2).searchForMissingEpisodes(sources);
 		assertTrue(testTorrentSource.searchedEpisodes.isEmpty());
 	}
 

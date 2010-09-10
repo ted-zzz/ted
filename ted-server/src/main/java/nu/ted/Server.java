@@ -6,11 +6,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -123,8 +121,7 @@ public class Server {
 		Ted ted = new Ted();
 
 		TedConfig config = new TedConfig();
-		Map<String, List<TorrentSource>> sourceMap = new HashMap<String, List<TorrentSource>>();
-		config.setTorrentSources(sourceMap);
+		config.setTorrentSources(new LinkedList<TorrentSource>());
 
 		// TODO: will probably want to create some default TorrentSources around here or in TedConfig()
 		ted.setConfig(config);
@@ -213,7 +210,7 @@ public class Server {
 
 			List<Series> series = new TedBackendWrapper(ted).getSeriesWithMissingEpisodes();
 			for (Series s : series) {
-				new SeriesBackendWrapper(s).searchForMissingEpisodes();
+				new SeriesBackendWrapper(s).searchForMissingEpisodes(ted.getConfig().getTorrentSources());
 			}
 
 			if (new TedBackendWrapper(ted).hasMissingEpisodes()) {

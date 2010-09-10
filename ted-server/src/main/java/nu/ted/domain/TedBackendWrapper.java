@@ -1,5 +1,6 @@
 package nu.ted.domain;
 
+
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;

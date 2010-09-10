@@ -1,13 +1,9 @@
 package nu.ted.service;
 
-import static java.util.Collections.unmodifiableMap;
-import static java.util.Collections.unmodifiableList;
-
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.thrift.TException;
 
@@ -201,36 +197,21 @@ public class TedServiceImpl implements Iface
 		eventRegistry.addEvent(event);
 	}
 
-	public Map<String, List<TorrentSource>> getAllTorrentSources() throws TException {
-		// Map value is already unmodifiable
-		return unmodifiableMap(ted.getConfig().getTorrentSources());
+	@Override
+	public List<TorrentSource> getTorrentSources() throws TException {
+		return Collections.unmodifiableList(ted.getConfig().getTorrentSources());
 	}
 
 	@Override
-	public List<TorrentSource> getTorrentSources(String name)
-			throws TException {
+	public void updateTorrentSources(List<TorrentSource> sources)
+		throws TException {
 
-		List<TorrentSource> tsList;
-
-		tsList = ted.getConfig().getTorrentSources().get(name);
-
-		if (tsList == null) {
-			return new LinkedList<TorrentSource>();
-		} else {
-			return tsList;
+		// Was going to make this catachable, but it's a coding error, so make it a Runtime exception.
+		if (sources == null) {
+			sources = new LinkedList<TorrentSource>();
 		}
-	}
-
-	@Override
-	public void editTorrentSources(String name,
-			List<TorrentSource> torrentSources) throws TException {
-		// TODO: should we validate anything here?
-		ted.getConfig().getTorrentSources().put(name, unmodifiableList(torrentSources));
-	}
-
-	@Override
-	public void removeTorrentSources(String name) throws TException {
-		ted.getConfig().getTorrentSources().remove(name);
+		// TODO: notify anyone? Clone map?
+		ted.getConfig().setTorrentSources(sources);
 	}
 
 }
