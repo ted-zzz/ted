@@ -11,6 +11,10 @@ public class ClientIdGenerator {
 		random = new SecureRandom();
 	}
 
+	ClientIdGenerator(byte[] seed) {
+		random = new SecureRandom(seed);
+	}
+
 	/**
 	 * Generate a pseudo-unique client id for the user.
 	 *

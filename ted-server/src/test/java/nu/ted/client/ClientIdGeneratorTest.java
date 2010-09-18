@@ -1,4 +1,4 @@
-package nu.ted.event;
+package nu.ted.client;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertFalse;
@@ -11,11 +11,17 @@ public class ClientIdGeneratorTest {
 
 	@Test
 	public void ensureClientIdGeneration() {
-		ClientIdGenerator generator = new ClientIdGenerator();
+
+		// Use static seed to always have consistent results.
+		byte[] seed = "abc".getBytes();
+		ClientIdGenerator generator = new ClientIdGenerator(seed);
+
 		String generatedClientId = generator.generateClientId();
-		System.out.println("Generated client ID was: " + generatedClientId);
 		assertNotNull("Id generator failed to generate and Id.", generatedClientId);
 		assertFalse("Generated ID was empty", generatedClientId.isEmpty());
+
+		String secondId = generator.generateClientId();
+		assertFalse(generatedClientId.equals(secondId));
 	}
-	
+
 }
