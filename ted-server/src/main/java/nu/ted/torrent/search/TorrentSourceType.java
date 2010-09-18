@@ -4,12 +4,13 @@ import java.util.List;
 
 import nu.ted.domain.SeriesBackendWrapper;
 import nu.ted.generated.Episode;
-import nu.ted.torrent.Torrent;
+import nu.ted.torrent.TorrentRef;
 
 public interface TorrentSourceType {
 
 	String getName();
+	String getLocation();
 
-	List<Torrent> searchEpisode(SeriesBackendWrapper series, Episode episode);
+	List<TorrentRef> searchEpisode(SeriesBackendWrapper series, Episode episode);
 
 }

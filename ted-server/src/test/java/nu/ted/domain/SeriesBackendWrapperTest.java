@@ -15,9 +15,10 @@ import nu.ted.generated.TorrentSource;
 import nu.ted.guide.GuideFactory;
 import nu.ted.guide.TestGuide;
 import nu.ted.service.TedServiceImpl;
-import nu.ted.torrent.Torrent;
-import nu.ted.torrent.search.TorrentSourceTypeIndex;
+import nu.ted.torrent.TorrentRef;
+import nu.ted.torrent.search.TorrentSourceIndex;
 import nu.ted.torrent.search.TorrentSourceType;
+import nu.ted.torrent.search.TorrentSourceTypeFactory;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -43,6 +44,22 @@ public class SeriesBackendWrapperTest {
 		assertEquals(series, received.getSeries());
 	}
 
+	public static class TestTorrentSourceFactory implements TorrentSourceTypeFactory {
+
+		// Always use the same one here for testing.
+		TestTorrentSource torrentSource;
+
+		public TestTorrentSourceFactory(TestTorrentSource testTorrentSource) {
+			torrentSource = testTorrentSource;
+		}
+
+		@Override
+		public TorrentSourceType createTorrentSourceType(TorrentSource source) {
+			return torrentSource;
+		}
+
+	}
+
 	public static class TestTorrentSource implements TorrentSourceType {
 
 		List<Episode> searchedEpisodes = new LinkedList<Episode>();
@@ -53,9 +70,15 @@ public class SeriesBackendWrapperTest {
 		}
 
 		@Override
-		public List<Torrent> searchEpisode(SeriesBackendWrapper series, Episode e) {
+		public List<TorrentRef> searchEpisode(SeriesBackendWrapper series, Episode e) {
 			searchedEpisodes.add(e);
-			return new LinkedList<Torrent>();
+			return new LinkedList<TorrentRef>();
+
+		}
+
+		@Override
+		public String getLocation() {
+			throw new UnsupportedOperationException("Not Yet Implemented");
 		}
 	}
 
@@ -63,7 +86,8 @@ public class SeriesBackendWrapperTest {
 	public void ensureHasMissingFindsMissingsEpsidoes() throws Exception {
 		TestTorrentSource testTorrentSource = new TestTorrentSource();
 
-		TorrentSourceTypeIndex.addType(testTorrentSource);
+		TorrentSourceIndex.registerFactory(testTorrentSource.getName(), new TestTorrentSourceFactory(
+				testTorrentSource));
 
 		TorrentSource torrentSource = new TorrentSource(testTorrentSource.getName(), "freetv", "freetv.invalid");
 		List<TorrentSource> sources = new LinkedList<TorrentSource>();

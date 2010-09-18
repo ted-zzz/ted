@@ -33,6 +33,8 @@ import nu.ted.guide.tvrage.TVRage;
 import nu.ted.service.TedServiceImpl;
 import nu.ted.thrift.TedServerSecureSocket;
 import nu.ted.thrift.TThreadPoolServer;
+import nu.ted.torrent.search.Rss;
+import nu.ted.torrent.search.TorrentSourceIndex;
 import nu.ted.www.DirectPageLoader;
 
 import org.apache.thrift.TDeserializer;
@@ -199,7 +201,7 @@ public class Server {
 	}
 
 	private static class EpisodeSearcher implements Runnable {
-		private static Boolean scheduled;
+		private static boolean scheduled = false;
 		private static Object scheduledLock = new Object();
 		private static ScheduledExecutorService executor;
 
@@ -247,6 +249,7 @@ public class Server {
 	private static class EpisodeUpdater implements Runnable {
 
 		public void run() {
+			// TODO: subscribe to events for new series, and changes to series.
 			try {
 				if (new TedBackendWrapper(ted).updateSeries(Calendar.getInstance()) == true) {
 					EpisodeSearcher.scheduleRun();
@@ -287,6 +290,7 @@ public class Server {
 				serverTransport = new TServerSocket(config.getPort());
 			}
 
+			// Setup Guide
 			try {
 				GuideFactory.addGuide(new TVDB(
 						new CacheDataSource(new DirectDataSource(new DirectPageLoader()))));
@@ -298,6 +302,9 @@ public class Server {
 
 			GuideDB guide = GuideFactory.getGuide(TVDB.NAME);
 			service = new TedServiceImpl(ted, guide);
+
+			// Setup Episode Searchers
+			TorrentSourceIndex.registerFactory(Rss.name, new Rss.RssFactory());
 
 			// Setup the worker thread:
 			ScheduledExecutorService searcher = Executors.newScheduledThreadPool(1);

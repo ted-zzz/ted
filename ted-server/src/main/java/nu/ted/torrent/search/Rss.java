@@ -16,15 +16,32 @@ import com.sun.syndication.io.SyndFeedInput;
 
 import nu.ted.domain.SeriesBackendWrapper;
 import nu.ted.generated.Episode;
+import nu.ted.generated.TorrentSource;
 import nu.ted.guide.DataTransferException;
-import nu.ted.torrent.Torrent;
+import nu.ted.torrent.TorrentRef;
 import nu.ted.www.DirectPageLoader;
 import nu.ted.www.PageLoader;
 
 public class Rss implements TorrentSourceType {
 
+	public static String name = "RSS";
+
+	public static class RssFactory implements TorrentSourceTypeFactory {
+
+		protected RssSource getRssSource(TorrentSource source) {
+			return new RomeRssSource(source.getLocation());
+		}
+
+		@Override
+		public TorrentSourceType createTorrentSourceType(TorrentSource torrentSource) {
+			return new Rss(getRssSource(torrentSource));
+		}
+
+	}
+
 	public static interface RssSource {
-		public List<Torrent> getTorrents();
+		public List<TorrentRef> getTorrents();
+		public String getLocation();
 	}
 
 	public static class RomeRssSource implements RssSource {
@@ -35,9 +52,10 @@ public class Rss implements TorrentSourceType {
 			this.location = location;
 		}
 
+
 		@Override
-		public List<Torrent> getTorrents() {
-			List<Torrent> results = new LinkedList<Torrent>();
+		public List<TorrentRef> getTorrents() {
+			List<TorrentRef> results = new LinkedList<TorrentRef>();
 
 			try {
 				PageLoader pageLoader = new DirectPageLoader();
@@ -49,7 +67,7 @@ public class Rss implements TorrentSourceType {
 				Iterator iter = feed.getEntries().iterator();
 				while (iter.hasNext()) {
 					SyndEntry entry = (SyndEntry) iter.next();
-					results.add(new Torrent(entry.getTitle(), entry.getLink()));
+					results.add(new TorrentRef(entry.getTitle(), entry.getLink()));
 				}
 			} catch (DataTransferException e) {
 				// TODO: log error - probably ignore
@@ -64,6 +82,11 @@ public class Rss implements TorrentSourceType {
 
 			return results;
 		}
+
+		@Override
+		public String getLocation() {
+			return location;
+		}
 	}
 
 	private RssSource source;
@@ -72,11 +95,7 @@ public class Rss implements TorrentSourceType {
 		this.source = source;
 	}
 
-	public Rss(String location) {
-		this.source = new RomeRssSource(location);
-	}
-
-	private boolean titleContainsTerms(Torrent torrent, List<String> terms) {
+	private boolean titleContainsTerms(TorrentRef torrent, List<String> terms) {
 		for (String term : terms) {
 			if (!torrent.getTitle().contains(term)) {
 				return false;
@@ -85,11 +104,11 @@ public class Rss implements TorrentSourceType {
 		return true;
 	}
 
-	public List<Torrent> search(List<String> terms) {
-		List<Torrent> torrents = source.getTorrents();
-		List<Torrent> results = new LinkedList<Torrent>();
+	public List<TorrentRef> search(List<String> terms) {
+		List<TorrentRef> torrents = source.getTorrents();
+		List<TorrentRef> results = new LinkedList<TorrentRef>();
 
-		for (Torrent torrent : torrents) {
+		for (TorrentRef torrent : torrents) {
 			if (titleContainsTerms(torrent, terms)) {
 				results.add(torrent);
 			}
@@ -104,7 +123,12 @@ public class Rss implements TorrentSourceType {
 	}
 
 	@Override
-	public List<Torrent> searchEpisode(SeriesBackendWrapper series, Episode episode) {
+	public String getLocation() {
+		return source.getLocation();
+	}
+
+	@Override
+	public List<TorrentRef> searchEpisode(SeriesBackendWrapper series, Episode episode) {
 
 		List<String> terms = new LinkedList<String>(Arrays.asList(series.getSearchTerms()));
 
@@ -118,5 +142,6 @@ public class Rss implements TorrentSourceType {
 
 		return search(terms);
 	}
+
 
 }

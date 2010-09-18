@@ -14,7 +14,9 @@ import nu.ted.guide.DataSourceException;
 import nu.ted.guide.GuideDB;
 import nu.ted.guide.GuideFactory;
 import nu.ted.service.TedServiceImpl;
-import nu.ted.torrent.search.TorrentSourceTypeIndex;
+import nu.ted.torrent.TorrentRef;
+import nu.ted.torrent.search.TorrentSourceType;
+import nu.ted.torrent.search.TorrentSourceIndex;
 
 /**
  * This is a representation of a TV Series.
@@ -97,7 +99,16 @@ public class SeriesBackendWrapper
 
 		for (Episode e : missings) {
 			for (TorrentSource source : sources) {
-				TorrentSourceTypeIndex.getTorrentSourceType(source.getType()).searchEpisode(this, e);
+				TorrentSourceType torrentSourceType =
+					TorrentSourceIndex.getTorrentSourceType(source);
+				List<TorrentRef> torrents = torrentSourceType.searchEpisode(this, e);
+
+				if (!torrents.isEmpty()) {
+					for (TorrentRef t : torrents) {
+						System.out.println("Found torrent title: " + t.getTitle() + " link: " + t.getLink());
+					}
+					// TODO: evaluate the torrents
+				}
 			}
 
 		}
