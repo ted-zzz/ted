@@ -118,12 +118,21 @@ public class Server {
 		return bytes;
 	}
 
+	/*
+	 * This should only be used to set default values, and not actually do anything with them.
+	 * This is because all or some of the values may be replaced with the saved copy.
+	 */
 	public static Ted createDefaultTed()
 	{
 		Ted ted = new Ted();
 
 		TedConfig config = new TedConfig();
+
+		// Setup default config.
 		config.setTorrentSources(new LinkedList<TorrentSource>());
+
+		File saveLocation = new File(System.getProperty("user.dir") + "/download/");
+		config.setSavePath(saveLocation.getPath());
 
 		// TODO: will probably want to create some default TorrentSources around here or in TedConfig()
 		ted.setConfig(config);
@@ -305,6 +314,16 @@ public class Server {
 
 			// Setup Episode Searchers
 			TorrentSourceIndex.registerFactory(Rss.name, new Rss.RssFactory());
+
+			// Setup download directory
+			File saveLocation = new File(config.getSavePath());
+			if (!saveLocation.exists()) {
+				System.err.println("Creating download location " + saveLocation.getPath());
+				if (saveLocation.mkdirs() == false) {
+					System.err.println("Unable to create location " + saveLocation.getPath());
+					System.exit(-1);
+				}
+			}
 
 			// Setup the worker thread:
 			ScheduledExecutorService searcher = Executors.newScheduledThreadPool(1);

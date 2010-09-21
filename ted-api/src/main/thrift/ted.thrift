@@ -84,7 +84,10 @@ struct TedConfig
 	3: string		salt,
 
 	# Where to look for torrents
-	4: list<TorrentSource>	torrentSources
+	4: list<TorrentSource>	torrentSources,
+
+	# Where to save them when found
+	5: string		savePath,
 }
 
 struct Ted
