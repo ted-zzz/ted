@@ -6,9 +6,6 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import nu.ted.domain.SeriesBackendWrapper;
-import nu.ted.generated.Episode;
-import nu.ted.generated.Series;
 import nu.ted.torrent.TorrentRef;
 import nu.ted.torrent.search.Rss.RomeRssSource;
 import nu.ted.torrent.search.Rss.RssSource;
@@ -70,14 +67,13 @@ public class RssTest {
 
 		Rss rss = new Rss(testRssSource);
 
-		Series series = new Series();
-		series.setName("Show That Matches");
+		List<String> searchTerms = new LinkedList<String>();
+		searchTerms.add("Show");
+		searchTerms.add("That");
+		searchTerms.add("Matches");
+		searchTerms.add("S01E02");
 
-		Episode episode = new Episode();
-		episode.setSeason((short) 1);
-		episode.setNumber((short) 2);
-
-		torrents = rss.searchEpisode(new SeriesBackendWrapper(series), episode);
+		torrents = rss.search(searchTerms);
 
 		assertEquals(2, torrents.size());
 

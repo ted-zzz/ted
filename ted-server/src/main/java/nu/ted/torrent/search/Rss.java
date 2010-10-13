@@ -2,9 +2,6 @@ package nu.ted.torrent.search;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,8 +11,6 @@ import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.SyndFeedInput;
 
-import nu.ted.domain.SeriesBackendWrapper;
-import nu.ted.generated.Episode;
 import nu.ted.generated.TorrentSource;
 import nu.ted.guide.DataTransferException;
 import nu.ted.torrent.TorrentRef;
@@ -125,22 +120,6 @@ public class Rss implements TorrentSourceType {
 	@Override
 	public String getLocation() {
 		return source.getLocation();
-	}
-
-	@Override
-	public List<TorrentRef> searchEpisode(SeriesBackendWrapper series, Episode episode) {
-
-		List<String> terms = new LinkedList<String>(Arrays.asList(series.getSearchTerms()));
-
-		NumberFormat formatter = new DecimalFormat("00");
-
-		// TODO: abstract this out somewhere later
-		String searchNumber = "S" + formatter.format(episode.getSeason()) +
-				"E" + formatter.format(episode.getNumber());
-
-		terms.add(searchNumber);
-
-		return search(terms);
 	}
 
 

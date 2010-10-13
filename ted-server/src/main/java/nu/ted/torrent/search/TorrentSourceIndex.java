@@ -27,6 +27,10 @@ public class TorrentSourceIndex {
 		torrentSourceFactories.put(type, factory);
 	}
 
+	public static void clear() {
+		torrentSourceFactories.clear();
+	}
+
 	public static TorrentSourceType getTorrentSourceType(TorrentSource source) {
 		String type = source.getType();
 		String location = source.getLocation();

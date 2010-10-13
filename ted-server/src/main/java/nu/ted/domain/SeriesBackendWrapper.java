@@ -1,5 +1,6 @@
 package nu.ted.domain;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,14 +10,10 @@ import nu.ted.generated.Date;
 import nu.ted.generated.Episode;
 import nu.ted.generated.EpisodeStatus;
 import nu.ted.generated.Series;
-import nu.ted.generated.TorrentSource;
 import nu.ted.guide.DataSourceException;
 import nu.ted.guide.GuideDB;
 import nu.ted.guide.GuideFactory;
 import nu.ted.service.TedServiceImpl;
-import nu.ted.torrent.TorrentRef;
-import nu.ted.torrent.search.TorrentSourceType;
-import nu.ted.torrent.search.TorrentSourceIndex;
 
 /**
  * This is a representation of a TV Series.
@@ -86,38 +83,21 @@ public class SeriesBackendWrapper
 		return false;
 	}
 
-	public void searchForMissingEpisodes(List<TorrentSource> sources) {
-
-		if (!hasMissingEpisodes())
-			return;
-
-		List<Episode> missings = new LinkedList<Episode>();
+	public List<Episode> getMissingEpisodes() {
+		List<Episode> episodes = new LinkedList<Episode>();
 		for (Episode e : series.getEpisodes()) {
-			if (e.getStatus() == EpisodeStatus.SEARCHING)
-				missings.add(e);
-		}
-
-		for (Episode e : missings) {
-			for (TorrentSource source : sources) {
-				TorrentSourceType torrentSourceType =
-					TorrentSourceIndex.getTorrentSourceType(source);
-				List<TorrentRef> torrents = torrentSourceType.searchEpisode(this, e);
-
-				if (!torrents.isEmpty()) {
-					for (TorrentRef t : torrents) {
-						System.out.println("Found torrent title: " + t.getTitle() + " link: " + t.getLink());
-					}
-					// TODO: evaluate the torrents
-				}
+			if (e.getStatus() == EpisodeStatus.SEARCHING) {
+				episodes.add(e);
 			}
-
 		}
+		return episodes;
 	}
+
 
 	/**
 	 * For now just split the terms on space. Could be configurable later.
 	 */
-	public String[] getSearchTerms() {
-		return series.getName().split(" ");
+	public List<String> getSearchTerms() {
+		return Arrays.asList(series.getName().split(" "));
 	}
 }
