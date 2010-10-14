@@ -199,6 +199,7 @@ public class Server {
 			byte[] data = serializeTed(ted);
 			try {
 				Server.writeFileFromBytes(new File(location), data);
+				Server.writeFileFromBytes(new File(location + ".backup"), data);
 			} catch (IOException e) {
 				System.err.println("Unable to save file");
 				throw new RuntimeException(e);
