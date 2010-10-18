@@ -89,7 +89,7 @@ public class DirectDataSourceTest {
 
 		assertNotNull(image);
 		assertEquals("image/test", image.getMimetype());
-		assertArrayEquals("abcd".getBytes(), image.getData().array());
+		assertArrayEquals("abcd".getBytes(), image.getData());
 
 	}
 
@@ -114,7 +114,7 @@ public class DirectDataSourceTest {
 
 		assertNotNull(image);
 		assertEquals("image/test", image.getMimetype());
-		assertArrayEquals("abcd".getBytes(), image.getData().array());
+		assertArrayEquals("abcd".getBytes(), image.getData());
 
 	}
 

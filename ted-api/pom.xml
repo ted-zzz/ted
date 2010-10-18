@@ -100,7 +100,7 @@
     <dependency>
       <groupId>org.apache</groupId>
       <artifactId>thrift</artifactId>
-      <version>0.4.0</version>
+      <version>0.5.0</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>

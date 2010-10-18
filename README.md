@@ -4,7 +4,7 @@ ted
 ## Building ####################################################################
 
 ### Requirements ###############################################################
- * [Apache Thrift](http://incubator.apache.org/thrift/) 0.2.0
+ * [Apache Thrift](http://incubator.apache.org/thrift/) 0.5.0
  * [Ant](http://ant.apache.org/)
  * [Maven](http://maven.apache.org/)
 

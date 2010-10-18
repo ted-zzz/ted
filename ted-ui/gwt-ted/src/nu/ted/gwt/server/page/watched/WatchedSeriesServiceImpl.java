@@ -29,7 +29,7 @@ public class WatchedSeriesServiceImpl extends TedRemoteServiceServlet
 			try {
 				ImageFile imageFile = ted.getImageBySeriesId(series.getUid(), ImageType.BANNER_THUMBNAIL);
 
-				if (imageFile.getData() == null || imageFile.getData().array().length == 0) {
+				if (imageFile.getData() == null || imageFile.getData().length == 0) {
 					return watched;
 				}
 
@@ -38,7 +38,7 @@ public class WatchedSeriesServiceImpl extends TedRemoteServiceServlet
 					return watched;
 				}
 
-				StoredImage storedImage = new StoredImage(imageFile.getMimetype(), imageFile.getData().array());
+				StoredImage storedImage = new StoredImage(imageFile.getMimetype(), imageFile.getData());
 				getImageStore().storeImage(imageStoreKey, storedImage);
 
 			} catch (TException e) { // TODO: should probably be more specific as to not catch transport errors

@@ -96,7 +96,7 @@ public class TedTests
 		ImageFile image = ted.getImageByGuideId("E", ImageType.BANNER);
 		assertNotNull(image);
 		assertEquals("image/banner", image.getMimetype());
-		assertArrayEquals("BANNER".getBytes(), image.getData().array());
+		assertArrayEquals("BANNER".getBytes(), image.getData());
 	}
 
 	@Test
@@ -106,7 +106,7 @@ public class TedTests
 		ImageFile image = ted.getImageByGuideId("E", ImageType.BANNER_THUMBNAIL);
 		assertNotNull(image);
 		assertEquals("image/thumbnail", image.getMimetype());
-		assertArrayEquals("THUMBNAIL".getBytes(), image.getData().array());
+		assertArrayEquals("THUMBNAIL".getBytes(), image.getData());
 	}
 
 	@Test
@@ -117,7 +117,7 @@ public class TedTests
 		ImageFile image = ted.getImageBySeriesId(id, ImageType.BANNER);
 		assertNotNull(image);
 		assertEquals("image/banner", image.getMimetype());
-		assertArrayEquals("BANNER".getBytes(), image.getData().array());
+		assertArrayEquals("BANNER".getBytes(), image.getData());
 	}
 
 	@Test
@@ -128,7 +128,7 @@ public class TedTests
 		ImageFile image = ted.getImageBySeriesId(id, ImageType.BANNER_THUMBNAIL);
 		assertNotNull(image);
 		assertEquals("image/thumbnail", image.getMimetype());
-		assertArrayEquals("THUMBNAIL".getBytes(), image.getData().array());
+		assertArrayEquals("THUMBNAIL".getBytes(), image.getData());
 	}
 
 	@Test
