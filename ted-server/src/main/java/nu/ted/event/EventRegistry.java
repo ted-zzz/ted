@@ -5,9 +5,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import nu.ted.generated.Event;
 
 public class EventRegistry {
+
+	private Logger logger = LoggerFactory.getLogger(EventRegistry.class);
 
 	protected static final int MAX_TRIES = 50;
 
@@ -81,7 +86,7 @@ public class EventRegistry {
 		synchronized (registry) {
 			EventCache removed = registry.remove(clientId);
 			if (removed != null) {
-				System.out.println("Client Unregisterd: " + clientId);
+				logger.debug("Client Unrigistered: {}", clientId);
 			}
 		}
 	}

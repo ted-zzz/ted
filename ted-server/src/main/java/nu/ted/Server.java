@@ -45,6 +45,8 @@ import org.apache.thrift.server.TServer;
 import org.apache.thrift.transport.TServerSocket;
 import org.apache.thrift.transport.TServerTransport;
 import org.apache.thrift.transport.TTransportException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.jordanzimmerman.SRPFactory;
 import com.jordanzimmerman.SRPVerifier;
@@ -54,6 +56,8 @@ import com.martiansoftware.jsap.JSAPResult;
 import com.martiansoftware.jsap.Switch;
 
 public class Server {
+
+	private final Logger logger = LoggerFactory.getLogger(Server.class);
 
 	private static TedServiceImpl service;
 	private static Ted ted;
@@ -172,8 +176,9 @@ public class Server {
 			try {
 				ted = deserializeTed(readFileToBytes(dataFile));
 			} catch (IOException e) {
-				System.err.println("Error reading data file.");
-				e.printStackTrace();
+				// TODO: we're ignoring bad files here, which could result in the file
+				// being overwritten with default settings.
+				logger.warn("Error reading data file.", e);
 			}
 		}
 		Executors.newScheduledThreadPool(1).scheduleAtFixedRate(
@@ -183,7 +188,7 @@ public class Server {
 
 	private void start()
 	{
-		System.err.println("Warning: Data will not be persisted. See '-h'.");
+		logger.warn("Data will not be persisted. See '-h'");
 		start(createDefaultTed());
 	}
 
@@ -201,8 +206,7 @@ public class Server {
 				Server.writeFileFromBytes(new File(location), data);
 				Server.writeFileFromBytes(new File(location + ".backup"), data);
 			} catch (IOException e) {
-				System.err.println("Unable to save file");
-				throw new RuntimeException(e);
+				throw new RuntimeException("Unable to save file", e);
 			}
 		}
 
@@ -218,8 +222,7 @@ public class Server {
 				}
 
 			} catch (Throwable ex) {
-				System.err.println("EpisodeUpdater crashed: ");
-				ex.printStackTrace();
+				LoggerFactory.getLogger(Server.class).warn("EpisodeUpdater crashed", ex);
 			}
 		}
 	}
@@ -248,7 +251,7 @@ public class Server {
 				serverTransport = new TedServerSecureSocket(config.getPort(),
 						verifier, salt);
 			} else {
-				System.err.println("Warning: Running unencrypted protocol.");
+				logger.warn("Running unencrypted protocol.");
 				serverTransport = new TServerSocket(config.getPort());
 			}
 
@@ -271,9 +274,9 @@ public class Server {
 			// Setup download directory
 			File saveLocation = new File(config.getSavePath());
 			if (!saveLocation.exists()) {
-				System.err.println("Creating download location " + saveLocation.getPath());
+				logger.info("Creating download location {}", saveLocation);
 				if (saveLocation.mkdirs() == false) {
-					System.err.println("Unable to create location " + saveLocation.getPath());
+					logger.warn("Unable to create location {}", saveLocation);
 					System.exit(-1);
 				}
 			}
@@ -311,7 +314,7 @@ public class Server {
 			Factory protFactory = new TBinaryProtocol.Factory(true, true);
 			TServer server = new TThreadPoolServer(processor, serverTransport, protFactory,
 					executor);
-			System.out.println("Starting server on port " + config.getPort() + " ...");
+			logger.info("Starting server on port {} ...", config.getPort());
 			server.serve();
 		}
 		catch (TTransportException e)

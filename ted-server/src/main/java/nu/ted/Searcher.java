@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import nu.ted.domain.EpisodeBackendWrapper;
 import nu.ted.domain.SeriesBackendWrapper;
 import nu.ted.domain.TedBackendWrapper;
@@ -27,12 +30,17 @@ import nu.ted.www.DirectPageLoader;
 import nu.ted.www.PageLoader;
 
 class Searcher implements Runnable {
+
+	private Logger logger = LoggerFactory.getLogger(Searcher.class);
+
 	private static boolean scheduled = false;
 	private static Object scheduledLock = new Object();
 	private static ScheduledExecutorService executor;
 	private static Ted ted;
 
 	public void run() {
+		logger.debug("Running Searcher");
+
 		if (executor == null) {
 			throw new RuntimeException("Unable to schedule Searcher without it being setup.");
 		}
@@ -97,16 +105,11 @@ class Searcher implements Runnable {
 					episode.setStatus(EpisodeStatus.FOUND);
 					// TODO: Send event
 				} catch (FileNotFoundException e) {
-					// TODO: logging
-					System.err.println("Unable to open file for write: " + filename);
+					logger.warn("Unable to open file for write: {}", filename, e);
 				} catch (IOException e) {
-					// TODO: logging
-					System.err.println("Error downloading file " + filename);
-					e.printStackTrace();
+					logger.warn("Error downloading file {}", filename, e);
 				} catch (DataTransferException e) {
-					// TODO: logging
-					System.err.println("Error downloading file " + filename);
-					e.printStackTrace();
+					logger.warn("Error downloading file {}", filename, e);
 				}
 			}
 		}
