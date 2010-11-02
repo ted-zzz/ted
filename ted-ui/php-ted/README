@@ -1,0 +1,16 @@
+--------------------------------------
+PHP TED
+--------------------------------------
+
+PHP TED is a web based ted front end
+implemented in PHP.
+
+
+BUILDING PHP-TED
+======================================
+1. Install a web container capable of running PHP (Apache)
+2. Install Thrift
+3. Build TED-API
+4. Edit 'build.properties' as necessary.
+5. Run 'ant deploy'.
+

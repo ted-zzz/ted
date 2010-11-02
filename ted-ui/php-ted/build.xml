@@ -1,0 +1,69 @@
+<project default="build">
+	<property environment="env"/>
+	<property file="build.properties" />
+	<property name="project.dir" value="."/>
+	<property name="thrift.php.lib" value="${env.THRIFT_HOME}/lib/php/src/" />
+	<property name="api.build.dir" value="../../ted-api/target/generated-sources/gen-php"/>
+	<property name="deploy.dir" value="${webapp.root}/${webapp.name}"/>
+	<property name="build.dir" value="${project.dir}/target"/>
+	<property name="src.dir" value="${project.dir}/src"/>
+
+	<!-- =================================
+		target: build
+		================================= -->
+	<target name="build" depends="init, copy_dependencies" description="Build the PHP web application.">
+		<copy todir="${build.dir}/${webapp.name}">
+			<fileset dir="${src.dir}" includes="**/*"/>
+		</copy>
+	</target>
+
+	<!-- =================================
+		target: clean
+		================================= -->
+	<target name="clean" description="Clean up the target directory.">
+		<delete dir="${build.dir}" />
+	</target>
+
+	<!-- =================================
+		target: deploy
+		================================= -->
+	<target name="deploy" depends="build" description="Deploy the webapp to the web container.">
+		<copy todir="${deploy.dir}">
+			<fileset dir="${build.dir}/${webapp.name}" includes="**/*"/>
+		</copy>
+	</target>
+
+	<!-- =================================
+		target: clean_deploy
+		================================= -->
+	<target name="clean_deploy" description="Clean up the deploy directory.">
+		<delete dir="${deploy.dir}" />
+	</target>
+
+	<!-- - - - - - - - - - - - - - - - - -
+		target: init
+		- - - - - - - - - - - - - - - - - -->
+	<target name="init">
+		<condition property="thrift.home.set">
+			<isset property="env.THRIFT_HOME" />
+		</condition>
+
+		<fail unless="thrift.home.set" message="Environment variable THRIFT_HOME must be set."/>
+
+		<mkdir dir="${build.dir}"/>
+	</target>
+
+	<!-- - - - - - - - - - - - - - - - - -
+		target: copy_dependencies
+		Copies all build dependencies: thrift.
+		- - - - - - - - - - - - - - - - - -->
+	<target name="copy_dependencies">
+		<copy todir="${build.dir}/${webapp.name}/thrift">
+			<fileset dir="${thrift.php.lib}" includes="**/*" />
+		</copy>
+		<copy todir="${build.dir}/${webapp.name}/thrift/packages">
+			<fileset dir="${api.build.dir}" includes="**/*" />
+		</copy>
+	</target>
+
+</project>

@@ -42,6 +42,8 @@
                       <arg value="java:beans"/>
                       <arg value="--gen"/>
                       <arg value="py:new_style"/>
+                      <arg value="--gen" />
+                      <arg value="php" />
                       <arg value="-o"/>
                       <arg value="target/generated-sources"/>
                       <arg value="src/main/thrift/ted.thrift"/>
