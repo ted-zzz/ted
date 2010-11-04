@@ -38,10 +38,10 @@ public class RssTest {
 	public void ensureSimpleSearchReturnsResult() {
 		TestRssSource testRssSource = new TestRssSource();
 		List<TorrentRef> torrents = new LinkedList<TorrentRef>();
-		torrents.add(new TorrentRef("A-name1", "A-link1"));
-		torrents.add(new TorrentRef("A-name2", "A-link2"));
-		torrents.add(new TorrentRef("B-name", "B-link"));
-		torrents.add(new TorrentRef("C-name", "C-link"));
+		torrents.add(new TorrentRef("A-name1", "A-link1", 100));
+		torrents.add(new TorrentRef("A-name2", "A-link2", 100));
+		torrents.add(new TorrentRef("B-name", "B-link", 100));
+		torrents.add(new TorrentRef("C-name", "C-link", 100));
 		testRssSource.addTorrens(torrents);
 
 		Rss rss = new Rss(testRssSource);
@@ -58,11 +58,11 @@ public class RssTest {
 	public void ensureSearchEpisodeWorks() {
 		TestRssSource testRssSource = new TestRssSource();
 		List<TorrentRef> torrents = new LinkedList<TorrentRef>();
-		torrents.add(new TorrentRef("Show That Matches S01E01", "link1"));
-		torrents.add(new TorrentRef("Show That Matches S01E02", "link2"));
-		torrents.add(new TorrentRef("Show That Matches S01E02", "link3"));
-		torrents.add(new TorrentRef("Show No Match S01E01", "link4"));
-		torrents.add(new TorrentRef("Show No Match S01E02", "link5"));
+		torrents.add(new TorrentRef("Show That Matches S01E01", "link1", 100));
+		torrents.add(new TorrentRef("Show That Matches S01E02", "link2", 100));
+		torrents.add(new TorrentRef("Show That Matches S01E02", "link3", 100));
+		torrents.add(new TorrentRef("Show No Match S01E01", "link4", 100));
+		torrents.add(new TorrentRef("Show No Match S01E02", "link5", 100));
 		testRssSource.addTorrens(torrents);
 
 		Rss rss = new Rss(testRssSource);

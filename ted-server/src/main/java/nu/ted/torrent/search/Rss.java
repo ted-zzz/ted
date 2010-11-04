@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.sun.syndication.feed.rss.Enclosure;
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.FeedException;
@@ -62,7 +63,12 @@ public class Rss implements TorrentSourceType {
 				Iterator iter = feed.getEntries().iterator();
 				while (iter.hasNext()) {
 					SyndEntry entry = (SyndEntry) iter.next();
-					results.add(new TorrentRef(entry.getTitle(), entry.getLink()));
+					for (Enclosure enclosure : getEnclosures(entry)) {
+						if (enclosure.getType() == "application/x-bittorrent") {
+							results.add(new TorrentRef(entry.getTitle(), entry.getLink(), enclosure.getLength()));
+							break;
+						}
+					}
 				}
 			} catch (DataTransferException e) {
 				// TODO: log error - probably ignore
@@ -76,6 +82,12 @@ public class Rss implements TorrentSourceType {
 			}
 
 			return results;
+		}
+
+
+		@SuppressWarnings("unchecked")
+		private List<Enclosure> getEnclosures(SyndEntry entry) {
+			return (List<Enclosure>)entry.getEnclosures();
 		}
 
 		@Override
