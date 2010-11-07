@@ -20,25 +20,16 @@ Currently to build ted, both ant and maven are required:
     $ mvn
     $ cd ..
     $ ant
-    $ cd ted-ui/gwt-ted
-    $ ant
 
 ## Running #####################################################################
 Ted can be run from eclipse by following these steps:
 
  1. In Eclipse set a classpath variable `TED_LIB_DIR` to point to the newly
  created `lib` directory in ted.
- 2. In Eclipse install [GWT](https://code.google.com/webtoolkit/usingeclipse.html)
- 3. Open projects in Eclipse.
- 4. Run `ted-server` from inside eclipse running the `nu.ted.Server` class.
+ 2. Open project in Eclipse.
+ 3. Run `ted-server` from inside eclipse running the `nu.ted.Server` class.
 This will start the server running on localhost port `9030`. Any client written
 using the ted.thrift API should be able to talk to the service on this port.
- 5. Run `gwt-ted` from inside eclipse.
-   * compile gwt-ted project: right-click the project -> Google -> GWT Compile
-   -> Compile
-   * run the gwt-ted UI: right-click the project -> RunAs -> Web Application.
-   This will run the debug webapp. When we deploy we may include something like
-   jetty to run the web ui.
 
 ## Lexicon #####################################################################
 
@@ -50,8 +41,6 @@ Or what in the world I'm talking about.
  daemon that looks for and downloads torrents.
  * [ted-ui](http://github.com/ted/ted/tree/master/ted-ui): The UIs included in
  the Ted project.
- * [gwt-ted](http://github.com/ted/ted/tree/master/ted-ui/gwt-ted): The GWT UI
- to talk to the ted-server.
 
 In Ted there is a back-end domain model. This is the data that will be
 persisted between restarts of the ted-server. When possible they will
@@ -183,11 +172,6 @@ If you have any Git or GitHub questions please send me ([KenMacD](http://github.
 Quick list of jars pulled down by Ivy, and their license (current 6/10):
 
  * commons-lang-2.4.jar        --  The Apache Software License, Version 2.0
- * diservlet-1.0-SNAPSHOT.jar  --  <missing - written by Mike>
- * gwt-dev-2.0.3.jar           --  The Apache Software License, Version 2.0
- * gwt-servlet-2.0.3.jar       --  The Apache Software License, Version 2.0
- * gwt-user-2.0.3.jar          --  The Apache Software License, Version 2.0
- * gwtsite-0.1-SNAPSHOT.jar    --  <missing - written by Mike>
  * jdom-1.0.jar                --  Apache-like
  * jsap-2.1.jar                --  LGPL (with extra info allowing subclassing)
  * junit-4.8.1-sources.jar     --  Common Public License - v 1.0
@@ -195,8 +179,7 @@ Quick list of jars pulled down by Ivy, and their license (current 6/10):
  * rome-1.0.0-javadoc.jar      --  The Apache Software License, Version 2.0
  * rome-1.0.0-sources.jar      --  The Apache Software License, Version 2.0
  * rome-1.0.0.jar              --  The Apache Software License, Version 2.0
- * servlet-api-2.5.jar         --  <unknown - by Sun, part of Glassfish>
  * slf4j-api-1.5.8.jar         --  MIT license (X license, X11 license)
  * slf4j-simple-1.5.8.jar      --  MIT license (X license, X11 license)
  * srpforjava-1.0.jar          --  The Apache Software License, Version 2.0
- * thrift-0.2.0.jar            --  The Apache Software License, Version 2.0
+ * thrift-0.5.0.jar            --  The Apache Software License, Version 2.0
