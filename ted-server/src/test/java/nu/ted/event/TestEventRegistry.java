@@ -1,5 +1,6 @@
 package nu.ted.event;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import nu.ted.generated.Event;
@@ -12,8 +13,10 @@ public class TestEventRegistry extends EventRegistry {
 	}
 
 	@Override
-	protected RegisteredEvent createRegisteredEvent(Event event) {
-		return new RegisteredEvent(event, nextRegisterDate);
+	protected Calendar getRegisteredDateCalendar() {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(nextRegisterDate);
+		return cal;
 	}
 
 	public void setNextRegisterDate(Date next) {

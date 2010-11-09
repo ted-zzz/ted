@@ -12,12 +12,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nu.ted.generated.Event;
+import nu.ted.generated.TDate;
 
 public class EventRegistry {
 
 	private Logger logger = LoggerFactory.getLogger(EventRegistry.class);
-
-	private List<RegisteredEvent> events;
+	private List<Event> events;
 
 	public static EventRegistry createEventRegistry(long cleanIntervalInMillis, int maxEventAgeInMinutes) {
 		EventRegistry registry = new EventRegistry();
@@ -27,25 +27,32 @@ public class EventRegistry {
 	}
 
 	protected EventRegistry() {
-		this.events = new ArrayList<RegisteredEvent>();
+		this.events = new ArrayList<Event>();
 	}
 
 	public void addEvent(Event event) {
 		synchronized (this.events) {
-			this.events.add(createRegisteredEvent(event));
+			Calendar cal = getRegisteredDateCalendar();
+			event.setRegisteredOn(new TDate(cal.getTimeInMillis()));
+			this.events.add(event);
 		}
 	}
 
-	protected RegisteredEvent createRegisteredEvent(Event event) {
-		return new RegisteredEvent(event, new Date());
+	protected Calendar getRegisteredDateCalendar() {
+		return Calendar.getInstance();
 	}
 
 	public List<Event> getEvents(Date from) {
 		synchronized (events) {
+			Calendar cal = getRegisteredDateCalendar();
+
 			List<Event> matched = new ArrayList<Event>();
-			for (RegisteredEvent regEvent : events) {
-				if (!regEvent.getRegisteredOn().before(from)) {
-					matched.add(regEvent.getEvent());
+			for (Event regEvent : events) {
+				cal.setTimeInMillis(regEvent.getRegisteredOn().getValue());
+				Date eventDate = cal.getTime();
+				System.err.println(eventDate + " ---> " + from);
+				if (eventDate.after(from)) {
+					matched.add(regEvent);
 				}
 			}
 
@@ -55,15 +62,13 @@ public class EventRegistry {
 
 	public void cleanup(int minutesOld) {
 		synchronized (events) {
-			List<RegisteredEvent> toRemove = new ArrayList();
-			for (RegisteredEvent regEvent : events) {
+			List<Event> toRemove = new ArrayList<Event>();
+			for (Event regEvent : events) {
 				long threshold = 60000 * minutesOld; // Minutes to millis.
 
 				Calendar cal = Calendar.getInstance();
 				long currentMillis = cal.getTimeInMillis();
-
-				cal.setTime(regEvent.getRegisteredOn());
-				long eventMillis = cal.getTimeInMillis();
+				long eventMillis = regEvent.getRegisteredOn().getValue();
 
 				if ((currentMillis - eventMillis) > threshold) {
 					toRemove.add(regEvent);

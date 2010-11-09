@@ -22,6 +22,6 @@ public class EventFactory {
 	}
 
 	public static Event createEpisodeAddedEvent(Series owner, Episode addedEpisode) {
-		return new Event(EventType.EPISODE_ADDED, owner, addedEpisode);
+		return new Event(EventType.EPISODE_ADDED, owner, addedEpisode, null);
 	}
 }

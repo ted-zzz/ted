@@ -120,7 +120,8 @@ struct Event
 {
 	1: EventType type,
 	2: Series series,
-	3: Episode episode
+	3: Episode episode,
+	4: TDate registeredOn
 }
 
 service TedService
