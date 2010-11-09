@@ -13,6 +13,7 @@ import nu.ted.domain.SeriesBackendWrapper;
 import nu.ted.event.EventFactory;
 import nu.ted.event.EventRegistry;
 import nu.ted.generated.Constants;
+import nu.ted.generated.Date;
 import nu.ted.generated.Event;
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.ImageType;
@@ -27,7 +28,7 @@ import nu.ted.guide.GuideDB;
 
 public class TedServiceImpl implements Iface
 {
-	private static EventRegistry eventRegistry = EventRegistry.createEventRegistry(60000L, 30000L);
+	private static EventRegistry eventRegistry = EventRegistry.createEventRegistry(60000L, 1);
 
 	private GuideDB seriesSource;
 	private Ted ted;
@@ -168,16 +169,11 @@ public class TedServiceImpl implements Iface
 	}
 
 	@Override
-	public String registerClientWithEventRegistry() throws TException {
-		Client client = ClientHolder.getClient();
-		eventRegistry.registerClient(client.getId());
-		return client.getId();
-	}
-
-	@Override
-	public List<Event> getEvents()
+	public List<Event> getEvents(Date date)
 			throws TException {
-		return eventRegistry.getEvents(ClientHolder.getClient().getId());
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(date.getValue());
+		return eventRegistry.getEvents(cal.getTime());
 	}
 
 	@Override

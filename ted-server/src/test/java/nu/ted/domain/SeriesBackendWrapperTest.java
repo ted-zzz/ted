@@ -24,16 +24,16 @@ public class SeriesBackendWrapperTest {
 
 	@Test
 	public void ensureEventFiredWhenEpisodeAdded() throws Exception {
+		Date lastPoll = new Date(Calendar.getInstance().getTimeInMillis());
 		TestGuide seriesSource = new TestGuide();
 		GuideFactory.addGuide(seriesSource);
 		TedServiceImpl service = new TedServiceImpl(Server.createDefaultTed(), seriesSource);
-		service.registerClientWithEventRegistry();
 
 		Series series = new Series();
 		series.setGuideName(seriesSource.getName());
 		SeriesBackendWrapper wrapper = new SeriesBackendWrapper(series);
 		wrapper.update(Calendar.getInstance());
-		List<Event> events = service.getEvents();
+		List<Event> events = service.getEvents(lastPoll);
 		assertEquals(1, events.size());
 
 		Event received = events.get(0);

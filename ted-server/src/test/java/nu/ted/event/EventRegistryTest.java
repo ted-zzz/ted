@@ -2,88 +2,92 @@ package nu.ted.event;
 
 import static org.junit.Assert.*;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import nu.ted.generated.Event;
+import nu.ted.generated.EventType;
+
 import org.junit.Test;
 
 public class EventRegistryTest {
 
 	@Test
-	public void registeringClientAddsClientIdToKeyList() {
-		String expectedClientId = "C1-GWT";
+	public void ensureGetEventsReturnsOnlyEventsSinceLastCheckDate() {
+		TestEventRegistry registry = new TestEventRegistry();
+		registry.setNextRegisterDate(getTime(Calendar.MAY, 11, 2011));
+		registry.addEvent(EventFactory.createEpisodeAddedEvent(null, null));
+		registry.setNextRegisterDate(getTime(Calendar.JUNE, 3, 2009));
+		registry.addEvent(EventFactory.createWatchedSeriesRemovedEvent(null));
 
-		EventRegistry registry = EventRegistry.createEventRegistry(5000L, 5000L);
-
-		registry.registerClient(expectedClientId);
-		assertTrue("Expected registry to contain client key: " + expectedClientId,
-				registry.isRegistered(expectedClientId));
+		List<Event> events = registry.getEvents(getTime(Calendar.NOVEMBER, 2, 2010));
+		assertEquals(1, events.size());
+		assertEquals(EventType.EPISODE_ADDED, events.get(0).getType());
 	}
 
 	@Test
-	public void checkEventAssociatedWithAllRegisteredClients() {
-		EventRegistry registry = EventRegistry.createEventRegistry(5000L, 5000L);
+	public void ensureGetEventsIncludesEventsPostedOnExactLastPostTime() {
+		TestEventRegistry registry = new TestEventRegistry();
+		Date lastPoll = getTime(Calendar.MAY, 11, 2011);
+		registry.setNextRegisterDate(lastPoll);
+		registry.addEvent(EventFactory.createEpisodeAddedEvent(null, null));
 
-		String clientId1 = "CID_1";
-		String clientId2 = "CID_2";
-
-		registry.registerClient(clientId1);
-		registry.registerClient(clientId2);
-
-		Event watchedListChanged = EventFactory.createWatchedSeriesAddedEvent(null);
-		registry.addEvent(watchedListChanged);
-
-		List<Event> client1Events = registry.getEvents(clientId1);
-		assertEquals(1, client1Events.size());
-		assertEquals(watchedListChanged, client1Events.get(0));
-
-		List<Event>	client2Events = registry.getEvents(clientId2);
-		assertEquals(1, client2Events.size());
-		assertEquals(watchedListChanged, client2Events.get(0));
-	}
-
-	@Test(expected = RuntimeException.class)
-	public void ensureExceptionIsThrownIfClientIsNotRegisteredOnGetEvents() {
-		EventRegistry registry = EventRegistry.createEventRegistry(5000L, 5000L);
-		registry.getEvents("SS");
+		List<Event> events = registry.getEvents(lastPoll);
+		assertEquals(1, events.size());
+		assertEquals(EventType.EPISODE_ADDED, events.get(0).getType());
 	}
 
 	@Test
-	public void ensureEventListIsClearedAfterRetrieval() {
-		EventRegistry registry = EventRegistry.createEventRegistry(5000L, 5000L);
+	public void ensureCleanUpCleansRegistryAccordingToMaxAge() {
+		Calendar cal = Calendar.getInstance();
+		Date now = cal.getTime();
 
-		String clientId1 = "CID_1";
 
-		registry.registerClient(clientId1);
+		TestEventRegistry registry = new TestEventRegistry();
 
-		Event watchedListChanged = EventFactory.createWatchedSeriesAddedEvent(null);
-		registry.addEvent(watchedListChanged);
+		cal.add(Calendar.MINUTE, -2);
+		registry.setNextRegisterDate(cal.getTime());
+		registry.addEvent(EventFactory.createEpisodeAddedEvent(null, null));
 
-		List<Event> client1Events = registry.getEvents(clientId1);
-		assertEquals(1, client1Events.size());
-		assertEquals(watchedListChanged, client1Events.get(0));
+		cal.add(Calendar.MINUTE, -10);
+		registry.setNextRegisterDate(cal.getTime());
+		registry.addEvent(EventFactory.createWatchedSeriesRemovedEvent(null));
 
-		assertTrue("Events should be empty after get.",
-				registry.getEvents(clientId1).isEmpty());
+		cal.add(Calendar.MINUTE, -9);
+		registry.setNextRegisterDate(cal.getTime());
+		registry.addEvent(EventFactory.createWatchedSeriesRemovedEvent(null));
+
+		cal.add(Calendar.MINUTE, -60);
+		Date lastPoll = cal.getTime();
+
+		assertEquals(3, registry.getEvents(lastPoll).size());
+
+		registry.cleanup(30); // Nothing is that old.
+		assertEquals(3, registry.getEvents(lastPoll).size());
+
+		registry.cleanup(15);
+		assertEquals(2, registry.getEvents(lastPoll).size());
+
+		registry.cleanup(1);
+		assertTrue(registry.getEvents(lastPoll).isEmpty());
+
 	}
 
-	@Test
-	public void ensureGetLastPollTimeFromClient() {
-		EventRegistry registry = EventRegistry.createEventRegistry(5000L, 5000L);
-
-		String clientId1 = "CID_1";
-		registry.registerClient(clientId1);
-
-		Event watchedListChanged = EventFactory.createWatchedSeriesAddedEvent(null);
-		registry.addEvent(watchedListChanged);
-
-		assertFalse(0L == registry.getLastPollTime(clientId1));
+	private Date getTime(int calMonth, int day, int year, int min) {
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.MONTH, calMonth);
+		cal.set(Calendar.DATE, day);
+		cal.set(Calendar.YEAR, year);
+		cal.set(Calendar.HOUR, 0);
+		cal.set(Calendar.MINUTE, min);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		return cal.getTime();
 	}
 
-	@Test(expected = RuntimeException.class)
-	public void ensureGetLastPollTimeFromClientThrowsExceptionIfClientDoesNotExist() {
-		EventRegistry registry = EventRegistry.createEventRegistry(5000L, 5000L);
-		registry.getLastPollTime("Unknown Client");
+	private Date getTime(int calMonth, int day, int year) {
+		return getTime(calMonth, day, year, 0);
 	}
 
 }

@@ -2,11 +2,13 @@ package nu.ted.service;
 
 import static org.junit.Assert.*;
 
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
 import nu.ted.Server;
 import nu.ted.domain.SeriesBackendWrapper;
+import nu.ted.generated.Date;
 import nu.ted.generated.Event;
 import nu.ted.generated.EventType;
 import nu.ted.generated.ImageFile;
@@ -141,10 +143,16 @@ public class TedTests
 	@Test
 	public void shouldRegisterWatchedListChangedEventIfStartWatching() throws TException, InvalidOperation{
 		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
-		ted.registerClientWithEventRegistry();
+		Date lastCheck = new Date(Calendar.getInstance().getTimeInMillis());
+		List<Event> initialEvents = ted.getEvents(lastCheck);
 
 		ted.startWatching("E");
-		List<Event> events = ted.getEvents();
+		List<Event> events = ted.getEvents(lastCheck);
+
+		// Remove the initial events as the Event Registry is a static
+		// instance in the service.
+		events.removeAll(initialEvents);
+
 		assertEquals(1, events.size());
 		assertEquals(EventType.WATCHED_SERIES_ADDED, events.get(0).getType());
 	}
@@ -159,15 +167,20 @@ public class TedTests
 	}
 
 	@Test
-	public void shouldRegisterWatchedListChangedEventIfStopWatching() throws TException, InvalidOperation {
+	public void shouldRegisterWatchedListChangedEventIfStopWatching() throws TException, InvalidOperation, InterruptedException {
 		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
-		ted.registerClientWithEventRegistry();
 		short id = ted.startWatching("E");
-		// Flush the registry for this client.
-		ted.getEvents();
+
+		Date lastCheck = new Date(Calendar.getInstance().getTimeInMillis());
+		List<Event> initialEvents = ted.getEvents(lastCheck);
 
 		ted.stopWatching(id);
-		List<Event> events = ted.getEvents();
+		List<Event> events = ted.getEvents(lastCheck);
+
+		// Remove the initial events as the Event Registry is a static
+		// instance in the service.
+		events.removeAll(initialEvents);
+
 		assertEquals(1, events.size());
 		assertEquals(EventType.WATCHED_SERIES_REMOVED, events.get(0).getType());
 	}

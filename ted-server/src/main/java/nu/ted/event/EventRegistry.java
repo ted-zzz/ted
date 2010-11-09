@@ -1,5 +1,8 @@
 package nu.ted.event;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,80 +17,59 @@ public class EventRegistry {
 
 	private Logger logger = LoggerFactory.getLogger(EventRegistry.class);
 
-	protected static final int MAX_TRIES = 50;
+	private List<RegisteredEvent> events;
 
-	private Map<String, EventCache> registry;
-
-	public static EventRegistry createEventRegistry(long maxClientIdleTime, long wait) {
+	public static EventRegistry createEventRegistry(long cleanIntervalInMillis, int maxEventAgeInMinutes) {
 		EventRegistry registry = new EventRegistry();
+		EventRegistryCleaner cleaner = new EventRegistryCleaner(registry, cleanIntervalInMillis, maxEventAgeInMinutes);
+		cleaner.start();
 		return registry;
 	}
 
 	protected EventRegistry() {
-		this.registry = new HashMap<String, EventCache>();
-	}
-
-	public void registerClient(String Id) {
-		synchronized (registry) {
-			registry.put(Id, new EventCache());
-		}
-	}
-
-	public boolean isRegistered(String clientId) {
-		synchronized (registry) {
-			return registry.containsKey(clientId);
-		}
+		this.events = new ArrayList<RegisteredEvent>();
 	}
 
 	public void addEvent(Event event) {
-		synchronized (registry) {
-			for (Entry<String, EventCache> entry : registry.entrySet()) {
-				entry.getValue().addEvent(event);
-			}
+		synchronized (this.events) {
+			this.events.add(createRegisteredEvent(event));
 		}
 	}
 
-	public List<Event> getEvents(String clientId) {
-		synchronized (registry) {
-			if (!isRegistered(clientId)) {
-				// TODO [MS] Throw properly typed exception here?
-				throw new RuntimeException(
-						"Unable to get events. Client not registered: "
-								+ clientId);
+	protected RegisteredEvent createRegisteredEvent(Event event) {
+		return new RegisteredEvent(event, new Date());
+	}
+
+	public List<Event> getEvents(Date from) {
+		synchronized (events) {
+			List<Event> matched = new ArrayList<Event>();
+			for (RegisteredEvent regEvent : events) {
+				if (!regEvent.getRegisteredOn().before(from)) {
+					matched.add(regEvent.getEvent());
+				}
 			}
 
-			EventCache cache = registry.get(clientId);
-			try {
-				return cache.getEvents();
-			} finally {
-				cache.clear();
-			}
+			return matched;
 		}
 	}
 
-	public String[] getClientIds() {
-		synchronized (registry) {
-			return registry.keySet().toArray(
-					new String[registry.keySet().size()]);
-		}
-	}
+	public void cleanup(int minutesOld) {
+		synchronized (events) {
+			List<RegisteredEvent> toRemove = new ArrayList();
+			for (RegisteredEvent regEvent : events) {
+				long threshold = 60000 * minutesOld; // Minutes to millis.
 
-	public long getLastPollTime(String clientId) {
-		synchronized (registry) {
-			if (!isRegistered(clientId)) {
-				// TODO [MS] Throw properly typed exception here?
-				throw new RuntimeException("Client not registered: " + clientId);
-			}
-			return registry.get(clientId).getLastPollTime();
-		}
-	}
+				Calendar cal = Calendar.getInstance();
+				long currentMillis = cal.getTimeInMillis();
 
-	public void unregisterClient(String clientId) {
-		synchronized (registry) {
-			EventCache removed = registry.remove(clientId);
-			if (removed != null) {
-				logger.debug("Client Unrigistered: {}", clientId);
+				cal.setTime(regEvent.getRegisteredOn());
+				long eventMillis = cal.getTimeInMillis();
+
+				if ((currentMillis - eventMillis) > threshold) {
+					toRemove.add(regEvent);
+				}
 			}
+			events.removeAll(toRemove);
 		}
 	}
 
