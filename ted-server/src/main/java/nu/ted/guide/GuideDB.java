@@ -3,7 +3,7 @@ package nu.ted.guide;
 import java.util.Calendar;
 import java.util.List;
 
-import nu.ted.generated.Date;
+import nu.ted.generated.TDate;
 import nu.ted.generated.Episode;
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.ImageType;
@@ -25,7 +25,7 @@ public interface GuideDB
 
 	ImageFile getImage(String guideId, ImageType type) throws DataSourceException;
 
-	List<Episode> getAiredEpisodesBetween(String guideId, Date after,
-			Date before) throws DataSourceException;
+	List<Episode> getAiredEpisodesBetween(String guideId, TDate after,
+			TDate before) throws DataSourceException;
 
 }

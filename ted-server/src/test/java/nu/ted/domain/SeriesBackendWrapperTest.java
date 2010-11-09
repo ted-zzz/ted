@@ -6,7 +6,7 @@ import java.util.List;
 
 import nu.ted.Server;
 import nu.ted.SearcherTest.TestTorrentSource;
-import nu.ted.generated.Date;
+import nu.ted.generated.TDate;
 import nu.ted.generated.Episode;
 import nu.ted.generated.EpisodeStatus;
 import nu.ted.generated.Event;
@@ -24,7 +24,7 @@ public class SeriesBackendWrapperTest {
 
 	@Test
 	public void ensureEventFiredWhenEpisodeAdded() throws Exception {
-		Date lastPoll = new Date(Calendar.getInstance().getTimeInMillis());
+		TDate lastPoll = new TDate(Calendar.getInstance().getTimeInMillis());
 		TestGuide seriesSource = new TestGuide();
 		GuideFactory.addGuide(seriesSource);
 		TedServiceImpl service = new TedServiceImpl(Server.createDefaultTed(), seriesSource);
@@ -51,27 +51,27 @@ public class SeriesBackendWrapperTest {
 
 	@Test
 	public void ensureSeriesKnowsItsMissingEpisodes() throws Exception {
-		Episode s1e1 = new Episode((short) 1, (short) 2, new Date(12345));
+		Episode s1e1 = new Episode((short) 1, (short) 2, new TDate(12345));
 		s1e1.setStatus(EpisodeStatus.SEARCHING);
 
-		Episode s1e2 = new Episode((short) 1, (short) 3, new Date(12345));
+		Episode s1e2 = new Episode((short) 1, (short) 3, new TDate(12345));
 		s1e2.setStatus(EpisodeStatus.SEARCHING);
 
-		Episode s1e3 = new Episode((short) 1, (short) 4, new Date(12345));
+		Episode s1e3 = new Episode((short) 1, (short) 4, new TDate(12345));
 		s1e3.setStatus(EpisodeStatus.FOUND);
 
-		Episode s2e1 = new Episode((short) 1, (short) 5, new Date(12345));
+		Episode s2e1 = new Episode((short) 1, (short) 5, new TDate(12345));
 		s2e1.setStatus(EpisodeStatus.FOUND);
 
 		List<Episode> s1Eplist = new LinkedList<Episode>();
 		s1Eplist.add(s1e1);
 		s1Eplist.add(s1e2);
 		s1Eplist.add(s1e3);
-		Series s1 = new Series((short) 1, "name", new Date(12344), "guideName", "guideId", s1Eplist);
+		Series s1 = new Series((short) 1, "name", new TDate(12344), "guideName", "guideId", s1Eplist);
 
 		List<Episode> s2EpList = new LinkedList<Episode>();
 		s2EpList.add(s2e1);
-		Series s2 = new Series((short) 2, "name", new Date(12346), "guideName", "guildId", s2EpList);
+		Series s2 = new Series((short) 2, "name", new TDate(12346), "guideName", "guildId", s2EpList);
 
 		assertTrue(new SeriesBackendWrapper(s1).hasMissingEpisodes());
 		assertFalse(new SeriesBackendWrapper(s2).hasMissingEpisodes());

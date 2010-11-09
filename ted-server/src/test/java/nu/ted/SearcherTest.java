@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import nu.ted.domain.EpisodeBackendWrapper;
-import nu.ted.generated.Date;
+import nu.ted.generated.TDate;
 import nu.ted.generated.Episode;
 import nu.ted.generated.EpisodeStatus;
 import nu.ted.generated.Series;
@@ -81,27 +81,27 @@ public class SearcherTest {
 		List<TorrentSource> sources = new LinkedList<TorrentSource>();
 		sources.add(torrentSource);
 
-		Episode s1e2 = new Episode((short) 1, (short) 2, new Date(12345));
+		Episode s1e2 = new Episode((short) 1, (short) 2, new TDate(12345));
 		s1e2.setStatus(EpisodeStatus.SEARCHING);
 
-		Episode s1e3 = new Episode((short) 1, (short) 3, new Date(12345));
+		Episode s1e3 = new Episode((short) 1, (short) 3, new TDate(12345));
 		s1e3.setStatus(EpisodeStatus.SEARCHING);
 
-		Episode s1e4 = new Episode((short) 1, (short) 4, new Date(12345));
+		Episode s1e4 = new Episode((short) 1, (short) 4, new TDate(12345));
 		s1e4.setStatus(EpisodeStatus.FOUND);
 
-		Episode s2e1 = new Episode((short) 1, (short) 5, new Date(12345));
+		Episode s2e1 = new Episode((short) 1, (short) 5, new TDate(12345));
 		s2e1.setStatus(EpisodeStatus.FOUND);
 
 		List<Episode> s1Eplist = new LinkedList<Episode>();
 		s1Eplist.add(s1e2);
 		s1Eplist.add(s1e3);
 		s1Eplist.add(s1e4);
-		Series s1 = new Series((short) 1, "name", new Date(12344), "guideName", "guideId", s1Eplist);
+		Series s1 = new Series((short) 1, "name", new TDate(12344), "guideName", "guideId", s1Eplist);
 
 		List<Episode> s2EpList = new LinkedList<Episode>();
 		s2EpList.add(s2e1);
-		Series s2 = new Series((short) 2, "name", new Date(12346), "guideName", "guildId", s2EpList);
+		Series s2 = new Series((short) 2, "name", new TDate(12346), "guideName", "guildId", s2EpList);
 
 		List<Series> series = new LinkedList<Series>();
 		series.add(s1);

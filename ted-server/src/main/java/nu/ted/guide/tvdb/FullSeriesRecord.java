@@ -14,8 +14,8 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import nu.ted.generated.Date;
 import nu.ted.generated.Episode;
+import nu.ted.generated.TDate;
 
 @XmlRootElement(name = "Data")
 public class FullSeriesRecord {
@@ -105,7 +105,7 @@ public class FullSeriesRecord {
 
 		Episode getEpisode() {
 			return new Episode((short) getSeason(), (short) getEpisodeNumber(),
-					new Date(getFirstAired()));
+					new TDate(getFirstAired()));
 		}
 	}
 
@@ -140,7 +140,7 @@ public class FullSeriesRecord {
 	@XmlElement(name = "Episode")
 	private List<TVDBEpisode> episodeList = new ArrayList<TVDBEpisode>();
 
-	public Episode getNextEpisode(Date date)
+	public Episode getNextEpisode(TDate date)
 	{
 		long checkDate = date.getValue();
 		for (TVDBEpisode e : episodeList) {

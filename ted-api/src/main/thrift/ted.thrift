@@ -21,7 +21,7 @@ exception InvalidOperation {
 	1: string	message
 }
 
-struct Date {
+struct TDate {
 	1: i64			value
 }
 
@@ -43,7 +43,7 @@ struct Episode
 {
 	1: i16				season,
 	2: i16				number,
-	3: Date				aired,
+	3: TDate				aired,
 
 	4: optional EpisodeStatus	status
 }
@@ -67,7 +67,7 @@ struct Series
 {
 	1: i16			uid,
 	2: string		name,
-	3: Date			lastCheck,
+	3: TDate			lastCheck,
 
 	4: string		guideName,
 	5: string		guideId,
@@ -162,7 +162,7 @@ service TedService
 	string getOverview(1: string searchUID);
 		# TODO: throws?
 
-	list<Event> getEvents(1: Date lastChecked);
+	list<Event> getEvents(1: TDate lastChecked);
 		# TODO: throws?
 
 	# --- Commands related to Torrent Sources ---

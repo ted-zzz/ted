@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import nu.ted.event.EventFactory;
-import nu.ted.generated.Date;
+import nu.ted.generated.TDate;
 import nu.ted.generated.Episode;
 import nu.ted.generated.EpisodeStatus;
 import nu.ted.generated.Series;
@@ -51,8 +51,8 @@ public class SeriesBackendWrapper
 
 	public boolean update(Calendar calendar) {
 		boolean foundNew = false;
-		Date after = series.getLastCheck();
-		Date before = new Date(calendar.getTimeInMillis());
+		TDate after = series.getLastCheck();
+		TDate before = new TDate(calendar.getTimeInMillis());
 
 		GuideDB guide = getGuide();
 		String guideId = series.getGuideId();

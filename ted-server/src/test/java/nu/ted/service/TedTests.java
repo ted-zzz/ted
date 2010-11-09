@@ -8,7 +8,7 @@ import java.util.List;
 
 import nu.ted.Server;
 import nu.ted.domain.SeriesBackendWrapper;
-import nu.ted.generated.Date;
+import nu.ted.generated.TDate;
 import nu.ted.generated.Event;
 import nu.ted.generated.EventType;
 import nu.ted.generated.ImageFile;
@@ -143,7 +143,7 @@ public class TedTests
 	@Test
 	public void shouldRegisterWatchedListChangedEventIfStartWatching() throws TException, InvalidOperation{
 		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
-		Date lastCheck = new Date(Calendar.getInstance().getTimeInMillis());
+		TDate lastCheck = new TDate(Calendar.getInstance().getTimeInMillis());
 		List<Event> initialEvents = ted.getEvents(lastCheck);
 
 		ted.startWatching("E");
@@ -171,7 +171,7 @@ public class TedTests
 		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
 		short id = ted.startWatching("E");
 
-		Date lastCheck = new Date(Calendar.getInstance().getTimeInMillis());
+		TDate lastCheck = new TDate(Calendar.getInstance().getTimeInMillis());
 		List<Event> initialEvents = ted.getEvents(lastCheck);
 
 		ted.stopWatching(id);

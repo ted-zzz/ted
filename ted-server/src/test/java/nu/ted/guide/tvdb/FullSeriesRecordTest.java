@@ -8,7 +8,7 @@ import javax.xml.bind.DatatypeConverter;
 
 import junit.framework.Assert;
 import nu.ted.domain.TestSeriesXml;
-import nu.ted.generated.Date;
+import nu.ted.generated.TDate;
 import nu.ted.generated.Episode;
 import nu.ted.guide.tvdb.FullSeriesRecord.TVDBEpisode;
 
@@ -56,7 +56,7 @@ public class FullSeriesRecordTest
 
 		FullSeriesRecord list = FullSeriesRecord.create(xml.toStream());
 
-		Episode result = list.getNextEpisode(new Date(now.getTimeInMillis()));
+		Episode result = list.getNextEpisode(new TDate(now.getTimeInMillis()));
 		Assert.assertNotNull(result);
 		assertEpisode(result, (short) 1, (short) 3, thenCompare, "Name");
 	}
@@ -80,7 +80,7 @@ public class FullSeriesRecordTest
 		Calendar afterCompare = DatatypeConverter.parseDate(afterPrintDate);
 		FullSeriesRecord list = FullSeriesRecord.create(xml.toStream());
 
-		Episode result = list.getNextEpisode(new Date(now.getTimeInMillis()));
+		Episode result = list.getNextEpisode(new TDate(now.getTimeInMillis()));
 
 		Assert.assertNotNull(result);
 		assertEpisode(result, (short) 1, (short) 4, afterCompare, "Name2");
@@ -101,11 +101,11 @@ public class FullSeriesRecordTest
 		TVDBEpisode episode = new TVDBEpisode(1, 3, now, "EP1");
 
 		Episode matching = new Episode((short) 1, (short) 3,
-				new Date(now.getTimeInMillis()));
+				new TDate(now.getTimeInMillis()));
 		Episode wrongSeason = new Episode((short) 2, (short) 3,
-				new Date(now.getTimeInMillis()));
+				new TDate(now.getTimeInMillis()));
 		Episode wrongNumber = new Episode((short) 2, (short) 3,
-				new Date(now.getTimeInMillis()));
+				new TDate(now.getTimeInMillis()));
 
 		Assert.assertTrue(episode.equalsEpisode(matching));
 		Assert.assertFalse(episode.equalsEpisode(wrongSeason));
@@ -133,7 +133,7 @@ public class FullSeriesRecordTest
 		xml.addEpisode(4, 3, thenPrintDate, "Good Ep");
 
 		FullSeriesRecord record = FullSeriesRecord.create(xml.toStream());
-		Episode e = record.getNextEpisode(new Date(now.getTimeInMillis()));
+		Episode e = record.getNextEpisode(new TDate(now.getTimeInMillis()));
 
 		Assert.assertNotNull(e);
 		assertEpisode(e, (short)4, (short)3, DatatypeConverter.parseDate(thenPrintDate), "Good Ep");

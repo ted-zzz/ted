@@ -13,7 +13,7 @@ import nu.ted.domain.SeriesBackendWrapper;
 import nu.ted.event.EventFactory;
 import nu.ted.event.EventRegistry;
 import nu.ted.generated.Constants;
-import nu.ted.generated.Date;
+import nu.ted.generated.TDate;
 import nu.ted.generated.Event;
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.ImageType;
@@ -169,7 +169,7 @@ public class TedServiceImpl implements Iface
 	}
 
 	@Override
-	public List<Event> getEvents(Date date)
+	public List<Event> getEvents(TDate date)
 			throws TException {
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(date.getValue());

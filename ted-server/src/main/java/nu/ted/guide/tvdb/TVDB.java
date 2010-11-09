@@ -4,7 +4,7 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
-import nu.ted.generated.Date;
+import nu.ted.generated.TDate;
 import nu.ted.generated.Episode;
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.ImageType;
@@ -51,8 +51,8 @@ public class TVDB implements GuideDB
 	}
 
 	@Override
-	public List<Episode> getAiredEpisodesBetween(String guideId, Date after,
-			Date before) throws DataSourceException {
+	public List<Episode> getAiredEpisodesBetween(String guideId, TDate after,
+			TDate before) throws DataSourceException {
 		FullSeriesRecord series = dataSource.getFullSeriesRecord(guideId);
 		List<Episode> newOnes = new LinkedList<Episode>();
 
@@ -68,7 +68,7 @@ public class TVDB implements GuideDB
 	public Series getSeries(String guideId, short id, Calendar date) throws DataSourceException {
 		FullSeriesRecord record = dataSource.getFullSeriesRecord(guideId);
 
-		return new Series(id, record.getName(), new Date(date.getTimeInMillis()),
+		return new Series(id, record.getName(), new TDate(date.getTimeInMillis()),
 				getName(), guideId, new LinkedList<Episode>());
 	}
 
