@@ -21,7 +21,7 @@ a {
 
 #header {
 	width: 100%;
-	background-image: url("img/header/header_back.png");
+	background-image: url("../img/header/header_back.png");
 }
 
 #header_image img {

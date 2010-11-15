@@ -30,4 +30,4 @@
 		}
 	?>
 </ul>
-<a href="stop_watching.php?uid=<?php echo $series->uid; ?>">Stop Watching</a>
+<a href="watching/stopWatching/<?php echo $series->uid; ?>">Stop Watching</a>
