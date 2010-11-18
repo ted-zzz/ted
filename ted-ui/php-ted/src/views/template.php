@@ -2,6 +2,7 @@
 	<head>
 		<title>TED - <?php echo $view_title; ?> </title>
 		<link href="views/ted.css" rel="stylesheet" type="text/css" />
+		<script src="lib/jquery.js" language="javascript" type="text/javascript"></script>
 	</head>
 	<body>
 		<div id="container">

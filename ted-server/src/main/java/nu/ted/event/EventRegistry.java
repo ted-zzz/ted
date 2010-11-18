@@ -50,7 +50,6 @@ public class EventRegistry {
 			for (Event regEvent : events) {
 				cal.setTimeInMillis(regEvent.getRegisteredOn().getValue());
 				Date eventDate = cal.getTime();
-				System.err.println(eventDate + " ---> " + from);
 				if (eventDate.after(from)) {
 					matched.add(regEvent);
 				}

@@ -7,7 +7,8 @@
 	$path_parts = explode('/', $site_path);
 	define ('__SITE_ROOT', $path_parts[sizeof($path_parts) - 1]);
 
-	/*** include the init.php file ***/
+	define ('__POLL_INTERVAL', 5000);
+
 	include 'includes/init.php';
 
 	$registry->router = new router($registry);

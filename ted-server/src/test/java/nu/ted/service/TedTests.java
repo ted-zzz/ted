@@ -143,7 +143,11 @@ public class TedTests
 	@Test
 	public void shouldRegisterWatchedListChangedEventIfStartWatching() throws TException, InvalidOperation{
 		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
-		TDate lastCheck = new TDate(Calendar.getInstance().getTimeInMillis());
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.MINUTE, -1);
+		TDate lastCheck = new TDate(calendar.getTimeInMillis());
+
 		List<Event> initialEvents = ted.getEvents(lastCheck);
 
 		ted.startWatching("E");
@@ -171,10 +175,14 @@ public class TedTests
 		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
 		short id = ted.startWatching("E");
 
-		TDate lastCheck = new TDate(Calendar.getInstance().getTimeInMillis());
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.MINUTE, -1);
+		TDate lastCheck = new TDate(calendar.getTimeInMillis());
 		List<Event> initialEvents = ted.getEvents(lastCheck);
 
 		ted.stopWatching(id);
+
+//		lastCheck = new TDate(calendar.getTimeInMillis());
 		List<Event> events = ted.getEvents(lastCheck);
 
 		// Remove the initial events as the Event Registry is a static

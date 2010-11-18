@@ -27,15 +27,14 @@ public class EventRegistryTest {
 	}
 
 	@Test
-	public void ensureGetEventsIncludesEventsPostedOnExactLastPostTime() {
+	public void ensureGetEventsDoesNotIncludeEventsPostedOnExactLastPostTime() {
 		TestEventRegistry registry = new TestEventRegistry();
 		Date lastPoll = getTime(Calendar.MAY, 11, 2011);
 		registry.setNextRegisterDate(lastPoll);
 		registry.addEvent(EventFactory.createEpisodeAddedEvent(null, null));
 
 		List<Event> events = registry.getEvents(lastPoll);
-		assertEquals(1, events.size());
-		assertEquals(EventType.EPISODE_ADDED, events.get(0).getType());
+		assertEquals(0, events.size());
 	}
 
 	@Test

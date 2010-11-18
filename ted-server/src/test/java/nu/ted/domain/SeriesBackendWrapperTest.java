@@ -1,22 +1,24 @@
 package nu.ted.domain;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
 import nu.ted.Server;
-import nu.ted.SearcherTest.TestTorrentSource;
-import nu.ted.generated.TDate;
 import nu.ted.generated.Episode;
 import nu.ted.generated.EpisodeStatus;
 import nu.ted.generated.Event;
 import nu.ted.generated.EventType;
 import nu.ted.generated.Series;
+import nu.ted.generated.TDate;
 import nu.ted.guide.GuideFactory;
 import nu.ted.guide.TestGuide;
 import nu.ted.service.TedServiceImpl;
-
-import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -24,16 +26,24 @@ public class SeriesBackendWrapperTest {
 
 	@Test
 	public void ensureEventFiredWhenEpisodeAdded() throws Exception {
-		TDate lastPoll = new TDate(Calendar.getInstance().getTimeInMillis());
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.MINUTE, -2);
+		TDate lastPoll = new TDate(calendar.getTimeInMillis());
+
 		TestGuide seriesSource = new TestGuide();
 		GuideFactory.addGuide(seriesSource);
 		TedServiceImpl service = new TedServiceImpl(Server.createDefaultTed(), seriesSource);
 
+		List<Event> current = service.getEvents(lastPoll);
+		
 		Series series = new Series();
 		series.setGuideName(seriesSource.getName());
 		SeriesBackendWrapper wrapper = new SeriesBackendWrapper(series);
 		wrapper.update(Calendar.getInstance());
+		
 		List<Event> events = service.getEvents(lastPoll);
+		// Clear out events that existed before add (static registry).
+		events.removeAll(current);
 		assertEquals(1, events.size());
 
 		Event received = events.get(0);
