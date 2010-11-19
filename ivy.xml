@@ -9,10 +9,11 @@
 		<!-- For Encryption -->
 		<dependency org="com.jordanzimmerman" name="srpforjava" rev="1.0"/>
 
-		<!-- From Thrift -->
-		<dependency org="org.slf4j" name="slf4j-api" rev="1.5.8" conf="* -> *,!sources,!javadoc"/>
-		<dependency org="org.slf4j" name="slf4j-simple" rev="1.5.8" conf="* -> *,!sources,!javadoc"/>
-		<dependency org="commons-lang" name="commons-lang" rev="2.4" conf="* -> *,!sources,!javadoc"/>
+		<!-- Logging -->
+		<dependency org="org.slf4j" name="slf4j-api" rev="1.6.1" conf="* -> *,!sources,!javadoc"/>
+		<dependency org="ch.qos.logback" name="logback-classic" rev="0.9.26" conf="* -> *,!sources,!javadoc"/>
+
+		<!-- Thrift -->
 		<dependency org="org.apache" name="thrift" rev="0.5.0"/>
 
 		<!-- For RSS Parsing -->
