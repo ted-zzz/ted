@@ -112,3 +112,33 @@ a {
 	float: left;
 	width: 300px;
 }
+
+#sources_table {
+	border-collapse: collapse;
+}
+
+
+#sources_table, th, td {
+	border: 1px solid #CA570B;
+}
+
+#sources_table td {
+	padding: 4px;
+}
+
+#sources_table thead {
+	background-color: #FF7010;
+	color: white;
+}
+
+#sources_table th.type {
+	width: 100px;
+}
+
+#sources_table th.name {
+	width: 300px;
+}
+
+#sources_table th.location {
+	width: 600px;
+}

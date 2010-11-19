@@ -22,6 +22,7 @@ import nu.ted.generated.InvalidOperation;
 import nu.ted.generated.Series;
 import nu.ted.generated.SeriesSearchResult;
 import nu.ted.generated.Ted;
+import nu.ted.generated.TedConfig;
 import nu.ted.generated.TedService.Iface;
 import nu.ted.generated.TorrentSource;
 import nu.ted.guide.GuideDB;
@@ -208,6 +209,87 @@ public class TedServiceImpl implements Iface
 		}
 		// TODO: notify anyone? Clone map?
 		ted.getConfig().setTorrentSources(sources);
+	}
+
+	@Override
+	public TorrentSource getTorrentSource(short id) throws InvalidOperation {
+		int idx = findTorrentSource(id);
+		if (idx < 0) {
+			throw new InvalidOperation("Torrent source not found with id: " + id);
+		}
+		return ted.getConfig().getTorrentSources().get(idx);
+	}
+
+	@Override
+	public void addTorrentSource(TorrentSource source) throws InvalidOperation {
+		TedConfig config = ted.getConfig();
+
+		if (!isUniqueTorrentSourceName(source.getName())) {
+			throw new InvalidOperation("Could not add torrent source. A source " +
+					"with the name " + source.getName() + " already exists.");
+		}
+
+		short nextUid = ted.getSourceUidCache().getNextUid();
+		source.setUid(nextUid);
+		config.addToTorrentSources(source);
+		ted.getSourceUidCache().setNextUid(++nextUid);
+	}
+
+	@Override
+	public void removeTorrentSource(short id) throws InvalidOperation {
+		TedConfig config = ted.getConfig();
+		int sourceIdx = findTorrentSource(id);
+		if (sourceIdx < 0) {
+			throw new InvalidOperation("Could not remove torrent source: " +
+					id + ". Source does not exist.");
+		}
+		config.getTorrentSources().remove(sourceIdx);
+	}
+
+	@Override
+	public void updateTorrentSource(TorrentSource updatedSource)
+			throws InvalidOperation {
+		TedConfig config = ted.getConfig();
+		int originalSourceIdx = findTorrentSource(updatedSource.getUid());
+		if (originalSourceIdx < 0) {
+			throw new InvalidOperation("Could not update torrent source: " +
+					updatedSource.getUid() + ". Original source does not exist.");
+		}
+
+		TorrentSource originalSource = config.getTorrentSources().get(originalSourceIdx);
+		if (!originalSource.getName().equalsIgnoreCase(updatedSource.getName())
+				&& !isUniqueTorrentSourceName(updatedSource.getName())) {
+			throw new InvalidOperation("Could not update torrent source: " +
+					updatedSource.getUid() +
+					". A source with the name " +
+					updatedSource.getName() + " already exists.");
+		}
+
+		config.getTorrentSources().remove(originalSourceIdx);
+		config.getTorrentSources().add(originalSourceIdx, updatedSource);
+	}
+
+	private int findTorrentSource(short id) {
+		TedConfig config = ted.getConfig();
+		List<TorrentSource> currentSources = config.getTorrentSources();
+		for (int i = 0; i < currentSources.size(); i++) {
+			TorrentSource next = currentSources.get(i);
+			if (next.getUid() == id) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	private boolean isUniqueTorrentSourceName(String sourceName) {
+		TedConfig config = ted.getConfig();
+		List<TorrentSource> currentSources = config.getTorrentSources();
+		for (TorrentSource next : currentSources) {
+			if (next.getName().equalsIgnoreCase(sourceName)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 }

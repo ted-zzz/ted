@@ -99,8 +99,8 @@ public class SearcherTest {
 		TorrentSourceIndex.registerFactory(testTorrentSourceWithE.getName(), new TestTorrentSourceFactory(
 				testTorrentSourceWithE));
 
-		TorrentSource torrentSource = new TorrentSource(testTorrentSource.getName(), "freetv", "freetv.invalid");
-		TorrentSource torrentSourceWithE = new TorrentSource(testTorrentSourceWithE.getName(), "BAD", "BAD.invalid");
+		TorrentSource torrentSource = new TorrentSource((short) 1, testTorrentSource.getName(), "freetv", "freetv.invalid");
+		TorrentSource torrentSourceWithE = new TorrentSource((short) 2, testTorrentSourceWithE.getName(), "BAD", "BAD.invalid");
 		List<TorrentSource> sources = new LinkedList<TorrentSource>();
 
 		sources.add(torrentSourceWithE);

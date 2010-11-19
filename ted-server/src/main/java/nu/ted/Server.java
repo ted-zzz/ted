@@ -140,6 +140,7 @@ public class Server {
 		ted.setConfig(config);
 		ted.setSeries(new LinkedList<Series>());
 		ted.setSeriesUidCache(new UidCache());
+		ted.setSourceUidCache(new UidCache());
 		return ted;
 	}
 
@@ -289,7 +290,7 @@ public class Server {
 			if (new TedBackendWrapper(ted).hasMissingEpisodes() == true) {
 				searcherExecutor.schedule(new Searcher(), 20, TimeUnit.SECONDS);
 			}
-			searcherExecutor.scheduleAtFixedRate(new EpisodeUpdater(), 10, 3600, TimeUnit.SECONDS);
+			searcherExecutor.scheduleAtFixedRate(new EpisodeUpdater(), 10, 60, TimeUnit.SECONDS);
 
 			// Create an executor service that will always call the logout
 			// after the client disconnects.

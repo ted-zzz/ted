@@ -2,6 +2,7 @@ package nu.ted.service;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
@@ -93,7 +94,7 @@ public class TedTests
 	}
 
 	@Test
-	public void shouldNotIncrementSeriesUidCacheNextIdAfterUuccessfulWatch()
+	public void shouldNotIncrementSeriesUidCacheNextIdAfterUnsuccessfulWatch()
 		throws TException, InvalidOperation {
 		Ted defaultTed = Server.createDefaultTed();
 		TedServiceImpl tedService = new TedServiceImpl(defaultTed, new TestGuide());
@@ -177,7 +178,7 @@ public class TedTests
 		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
 
 		Calendar calendar = Calendar.getInstance();
-		calendar.add(Calendar.MINUTE, -10);
+		calendar.add(Calendar.SECOND, -1);
 		TDate lastCheck = new TDate(calendar.getTimeInMillis());
 
 		List<Event> initialEvents = ted.getEvents(lastCheck);
@@ -254,9 +255,9 @@ public class TedTests
 	public void ensureReplacingTorrentSourceWorks() throws Exception {
 		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
 
-		TorrentSource source1 = new TorrentSource("type", "name1", "location1");
-		TorrentSource source2 = new TorrentSource("type", "name2", "location2");
-		TorrentSource source3 = new TorrentSource("type", "name3", "location3");
+		TorrentSource source1 = new TorrentSource((short) 1, "type", "name1", "location1");
+		TorrentSource source2 = new TorrentSource((short) 2, "type", "name2", "location2");
+		TorrentSource source3 = new TorrentSource((short) 3, "type", "name3", "location3");
 
 		List<TorrentSource> torrentSourceList = new LinkedList<TorrentSource>();
 		torrentSourceList.add(source1);
@@ -284,13 +285,152 @@ public class TedTests
 	@Test
 	public void ensureNullTorrentListIsError() throws Exception {
 		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
-
 		ted.updateTorrentSources(null);
 
 		List<TorrentSource> sources = ted.getTorrentSources();
 		assertNotNull(sources);
 		assertEquals("Should have 0 elements", 0, sources.size());
-
-
 	}
+
+	@Test
+	public void getTorrentSource() throws InvalidOperation {
+		TorrentSource source = new TorrentSource((short) 0, "RSS", "SRC", "LOC");
+
+		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
+		ted.addTorrentSource(source);
+
+		TorrentSource fetched = ted.getTorrentSource(source.getUid());
+		assertEquals(source, fetched);
+	}
+
+	@Test(expected=InvalidOperation.class)
+	public void ensureGetTorrentSourceThrowsExceptionIfTorrentSourceNotFound()
+		throws InvalidOperation {
+		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
+		ted.getTorrentSource((short) 1);
+	}
+
+	@Test
+	public void addTorrentSource() throws InvalidOperation, TException {
+		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
+
+		TorrentSource source = new TorrentSource((short) 0, "RSS", "NEW_SOURCE", "LOC");
+		ted.addTorrentSource(source);
+
+		List<TorrentSource> fetched = ted.getTorrentSources();
+		assertEquals(1, fetched.size());
+		assertTrue(fetched.contains(source));
+	}
+
+	@Test
+	public void ensureAddTorrentSourceUpdatesSourceUidCacheNextId()
+		throws InvalidOperation, TException {
+		Ted ted = Server.createDefaultTed();
+		TedServiceImpl tedService = new TedServiceImpl(ted, new TestGuide());
+		assertEquals(1, ted.getSourceUidCache().getNextUid());
+		TorrentSource source = new TorrentSource((short) 0, "RSS", "NEW_SOURCE", "LOC");
+		tedService.addTorrentSource(source);
+		assertEquals(2, ted.getSourceUidCache().getNextUid());
+	}
+
+	@Test
+	public void addTorrentSourceThrowsExceptionIfSourceExistsWithSameName()
+		throws InvalidOperation, TException {
+		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
+
+		String expectedName = "TEST_SOURCE";
+		TorrentSource existingSource = new TorrentSource((short) 0, "RSS", expectedName, "LOC");
+		ted.addTorrentSource(existingSource);
+
+		try {
+			// Add the source again - expect exception.
+			ted.addTorrentSource(existingSource);
+			fail("Should have thrown exception since source already existed.");
+		}
+		catch (InvalidOperation e) {
+			String expectedException = "Could not add torrent source. A source " +
+				"with the name " + existingSource.getName() + " already exists.";
+			assertEquals(expectedException, e.getMessage());
+		}
+	}
+
+	@Test
+	public void removeTorrentSource() throws InvalidOperation, TException {
+		TorrentSource torrentSource = new TorrentSource((short) 0, "RSS",
+				"TO_REMOVE", "LOC");
+
+		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
+		ted.addTorrentSource(torrentSource);
+
+		ted.removeTorrentSource(torrentSource.getUid());
+
+		List<TorrentSource> fetched = ted.getTorrentSources();
+		assertTrue(fetched.isEmpty());
+	}
+
+	@Test
+	public void removeTorrentSourceThrowsExceptionIfSourceDoesNotExist()
+		throws InvalidOperation, TException {
+		short expectedId = (short) 1;
+		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
+		try {
+			ted.removeTorrentSource(expectedId);
+			fail("Should have thrown exception since source does not exist.");
+		}
+		catch (InvalidOperation e) {
+			String expectedException = "Could not remove torrent source: " +
+					expectedId + ". Source does not exist.";
+			assertEquals(expectedException, e.getMessage());
+		}
+	}
+
+	@Test
+	public void updateTorrentSource() throws InvalidOperation, TException {
+		TorrentSource originalSource = new TorrentSource((short) 0, "RSS", "TEST_SOURCE", "LOC");
+
+		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
+		ted.addTorrentSource(originalSource);
+
+		TorrentSource containsUpdates = new TorrentSource(originalSource.getUid(),
+				"UPDATED_TYPE", "UPDATED_SOURCE", "UPDATED_LOC");
+
+		ted.updateTorrentSource(containsUpdates);
+
+		List<TorrentSource> fetched = ted.getTorrentSources();
+		assertEquals(1, fetched.size());
+		TorrentSource updated = fetched.get(0);
+		assertEquals(containsUpdates.getType(), updated.getType());
+		assertEquals(containsUpdates.getName(), updated.getName());
+		assertEquals(containsUpdates.getLocation(), updated.getLocation());
+	}
+
+	@Test
+	public void updateTorrentSourceThrowsExceptionIfSourceWithOriginalNameExists()
+		throws InvalidOperation, TException {
+		String originalName = "TEST_SOURCE";
+
+		TorrentSource existingSource1 = new TorrentSource((short) 0, "RSS",
+				originalName, "LOC");
+		TorrentSource existingSource2 = new TorrentSource((short) 0, "RSS",
+				originalName + "2", "LOC");
+
+		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
+		ted.addTorrentSource(existingSource1);
+		ted.addTorrentSource(existingSource2);
+
+		TorrentSource updated = new TorrentSource(existingSource2.getUid(),
+				"RSS", originalName, "LOC");
+		try {
+			ted.updateTorrentSource(updated);
+			fail("Should have thrown exception since original name did not exist.");
+		}
+		catch (InvalidOperation e) {
+			String expectedException = "Could not update torrent source: " +
+				updated.getUid() + ". A source with the name " +
+				updated.getName() + " already exists.";
+
+			assertEquals(expectedException, e.getMessage());
+		}
+	}
+
 }

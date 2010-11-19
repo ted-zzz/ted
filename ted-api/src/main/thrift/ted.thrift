@@ -50,9 +50,10 @@ struct Episode
 
 struct TorrentSource
 {
-	1: string		type,	# Unique identifer for type
-	2: string		name,   # Unique name for source
-	3: string		location
+	1: i16			uid		# Unique id for source.
+	2: string		type,	# Unique identifer for type
+	3: string		name,   # Unique name for source
+	4: string		location
 }
 
 # Not currently used, left as idea for how to include custom sources later
@@ -67,7 +68,7 @@ struct Series
 {
 	1: i16			uid,
 	2: string		name,
-	3: TDate			lastCheck,
+	3: TDate		lastCheck,
 
 	4: string		guideName,
 	5: string		guideId,
@@ -101,7 +102,8 @@ struct Ted
 
 	2: TedConfig		config,
 	3: list<Series>		series,
-	4: UidCache	seriesUidCache
+	4: UidCache	seriesUidCache,
+	5: UidCache sourceUidCache
 }
 
 enum ImageType {
@@ -175,4 +177,16 @@ service TedService
 	# --- Commands related to Torrent Sources ---
 	list<TorrentSource> 	getTorrentSources(); # TODO: throw
 	void			updateTorrentSources(1: list<TorrentSource> sources); #throw
+
+	TorrentSource getTorrentSource(1: i16 id)
+		throws (1:InvalidOperation invalidOperation);
+
+	void addTorrentSource(1: TorrentSource source)
+		throws (1:InvalidOperation invalidOperation);
+
+	void removeTorrentSource(1: i16 id)
+		throws (1:InvalidOperation invalidOperation);
+
+	void updateTorrentSource(1: TorrentSource updatedSource)
+		throws (1:InvalidOperation invalidOperation);
 }
