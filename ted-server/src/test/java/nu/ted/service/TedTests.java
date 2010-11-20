@@ -16,6 +16,7 @@ import nu.ted.generated.ImageType;
 import nu.ted.generated.InvalidOperation;
 import nu.ted.generated.Series;
 import nu.ted.generated.SeriesSearchResult;
+import nu.ted.generated.Ted;
 import nu.ted.generated.TorrentSource;
 import nu.ted.guide.TestGuide;
 
@@ -79,6 +80,37 @@ public class TedTests
 
 	}
 
+	@Test
+	public void shouldIncrementSeriesUidCacheNextIdAfterSuccessfulWatch()
+		throws TException, InvalidOperation {
+		Ted defaultTed = Server.createDefaultTed();
+		TedServiceImpl tedService = new TedServiceImpl(defaultTed, new TestGuide());
+		assertEquals(1, defaultTed.getSeriesUidCache().getNextUid());
+		tedService.startWatching("E");
+		assertEquals(2, defaultTed.getSeriesUidCache().getNextUid());
+		List<Series> watched = tedService.getWatching();
+		assertEquals(1, watched.size());
+	}
+
+	@Test
+	public void shouldNotIncrementSeriesUidCacheNextIdAfterUuccessfulWatch()
+		throws TException, InvalidOperation {
+		Ted defaultTed = Server.createDefaultTed();
+		TedServiceImpl tedService = new TedServiceImpl(defaultTed, new TestGuide());
+		assertEquals(1, defaultTed.getSeriesUidCache().getNextUid());
+		tedService.startWatching("E");
+		assertEquals(2, defaultTed.getSeriesUidCache().getNextUid());
+		try {
+			tedService.startWatching("E");
+			fail("Should have thrown exception. Duplicate.");
+		}
+		catch (InvalidOperation e) {
+			// expected.
+		}
+		assertEquals(2, defaultTed.getSeriesUidCache().getNextUid());
+		List<Series> watched = tedService.getWatching();
+		assertEquals(1, watched.size());
+	}
 
 	@Test
 	public void shouldBeAbleToStopWatchingAShowYourWatching() throws TException, InvalidOperation {
@@ -145,7 +177,7 @@ public class TedTests
 		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
 
 		Calendar calendar = Calendar.getInstance();
-		calendar.add(Calendar.MINUTE, -1);
+		calendar.add(Calendar.MINUTE, -10);
 		TDate lastCheck = new TDate(calendar.getTimeInMillis());
 
 		List<Event> initialEvents = ted.getEvents(lastCheck);
@@ -182,7 +214,6 @@ public class TedTests
 
 		ted.stopWatching(id);
 
-//		lastCheck = new TDate(calendar.getTimeInMillis());
 		List<Event> events = ted.getEvents(lastCheck);
 
 		// Remove the initial events as the Event Registry is a static

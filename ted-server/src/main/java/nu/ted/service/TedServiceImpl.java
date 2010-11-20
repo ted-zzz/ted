@@ -54,8 +54,6 @@ public class TedServiceImpl implements Iface
 		}
 	}
 
-	static short nextUID = 1; // TODO: static across restarts
-
 	public TedServiceImpl(Ted ted, GuideDB seriesSource) {
 		this.ted = ted;
 		this.seriesSource = seriesSource;
@@ -88,11 +86,12 @@ public class TedServiceImpl implements Iface
 	@Override
 	public short startWatching(String guideId) throws InvalidOperation, TException
 	{
+		short nextUid = ted.getSeriesUidCache().getNextUid();
 		Series s;
 		try {
 			Calendar startDate = Calendar.getInstance();
 			startDate.add(Calendar.DAY_OF_YEAR, -14);
-			s = seriesSource.getSeries(guideId, nextUID, startDate);
+			s = seriesSource.getSeries(guideId, nextUid, startDate);
 		} catch (DataSourceException e) {
 			throw new TException(e);
 		}
@@ -106,7 +105,8 @@ public class TedServiceImpl implements Iface
 			}
 
 		}
-		nextUID++;
+
+		ted.getSeriesUidCache().setNextUid(++nextUid);
 		ted.getSeries().add(s);
 		registerEvent(EventFactory.createWatchedSeriesAddedEvent(s));
 		return s.getUid();

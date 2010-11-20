@@ -90,12 +90,18 @@ struct TedConfig
 	5: string		savePath,
 }
 
+struct UidCache
+{
+	1: i16	nextUid = 1;
+}
+
 struct Ted
 {
 	1: i32				version = PROTOCOL_VERSION,
 
 	2: TedConfig		config,
-	3: list<Series>		series
+	3: list<Series>		series,
+	4: UidCache	seriesUidCache
 }
 
 enum ImageType {

@@ -21,6 +21,7 @@ import nu.ted.generated.Ted;
 import nu.ted.generated.TedConfig;
 import nu.ted.generated.TedService;
 import nu.ted.generated.TorrentSource;
+import nu.ted.generated.UidCache;
 import nu.ted.guide.DataTransferException;
 import nu.ted.guide.GuideDB;
 import nu.ted.guide.GuideFactory;
@@ -139,6 +140,7 @@ public class Server {
 		// TODO: will probably want to create some default TorrentSources around here or in TedConfig()
 		ted.setConfig(config);
 		ted.setSeries(new LinkedList<Series>());
+		ted.setSeriesUidCache(new UidCache());
 		return ted;
 	}
 
