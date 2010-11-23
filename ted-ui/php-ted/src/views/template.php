@@ -7,6 +7,7 @@
 	<body>
 		<div id="container">
 			<?php include 'site_header.php'; ?>
+			<?php include_once 'navigation_bar.php';?>
 			<div id="page_content">
 				<div id="page_title"><?php echo $view_title; ?></div>
 				<?php include $content; ?>
