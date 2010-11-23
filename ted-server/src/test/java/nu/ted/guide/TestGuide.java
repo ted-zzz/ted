@@ -5,7 +5,7 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
-import nu.ted.DataSourceException;
+import nu.ted.DataRetrievalException;
 import nu.ted.generated.TDate;
 import nu.ted.generated.Episode;
 import nu.ted.generated.ImageFile;
@@ -53,7 +53,7 @@ public class TestGuide implements GuideDB
 	}
 
 	@Override
-	public String getName(String guideId) throws DataSourceException {
+	public String getName(String guideId) throws DataRetrievalException {
 		if (guideId.equals("E")) {
 			return "Exactly";
 		}
@@ -61,13 +61,13 @@ public class TestGuide implements GuideDB
 	}
 
 	@Override
-	public String getOverview(String guideId) throws DataSourceException {
+	public String getOverview(String guideId) throws DataRetrievalException {
 		return "An Overview";
 	}
 
 	@Override
 	public List<Episode> getAiredEpisodesBetween(String guideId,
-			TDate after, TDate before) throws DataSourceException {
+			TDate after, TDate before) throws DataRetrievalException {
 
 		List<Episode> episodes = new LinkedList<Episode>();
 		episodes.add(new Episode(LAST_EPISODE_SEASON, (short) (LAST_EPISODE_NUMBER + 1),
@@ -76,7 +76,7 @@ public class TestGuide implements GuideDB
 	}
 
 	@Override
-	public Series getSeries(String guideId, short id, Calendar date) throws DataSourceException {
+	public Series getSeries(String guideId, short id, Calendar date) throws DataRetrievalException {
 		if (guideId.equals("E")) {
 			return new Series(id, "Exactly", new TDate(date.getTimeInMillis()),
 					getName(), guideId, new LinkedList<Episode>());

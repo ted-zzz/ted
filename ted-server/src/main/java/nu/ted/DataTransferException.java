@@ -4,7 +4,7 @@ package nu.ted;
  * Due to some network or unforeseen error, your data isn't there.
  *
  */
-public class DataTransferException extends DataSourceException {
+public class DataTransferException extends DataRetrievalException {
 
 	private static final long serialVersionUID = 1L;
 

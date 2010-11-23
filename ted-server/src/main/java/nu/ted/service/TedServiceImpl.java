@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.apache.thrift.TException;
 
-import nu.ted.DataSourceException;
+import nu.ted.DataRetrievalException;
 import nu.ted.client.Client;
 import nu.ted.client.ClientIdGenerator;
 import nu.ted.domain.SeriesBackendWrapper;
@@ -69,7 +69,7 @@ public class TedServiceImpl implements Iface
 	{
 		try {
 			return seriesSource.search(name);
-		} catch (DataSourceException e) {
+		} catch (DataRetrievalException e) {
 			// TODO: how does this work? Client won't know about cause classes? (more examples below)
 			// TODO: need to define an exception in the thrift for these I think.
 			throw new TException(e);
@@ -92,7 +92,7 @@ public class TedServiceImpl implements Iface
 			Calendar startDate = Calendar.getInstance();
 			startDate.add(Calendar.DAY_OF_YEAR, -14);
 			s = seriesSource.getSeries(guideId, nextUid, startDate);
-		} catch (DataSourceException e) {
+		} catch (DataRetrievalException e) {
 			throw new TException(e);
 		}
 
@@ -129,7 +129,7 @@ public class TedServiceImpl implements Iface
 	{
 		try {
 			return seriesSource.getImage(guideId, type);
-		} catch (DataSourceException e) {
+		} catch (DataRetrievalException e) {
 			throw new TException(e);
 		}
 	}
@@ -144,7 +144,7 @@ public class TedServiceImpl implements Iface
 
 		try {
 			return seriesSource.getImage(series.getGuideId(), type);
-		} catch (DataSourceException e) {
+		} catch (DataRetrievalException e) {
 			throw new TException(e);
 		}
 	}
@@ -154,7 +154,7 @@ public class TedServiceImpl implements Iface
 	public String getOverview(String searchUID) throws TException {
 		try {
 			return seriesSource.getOverview(searchUID);
-		} catch (DataSourceException e) {
+		} catch (DataRetrievalException e) {
 			throw new TException(e);
 		}
 	}

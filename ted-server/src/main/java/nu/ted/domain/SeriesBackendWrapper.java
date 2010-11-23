@@ -5,7 +5,7 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
-import nu.ted.DataSourceException;
+import nu.ted.DataRetrievalException;
 import nu.ted.event.EventFactory;
 import nu.ted.generated.TDate;
 import nu.ted.generated.Episode;
@@ -68,7 +68,7 @@ public class SeriesBackendWrapper
 				TedServiceImpl.registerEvent(EventFactory.createEpisodeAddedEvent(series, e));
 			}
 			series.setLastCheck(before);
-		} catch (DataSourceException e1) {
+		} catch (DataRetrievalException e1) {
 			// TODO: log or rethrow?
 		}
 		return foundNew;

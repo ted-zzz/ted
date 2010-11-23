@@ -5,7 +5,7 @@ package nu.ted;
  * Your data is missing, perhaps it doesn't exist on the record.
  *
  */
-public class DataUnavailableException extends DataSourceException
+public class DataUnavailableException extends DataRetrievalException
 {
 	private static final long serialVersionUID = 1L;
 

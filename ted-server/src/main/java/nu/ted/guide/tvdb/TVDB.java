@@ -4,7 +4,7 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
-import nu.ted.DataSourceException;
+import nu.ted.DataRetrievalException;
 import nu.ted.generated.TDate;
 import nu.ted.generated.Episode;
 import nu.ted.generated.ImageFile;
@@ -33,26 +33,26 @@ public class TVDB implements GuideDB
 	}
 
 	@Override
-	public ImageFile getImage(String guideId, ImageType type) throws DataSourceException
+	public ImageFile getImage(String guideId, ImageType type) throws DataRetrievalException
 	{
 		return dataSource.getImage(guideId, type);
 	}
 
 	@Override
-	public List<SeriesSearchResult> search(String name) throws DataSourceException
+	public List<SeriesSearchResult> search(String name) throws DataRetrievalException
 	{
 		return dataSource.search(name);
 	}
 
 	@Override
-	public String getOverview(String guideId) throws DataSourceException {
+	public String getOverview(String guideId) throws DataRetrievalException {
 		FullSeriesRecord series = dataSource.getFullSeriesRecord(guideId);
 		return series.getOverview();
 	}
 
 	@Override
 	public List<Episode> getAiredEpisodesBetween(String guideId, TDate after,
-			TDate before) throws DataSourceException {
+			TDate before) throws DataRetrievalException {
 		FullSeriesRecord series = dataSource.getFullSeriesRecord(guideId);
 		List<Episode> newOnes = new LinkedList<Episode>();
 
@@ -65,7 +65,7 @@ public class TVDB implements GuideDB
 	}
 
 	@Override
-	public Series getSeries(String guideId, short id, Calendar date) throws DataSourceException {
+	public Series getSeries(String guideId, short id, Calendar date) throws DataRetrievalException {
 		FullSeriesRecord record = dataSource.getFullSeriesRecord(guideId);
 
 		return new Series(id, record.getName(), new TDate(date.getTimeInMillis()),
@@ -73,7 +73,7 @@ public class TVDB implements GuideDB
 	}
 
 	@Override
-	public String getName(String guideId) throws DataSourceException {
+	public String getName(String guideId) throws DataRetrievalException {
 		return dataSource.getFullSeriesRecord(guideId).getName();
 	}
 }

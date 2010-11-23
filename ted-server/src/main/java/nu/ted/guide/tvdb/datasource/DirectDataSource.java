@@ -5,7 +5,7 @@ import java.net.URLEncoder;
 import java.util.LinkedList;
 import java.util.List;
 
-import nu.ted.DataSourceException;
+import nu.ted.DataRetrievalException;
 import nu.ted.DataTransferException;
 import nu.ted.DataUnavailableException;
 import nu.ted.generated.ImageFile;
@@ -30,7 +30,7 @@ public class DirectDataSource implements DataSource {
 					+ "/mirrors.xml"));
 		} catch (NoMirrorException e) {
 			throw new DataTransferException(e);
-		} catch (DataSourceException e) {
+		} catch (DataRetrievalException e) {
 			throw new DataTransferException(e);
 		}
 		
@@ -43,7 +43,7 @@ public class DirectDataSource implements DataSource {
 	// This is slow, which is why the Direct Data Source should be wrapped.
 	@Override
 	public FullSeriesRecord getFullSeriesRecord(String guideId)
-			throws DataSourceException {
+			throws DataRetrievalException {
 
 		// TODO: look at what if you guideID is invalid
 		// we should be sending a DataUnavailableException in that case.
@@ -56,7 +56,7 @@ public class DirectDataSource implements DataSource {
 	}
 
 	@Override
-	public List<SeriesSearchResult> search(String name) throws DataSourceException
+	public List<SeriesSearchResult> search(String name) throws DataRetrievalException
 	{
 		String nameEncoded;
 		String location;
@@ -82,13 +82,13 @@ public class DirectDataSource implements DataSource {
 
 	@Override
 	public ImageFile getImage(String guideId, ImageType type)
-			throws DataSourceException {
+			throws DataRetrievalException {
 		String location = getImageLocation(guideId, type);
 		return loader.createImageFile(location);
 	}
 
 	private String getImageLocation(String guideId, ImageType type)
-			throws DataSourceException {
+			throws DataRetrievalException {
 
 		String base;
 		try {
@@ -106,7 +106,7 @@ public class DirectDataSource implements DataSource {
 	}
 
 	private String getBannerLocation(String guideId)
-			throws DataSourceException {
+			throws DataRetrievalException {
 		FullSeriesRecord record = getFullSeriesRecord(guideId);
 		String banner = record.getBanner();
 		if (banner == null || banner.isEmpty()) {

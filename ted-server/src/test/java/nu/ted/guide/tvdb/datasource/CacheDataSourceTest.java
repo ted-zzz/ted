@@ -9,7 +9,7 @@ import java.util.Queue;
 
 import org.junit.Test;
 
-import nu.ted.DataSourceException;
+import nu.ted.DataRetrievalException;
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.ImageType;
 import nu.ted.generated.SeriesSearchResult;
@@ -38,26 +38,26 @@ public class CacheDataSourceTest {
 
 		@Override
 		public FullSeriesRecord getFullSeriesRecord(String id)
-				throws DataSourceException {
+				throws DataRetrievalException {
 			return records.poll();
 		}
 
 		@Override
 		public ImageFile getImage(String guideId, ImageType type)
-				throws DataSourceException {
+				throws DataRetrievalException {
 			return images.poll();
 		}
 
 		@Override
 		public List<SeriesSearchResult> search(String name)
-				throws DataSourceException {
+				throws DataRetrievalException {
 			throw new UnsupportedOperationException();
 		}
 
 	}
 
 	@Test
-	public void shouldAlwaysReturnFirst() throws DataSourceException {
+	public void shouldAlwaysReturnFirst() throws DataRetrievalException {
 		// Note: doing instance testing here, but it's easier than
 		// generating the objects. There's no reason why the CDS
 		// has to return the exact same object though.
@@ -80,7 +80,7 @@ public class CacheDataSourceTest {
 	}
 
 	@Test
-	public void shouldReturnCorrectRecordForId() throws DataSourceException {
+	public void shouldReturnCorrectRecordForId() throws DataRetrievalException {
 		List<FullSeriesRecord> records = new LinkedList<FullSeriesRecord>();
 
 		FullSeriesRecord one = new FullSeriesRecord();
@@ -100,7 +100,7 @@ public class CacheDataSourceTest {
 	}
 
 	@Test
-	public void shouldBeAbleToRemoveInvalidRecordsFromCache() throws DataSourceException {
+	public void shouldBeAbleToRemoveInvalidRecordsFromCache() throws DataRetrievalException {
 		List<FullSeriesRecord> records = new LinkedList<FullSeriesRecord>();
 
 		FullSeriesRecord one = new FullSeriesRecord();
@@ -121,7 +121,7 @@ public class CacheDataSourceTest {
 	}
 
 	@Test
-	public void shouldReturnCachedImages() throws DataSourceException {
+	public void shouldReturnCachedImages() throws DataRetrievalException {
 		List<ImageFile> images = new LinkedList<ImageFile>();
 		images.add(new ImageFile("Num1", ByteBuffer.wrap("abc".getBytes())));
 		images.add(new ImageFile("Num2", ByteBuffer.wrap("abc".getBytes())));
@@ -137,7 +137,7 @@ public class CacheDataSourceTest {
 	}
 
 	@Test
-	public void shouldReturnOnlyOnExactSameImage() throws DataSourceException {
+	public void shouldReturnOnlyOnExactSameImage() throws DataRetrievalException {
 		List<ImageFile> images = new LinkedList<ImageFile>();
 		images.add(new ImageFile("Num1", ByteBuffer.wrap("abc".getBytes())));
 		images.add(new ImageFile("Num2", ByteBuffer.wrap("abc".getBytes())));
@@ -160,7 +160,7 @@ public class CacheDataSourceTest {
 
 	// Don't remove the images as they're not critical to operation.
 	@Test
-	public void removeShouldLeaveImagesAlone() throws DataSourceException {
+	public void removeShouldLeaveImagesAlone() throws DataRetrievalException {
 		List<ImageFile> images = new LinkedList<ImageFile>();
 		images.add(new ImageFile("Num1", ByteBuffer.wrap("abc".getBytes())));
 		images.add(new ImageFile("Num2", ByteBuffer.wrap("abc".getBytes())));

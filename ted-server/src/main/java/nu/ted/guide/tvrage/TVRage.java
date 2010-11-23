@@ -10,7 +10,7 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
-import nu.ted.DataSourceException;
+import nu.ted.DataRetrievalException;
 import nu.ted.generated.TDate;
 import nu.ted.generated.Episode;
 import nu.ted.generated.ImageFile;
@@ -29,7 +29,7 @@ public class TVRage implements GuideDB {
 	}
 
 	@Override
-	public Series getSeries(String guideId, short id, Calendar date) throws DataSourceException {
+	public Series getSeries(String guideId, short id, Calendar date) throws DataRetrievalException {
 		throw new UnsupportedOperationException("Not yet implemented");
 		// TODO Auto-generated method stub
 	}
@@ -42,7 +42,7 @@ public class TVRage implements GuideDB {
 	}
 
 	@Override
-	public String getName(String searchId) throws DataSourceException {
+	public String getName(String searchId) throws DataRetrievalException {
 		throw new UnsupportedOperationException("Not yet implemented");
 		// TODO Auto-generated method stub
 	}
@@ -81,14 +81,14 @@ public class TVRage implements GuideDB {
 	}
 
 	@Override
-	public String getOverview(String guideId) throws DataSourceException {
+	public String getOverview(String guideId) throws DataRetrievalException {
 		// TODO Implement me.
 		throw new UnsupportedOperationException("Not yet implemented");
 	}
 
 	@Override
 	public List<Episode> getAiredEpisodesBetween(String guideId,
-			TDate after, TDate before) throws DataSourceException {
+			TDate after, TDate before) throws DataRetrievalException {
 		throw new UnsupportedOperationException("Not yet implemented");
 	}
 

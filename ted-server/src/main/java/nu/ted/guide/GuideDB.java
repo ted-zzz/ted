@@ -3,7 +3,7 @@ package nu.ted.guide;
 import java.util.Calendar;
 import java.util.List;
 
-import nu.ted.DataSourceException;
+import nu.ted.DataRetrievalException;
 import nu.ted.generated.TDate;
 import nu.ted.generated.Episode;
 import nu.ted.generated.ImageFile;
@@ -16,17 +16,17 @@ public interface GuideDB
 	// Get the name for this guide.
 	String getName();
 
-	List<SeriesSearchResult> search(String name) throws DataSourceException;
+	List<SeriesSearchResult> search(String name) throws DataRetrievalException;
 
-	Series getSeries(String guideId, short id, Calendar date) throws DataSourceException;
+	Series getSeries(String guideId, short id, Calendar date) throws DataRetrievalException;
 
-	String getName(String guideId) throws DataSourceException;
+	String getName(String guideId) throws DataRetrievalException;
 
-	String getOverview(String guideId) throws DataSourceException;
+	String getOverview(String guideId) throws DataRetrievalException;
 
-	ImageFile getImage(String guideId, ImageType type) throws DataSourceException;
+	ImageFile getImage(String guideId, ImageType type) throws DataRetrievalException;
 
 	List<Episode> getAiredEpisodesBetween(String guideId, TDate after,
-			TDate before) throws DataSourceException;
+			TDate before) throws DataRetrievalException;
 
 }

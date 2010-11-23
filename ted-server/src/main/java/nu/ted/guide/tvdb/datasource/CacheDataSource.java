@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import nu.ted.DataSourceException;
+import nu.ted.DataRetrievalException;
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.ImageType;
 import nu.ted.generated.SeriesSearchResult;
@@ -28,7 +28,7 @@ public class CacheDataSource implements DataSource {
 
 	@Override
 	public FullSeriesRecord getFullSeriesRecord(String id)
-			throws DataSourceException {
+			throws DataRetrievalException {
 		if (!recordCache.containsKey(id)) {
 			recordCache.put(id, source.getFullSeriesRecord(id));
 		}
@@ -37,7 +37,7 @@ public class CacheDataSource implements DataSource {
 
 	@Override
 	public ImageFile getImage(String guideId, ImageType type)
-			throws DataSourceException {
+			throws DataRetrievalException {
 		Map<String, ImageFile> cache;
 		if (type == ImageType.BANNER)
 			cache = bannerCache;
@@ -54,7 +54,7 @@ public class CacheDataSource implements DataSource {
 
 	@Override
 	public List<SeriesSearchResult> search(String name)
-			throws DataSourceException {
+			throws DataRetrievalException {
 
 		return source.search(name);
 	}
