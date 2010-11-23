@@ -73,7 +73,11 @@ class Searcher implements Runnable {
 					TorrentSourceType torrentSourceType =
 						TorrentSourceIndex.getTorrentSourceType(source);
 
-					torrents.addAll(torrentSourceType.search(searchTerms));
+					try {
+						torrents.addAll(torrentSourceType.search(searchTerms));
+					} catch (DataRetrievalException e) {
+						logger.warn("Unable to retrieve torrents from {}", source.getLocation(), e);
+					}
 				}
 
 				if (torrents.isEmpty()) {

@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import nu.ted.DataRetrievalException;
 import nu.ted.torrent.TorrentRef;
 import nu.ted.torrent.search.Rss.RomeRssSource;
 import nu.ted.torrent.search.Rss.RssSource;
@@ -35,7 +36,7 @@ public class RssTest {
 	}
 
 	@Test
-	public void ensureSimpleSearchReturnsResult() {
+	public void ensureSimpleSearchReturnsResult() throws DataRetrievalException {
 		TestRssSource testRssSource = new TestRssSource();
 		List<TorrentRef> torrents = new LinkedList<TorrentRef>();
 		torrents.add(new TorrentRef("A-name1", "A-link1", 100));
@@ -55,7 +56,7 @@ public class RssTest {
 	}
 
 	@Test
-	public void ensureSearchEpisodeWorks() {
+	public void ensureSearchEpisodeWorks() throws DataRetrievalException {
 		TestRssSource testRssSource = new TestRssSource();
 		List<TorrentRef> torrents = new LinkedList<TorrentRef>();
 		torrents.add(new TorrentRef("Show That Matches S01E01", "link1", 100));
@@ -95,7 +96,7 @@ public class RssTest {
 
 	// Set location and a breakpoint to test Rome's processing.
 	// Could have RomeRssSouce() take an input stream for testing.
-	public void manualRomeDebug() {
+	public void manualRomeDebug() throws DataRetrievalException {
 		String location = "set location here";
 		RomeRssSource source = new RomeRssSource(location);
 		source.getTorrents();

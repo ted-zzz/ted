@@ -12,7 +12,7 @@ import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.SyndFeedInput;
 
-import nu.ted.DataTransferException;
+import nu.ted.DataRetrievalException;
 import nu.ted.generated.TorrentSource;
 import nu.ted.torrent.TorrentRef;
 import nu.ted.www.DirectPageLoader;
@@ -36,7 +36,7 @@ public class Rss implements TorrentSourceType {
 	}
 
 	public static interface RssSource {
-		public List<TorrentRef> getTorrents();
+		public List<TorrentRef> getTorrents() throws DataRetrievalException;
 		public String getLocation();
 	}
 
@@ -50,7 +50,7 @@ public class Rss implements TorrentSourceType {
 
 
 		@Override
-		public List<TorrentRef> getTorrents() {
+		public List<TorrentRef> getTorrents() throws DataRetrievalException {
 			List<TorrentRef> results = new LinkedList<TorrentRef>();
 
 			try {
@@ -70,15 +70,10 @@ public class Rss implements TorrentSourceType {
 						}
 					}
 				}
-			} catch (DataTransferException e) {
-				// TODO: log error - probably ignore
-				throw new RuntimeException("Unhandled DTE", e);
 			} catch (IllegalArgumentException e) {
-				// TODO: log error - probably ignore
-				throw new RuntimeException("Unhandled IAE", e);
+				throw new DataRetrievalException(e);
 			} catch (FeedException e) {
-				// TODO: log error - probably ignore
-				throw new RuntimeException("Unhandled FE", e);
+				throw new DataRetrievalException(e);
 			}
 
 			return results;
@@ -111,7 +106,8 @@ public class Rss implements TorrentSourceType {
 		return true;
 	}
 
-	public List<TorrentRef> search(List<String> terms) {
+	@Override
+	public List<TorrentRef> search(List<String> terms) throws DataRetrievalException {
 		List<TorrentRef> torrents = source.getTorrents();
 		List<TorrentRef> results = new LinkedList<TorrentRef>();
 

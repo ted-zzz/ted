@@ -38,6 +38,25 @@ public class SearcherTest {
 		}
 
 	}
+	public static class TestTorrentSourceWithException extends TestTorrentSource {
+
+		@Override
+		public String getName() {
+			return "testTorrentSourceTypeWithException";
+		}
+
+		@Override
+		public String getLocation() {
+			throw new UnsupportedOperationException("Not Yet Implemented");
+		}
+
+		@Override
+		public List<TorrentRef> search(List<String> terms)
+				throws DataRetrievalException {
+			throw new DataRetrievalException("expected");
+		}
+
+	}
 	public static class TestTorrentSource implements TorrentSourceType {
 
 		List<List<String>> searches = new LinkedList<List<String>>();
@@ -48,7 +67,7 @@ public class SearcherTest {
 		}
 
 		@Override
-		public List<TorrentRef> search(List<String> terms) {
+		public List<TorrentRef> search(List<String> terms) throws DataRetrievalException {
 			searches.add(terms);
 			return new LinkedList<TorrentRef>();
 		}
@@ -69,16 +88,22 @@ public class SearcherTest {
 	}
 
 	/* Not a huge fan of how this currently works. Because the factories are global
-	 * the test needs to be wrapped to make sure it is properly cleand up.
+	 * the test needs to be wrapped to make sure it is properly cleaned up.
 	 */
 	public void ensureHasMissingFindsMissingsEpsidoes() throws Exception {
 		TestTorrentSource testTorrentSource = new TestTorrentSource();
+		TestTorrentSource testTorrentSourceWithE = new TestTorrentSourceWithException();
 
 		TorrentSourceIndex.registerFactory(testTorrentSource.getName(), new TestTorrentSourceFactory(
 				testTorrentSource));
+		TorrentSourceIndex.registerFactory(testTorrentSourceWithE.getName(), new TestTorrentSourceFactory(
+				testTorrentSourceWithE));
 
 		TorrentSource torrentSource = new TorrentSource(testTorrentSource.getName(), "freetv", "freetv.invalid");
+		TorrentSource torrentSourceWithE = new TorrentSource(testTorrentSourceWithE.getName(), "BAD", "BAD.invalid");
 		List<TorrentSource> sources = new LinkedList<TorrentSource>();
+
+		sources.add(torrentSourceWithE);
 		sources.add(torrentSource);
 
 		Episode s1e2 = new Episode((short) 1, (short) 2, new TDate(12345));
