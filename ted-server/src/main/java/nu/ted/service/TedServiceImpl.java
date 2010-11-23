@@ -194,6 +194,10 @@ public class TedServiceImpl implements Iface
 		eventRegistry.addEvent(event);
 	}
 
+	public static void clearRegistryEvents() {
+		eventRegistry.clear();
+	}
+
 	@Override
 	public List<TorrentSource> getTorrentSources() throws TException {
 		return Collections.unmodifiableList(ted.getConfig().getTorrentSources());

@@ -77,4 +77,13 @@ public class EventRegistry {
 		}
 	}
 
+	/**
+	 * Force cleanup of event registry.
+	 */
+	public void clear() {
+		synchronized (events) {
+			events.clear();
+		}
+	}
+
 }

@@ -181,15 +181,10 @@ public class TedTests
 		calendar.add(Calendar.SECOND, -1);
 		TDate lastCheck = new TDate(calendar.getTimeInMillis());
 
-		List<Event> initialEvents = ted.getEvents(lastCheck);
+		TedServiceImpl.clearRegistryEvents();
 
 		ted.startWatching("E");
 		List<Event> events = ted.getEvents(lastCheck);
-
-		// Remove the initial events as the Event Registry is a static
-		// instance in the service.
-		events.removeAll(initialEvents);
-
 		assertEquals(1, events.size());
 		assertEquals(EventType.WATCHED_SERIES_ADDED, events.get(0).getType());
 	}
@@ -208,18 +203,14 @@ public class TedTests
 		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
 		short id = ted.startWatching("E");
 
-		Calendar calendar = Calendar.getInstance();
-		calendar.add(Calendar.MINUTE, -1);
-		TDate lastCheck = new TDate(calendar.getTimeInMillis());
-		List<Event> initialEvents = ted.getEvents(lastCheck);
+		TedServiceImpl.clearRegistryEvents();
 
 		ted.stopWatching(id);
 
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.MINUTE, -1);
+		TDate lastCheck = new TDate(calendar.getTimeInMillis());
 		List<Event> events = ted.getEvents(lastCheck);
-
-		// Remove the initial events as the Event Registry is a static
-		// instance in the service.
-		events.removeAll(initialEvents);
 
 		assertEquals(1, events.size());
 		assertEquals(EventType.WATCHED_SERIES_REMOVED, events.get(0).getType());

@@ -34,16 +34,14 @@ public class SeriesBackendWrapperTest {
 		GuideFactory.addGuide(seriesSource);
 		TedServiceImpl service = new TedServiceImpl(Server.createDefaultTed(), seriesSource);
 
-		List<Event> current = service.getEvents(lastPoll);
-		
+		TedServiceImpl.clearRegistryEvents();
+
 		Series series = new Series();
 		series.setGuideName(seriesSource.getName());
 		SeriesBackendWrapper wrapper = new SeriesBackendWrapper(series);
 		wrapper.update(Calendar.getInstance());
-		
+
 		List<Event> events = service.getEvents(lastPoll);
-		// Clear out events that existed before add (static registry).
-		events.removeAll(current);
 		assertEquals(1, events.size());
 
 		Event received = events.get(0);
