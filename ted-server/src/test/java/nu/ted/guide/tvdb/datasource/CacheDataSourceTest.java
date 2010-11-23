@@ -9,10 +9,10 @@ import java.util.Queue;
 
 import org.junit.Test;
 
+import nu.ted.DataSourceException;
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.ImageType;
 import nu.ted.generated.SeriesSearchResult;
-import nu.ted.guide.DataSourceException;
 import nu.ted.guide.tvdb.FullSeriesRecord;
 
 public class CacheDataSourceTest {

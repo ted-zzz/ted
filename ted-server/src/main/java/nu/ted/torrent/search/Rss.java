@@ -12,8 +12,8 @@ import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.SyndFeedInput;
 
+import nu.ted.DataTransferException;
 import nu.ted.generated.TorrentSource;
-import nu.ted.guide.DataTransferException;
 import nu.ted.torrent.TorrentRef;
 import nu.ted.www.DirectPageLoader;
 import nu.ted.www.PageLoader;

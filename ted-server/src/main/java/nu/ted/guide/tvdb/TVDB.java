@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
+import nu.ted.DataSourceException;
 import nu.ted.generated.TDate;
 import nu.ted.generated.Episode;
 import nu.ted.generated.ImageFile;
@@ -12,7 +13,6 @@ import nu.ted.generated.Series;
 import nu.ted.generated.SeriesSearchResult;
 import nu.ted.guide.tvdb.datasource.DataSource;
 
-import nu.ted.guide.DataSourceException;
 import nu.ted.guide.GuideDB;
 
 public class TVDB implements GuideDB

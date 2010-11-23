@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.thrift.TException;
 
+import nu.ted.DataSourceException;
 import nu.ted.client.Client;
 import nu.ted.client.ClientIdGenerator;
 import nu.ted.domain.SeriesBackendWrapper;
@@ -23,7 +24,6 @@ import nu.ted.generated.SeriesSearchResult;
 import nu.ted.generated.Ted;
 import nu.ted.generated.TedService.Iface;
 import nu.ted.generated.TorrentSource;
-import nu.ted.guide.DataSourceException;
 import nu.ted.guide.GuideDB;
 
 public class TedServiceImpl implements Iface

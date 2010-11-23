@@ -22,7 +22,6 @@ import nu.ted.generated.EpisodeStatus;
 import nu.ted.generated.Series;
 import nu.ted.generated.Ted;
 import nu.ted.generated.TorrentSource;
-import nu.ted.guide.DataTransferException;
 import nu.ted.torrent.TorrentRef;
 import nu.ted.torrent.search.TorrentSourceIndex;
 import nu.ted.torrent.search.TorrentSourceType;

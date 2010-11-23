@@ -2,8 +2,8 @@ package nu.ted.www;
 
 import java.io.InputStream;
 
+import nu.ted.DataTransferException;
 import nu.ted.generated.ImageFile;
-import nu.ted.guide.DataTransferException;
 
 public interface PageLoader {
 	

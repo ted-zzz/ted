@@ -3,6 +3,7 @@ package nu.ted.guide;
 import java.util.Calendar;
 import java.util.List;
 
+import nu.ted.DataSourceException;
 import nu.ted.generated.TDate;
 import nu.ted.generated.Episode;
 import nu.ted.generated.ImageFile;

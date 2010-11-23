@@ -1,4 +1,4 @@
-package nu.ted.guide;
+package nu.ted;
 
 /**
  * Base exception that the datasource might throw.

@@ -22,7 +22,6 @@ import nu.ted.generated.TedConfig;
 import nu.ted.generated.TedService;
 import nu.ted.generated.TorrentSource;
 import nu.ted.generated.UidCache;
-import nu.ted.guide.DataTransferException;
 import nu.ted.guide.GuideDB;
 import nu.ted.guide.GuideFactory;
 import nu.ted.guide.tvdb.TVDB;

@@ -1,4 +1,4 @@
-package nu.ted.guide;
+package nu.ted;
 
 /**
  * Due to some network or unforeseen error, your data isn't there.

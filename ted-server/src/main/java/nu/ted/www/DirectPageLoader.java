@@ -9,8 +9,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.ByteBuffer;
 
+import nu.ted.DataTransferException;
 import nu.ted.generated.ImageFile;
-import nu.ted.guide.DataTransferException;
 
 public class DirectPageLoader implements PageLoader {
 

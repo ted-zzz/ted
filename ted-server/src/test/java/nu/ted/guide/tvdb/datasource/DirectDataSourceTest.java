@@ -9,11 +9,11 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import nu.ted.DataTransferException;
+import nu.ted.DataUnavailableException;
 import nu.ted.domain.TestSeriesXml;
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.ImageType;
-import nu.ted.guide.DataTransferException;
-import nu.ted.guide.DataUnavailableException;
 import nu.ted.guide.tvdb.TestMirrorXml;
 import nu.ted.guide.tvdb.datasource.DirectDataSource;
 import nu.ted.guide.tvdb.datasource.Mirrors.Mask;

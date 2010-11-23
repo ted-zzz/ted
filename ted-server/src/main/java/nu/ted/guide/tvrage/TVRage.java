@@ -10,13 +10,13 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
+import nu.ted.DataSourceException;
 import nu.ted.generated.TDate;
 import nu.ted.generated.Episode;
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.ImageType;
 import nu.ted.generated.Series;
 import nu.ted.generated.SeriesSearchResult;
-import nu.ted.guide.DataSourceException;
 import nu.ted.guide.GuideDB;
 import nu.ted.guide.tvrage.SearchResults.TVRageSeries;
 

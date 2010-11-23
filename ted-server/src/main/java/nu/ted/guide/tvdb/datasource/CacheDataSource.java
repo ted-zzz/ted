@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import nu.ted.DataSourceException;
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.ImageType;
 import nu.ted.generated.SeriesSearchResult;
-import nu.ted.guide.DataSourceException;
 import nu.ted.guide.tvdb.FullSeriesRecord;
 
 public class CacheDataSource implements DataSource {

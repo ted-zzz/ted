@@ -5,12 +5,12 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
+import nu.ted.DataSourceException;
 import nu.ted.event.EventFactory;
 import nu.ted.generated.TDate;
 import nu.ted.generated.Episode;
 import nu.ted.generated.EpisodeStatus;
 import nu.ted.generated.Series;
-import nu.ted.guide.DataSourceException;
 import nu.ted.guide.GuideDB;
 import nu.ted.guide.GuideFactory;
 import nu.ted.service.TedServiceImpl;

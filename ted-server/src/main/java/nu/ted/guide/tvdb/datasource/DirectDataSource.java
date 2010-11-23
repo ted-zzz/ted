@@ -5,12 +5,12 @@ import java.net.URLEncoder;
 import java.util.LinkedList;
 import java.util.List;
 
+import nu.ted.DataSourceException;
+import nu.ted.DataTransferException;
+import nu.ted.DataUnavailableException;
 import nu.ted.generated.ImageFile;
 import nu.ted.generated.ImageType;
 import nu.ted.generated.SeriesSearchResult;
-import nu.ted.guide.DataSourceException;
-import nu.ted.guide.DataTransferException;
-import nu.ted.guide.DataUnavailableException;
 import nu.ted.guide.tvdb.FullSeriesRecord;
 import nu.ted.guide.tvdb.SearchResults;
 import nu.ted.guide.tvdb.SearchResults.TVDBSeries;
