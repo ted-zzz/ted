@@ -13,6 +13,38 @@ a {
 	outline-width:0;
 }
 
+
+.ted-form table {
+	border: none;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.ted-form table td {
+	margin-bottom: 2px;
+	padding-left: 4px;
+	padding-right: 4px;
+}
+
+.ted-form-label {
+	background-color: #FF7010;
+	color: white;
+	font-weight: bold;
+	font-size: 14pt;
+}
+
+.ted-form-text-input {
+	font-size: 12pt;
+}
+
+.ted-form-input-error {
+	border: 2px solid #FF7010;
+}
+
+.ted-form-error-message {
+	color: red;
+}
+
 #container {
 	margin: 0px auto;
 	width: 1024px;
@@ -59,7 +91,7 @@ a {
 	float: right;
 	width: 16px;
 	height: 16px;
-	margin-top: 2px;
+	margin-top: 6px;
 	cursor: pointer;
 	background-image: url(../img/zoom.png);
 }
@@ -165,7 +197,8 @@ a {
 }
 
 
-#sources_table, th, td {
+#sources_table th,
+#sources_table td {
 	border: 1px solid #CA570B;
 }
 

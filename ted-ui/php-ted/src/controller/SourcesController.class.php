@@ -21,9 +21,10 @@
 		}
 
 		public function add() {
-			$type = $_POST['type'];
-			$name = $_POST['name'];
-			$location = $_POST['location'];
+			$values = $this->makeSafe($_POST);
+			$type = $values['type'];
+			$name = $values['name'];
+			$location = $values['location'];
 
 			$newSource = $this->createSource($type, $name, $location);
 			$this->registry->client->addTorrentSource($newSource);
@@ -36,15 +37,65 @@
 		}
 
 		public function update($id) {
-			$type = $_POST['type'];
-			$name = $_POST['name'];
-			$location = $_POST['location'];
+			$values = $this->makeSafe($_POST);
+			$type = $values['type'];
+			$name = $values['name'];
+			$location = $values['location'];
 
 			$source = $this->createSource($type, $name, $location);
 			$source->uid = $id;
 
 			$this->registry->client->updateTorrentSource($source);
 			header('Location: /' . __SITE_ROOT . '/sources');
+		}
+
+		public function validate() {
+			$fields = array();
+			if (!isset($_POST['type']) || $_POST['type'] == "") {
+				array_push($fields, array('is_valid'=>false, 'name'=>'type',
+					'message'=>'Required value'));
+			}
+			// TODO Verify type with ted once multiple exist (there will be multiple).
+			else if ($_POST['type'] != 'RSS') {
+				array_push($fields, array('is_valid'=>false, 'name'=>'type',
+					'message'=>'Invalid type. Supported types: RSS'));
+			}
+			else {
+				array_push($fields, array('is_valid'=>true, 'name'=>'type'));
+			}
+
+			if (!isset($_POST['name']) || $_POST['name'] == "") {
+				array_push($fields, array('is_valid'=>false, 'name'=>'name',
+					'message'=>'Required value'));
+			}
+			else if ($this->registry->client->torrentSourceExists($_POST['name'])) {
+				array_push($fields, array('is_valid'=>false, 'name'=>'name',
+					'message'=>'A source with this name already exists.'));
+			}
+			else {
+				array_push($fields, array('is_valid'=>true, 'name'=>'name'));
+			}
+
+			if (!isset($_POST['location']) || $_POST['location'] == "") {
+				array_push($fields, array('is_valid'=>false, 'name'=>'location',
+					'message'=>'Required value'));
+			}
+			else if (!$this->validateUrl($_POST['location'])) {
+				array_push($fields, array('is_valid'=>false, 'name'=>'location',
+					'message'=>'Invalid location. Must begin with http(s)://'));
+			}
+			else {
+				array_push($fields, array('is_valid'=>true, 'name'=>'location'));
+			}
+
+
+			$is_valid = !$this->fieldDataHasErrors($fields);
+
+			echo json_encode(array('is_valid'=>$is_valid, 'fields'=> $fields));
+		}
+
+		public function sayhi() {
+			json_encode($this->validate());
 		}
 
 		private function createSource($type, $name, $location) {
@@ -61,5 +112,17 @@
 			$this->registry->template->source = $source;
 		}
 
+		private function fieldDataHasErrors($data) {
+			foreach ($data as $fieldDataArray) {
+				if (!$fieldDataArray['is_valid']) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		private function validateUrl($url) {
+			return preg_match('|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i', $url);
+		}
 	}
 ?>
