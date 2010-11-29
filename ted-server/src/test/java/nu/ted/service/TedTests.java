@@ -424,4 +424,17 @@ public class TedTests
 		}
 	}
 
+	@Test
+	public void ensureTorrentSourceExists() throws InvalidOperation, TException {
+		TedServiceImpl ted = new TedServiceImpl(Server.createDefaultTed(), new TestGuide());
+
+		TorrentSource source = new TorrentSource((short) 0, "RSS", "BEST RSS", "LOC");
+		ted.addTorrentSource(source);
+
+		assertTrue("Torrent Source should have existed.",
+				ted.torrentSourceExists("BEST RSS"));
+		assertFalse("Torrent Source should not have existed.",
+				ted.torrentSourceExists("Non-Existant"));
+	}
+
 }

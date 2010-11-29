@@ -273,6 +273,12 @@ public class TedServiceImpl implements Iface
 		config.getTorrentSources().add(originalSourceIdx, updatedSource);
 	}
 
+
+	@Override
+	public boolean torrentSourceExists(String name) throws TException {
+		return !isUniqueTorrentSourceName(name);
+	}
+
 	private int findTorrentSource(short id) {
 		TedConfig config = ted.getConfig();
 		List<TorrentSource> currentSources = config.getTorrentSources();
@@ -295,5 +301,6 @@ public class TedServiceImpl implements Iface
 		}
 		return true;
 	}
+
 
 }

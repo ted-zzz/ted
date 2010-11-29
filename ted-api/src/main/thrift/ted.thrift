@@ -189,4 +189,6 @@ service TedService
 
 	void updateTorrentSource(1: TorrentSource updatedSource)
 		throws (1:InvalidOperation invalidOperation);
+
+	bool torrentSourceExists(1: string name);
 }
