@@ -14,12 +14,13 @@ import nu.ted.generated.Series;
 import nu.ted.guide.GuideDB;
 import nu.ted.guide.GuideFactory;
 import nu.ted.service.TedServiceImpl;
+import nu.ted.torrent.TorrentTitleMatcher;
 
 /**
  * This is a representation of a TV Series.
  *
  */
-public class SeriesBackendWrapper
+public class SeriesBackendWrapper implements TorrentTitleMatcher
 {
 	Series series;
 
@@ -93,11 +94,12 @@ public class SeriesBackendWrapper
 		return episodes;
 	}
 
-
-	/**
-	 * For now just split the terms on space. Could be configurable later.
-	 */
-	public List<String> getSearchTerms() {
-		return Arrays.asList(series.getName().split(" "));
+	@Override
+	public boolean matchTitle(String title) {
+		for (String term : series.getName().split(" ")) {
+			if (!title.contains(term))
+				return false;
+		}
+		return true;
 	}
 }

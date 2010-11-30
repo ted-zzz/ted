@@ -15,6 +15,7 @@ import nu.ted.generated.Ted;
 import nu.ted.generated.TedConfig;
 import nu.ted.generated.TorrentSource;
 import nu.ted.torrent.TorrentRef;
+import nu.ted.torrent.TorrentTitleMatcher;
 import nu.ted.torrent.search.TorrentSourceIndex;
 import nu.ted.torrent.search.TorrentSourceType;
 import nu.ted.torrent.search.TorrentSourceTypeFactory;
@@ -50,8 +51,7 @@ public class SearcherTest {
 			throw new UnsupportedOperationException("Not Yet Implemented");
 		}
 
-		@Override
-		public List<TorrentRef> search(List<String> terms)
+		public List<TorrentRef> search(List<TorrentTitleMatcher> terms)
 				throws DataRetrievalException {
 			throw new DataRetrievalException("expected");
 		}
@@ -59,7 +59,7 @@ public class SearcherTest {
 	}
 	public static class TestTorrentSource implements TorrentSourceType {
 
-		List<List<String>> searches = new LinkedList<List<String>>();
+		int searchesDone = 0;
 
 		@Override
 		public String getName() {
@@ -67,8 +67,8 @@ public class SearcherTest {
 		}
 
 		@Override
-		public List<TorrentRef> search(List<String> terms) throws DataRetrievalException {
-			searches.add(terms);
+		public List<TorrentRef> search(List<TorrentTitleMatcher> terms) throws DataRetrievalException {
+			searchesDone++;
 			return new LinkedList<TorrentRef>();
 		}
 
@@ -142,12 +142,6 @@ public class SearcherTest {
 
 		search.searchForMissingEpisodes();
 
-		assertEquals(2, testTorrentSource.searches.size());
-
-		assertTrue(testTorrentSource.searches.get(0).contains("name"));
-		assertTrue(testTorrentSource.searches.get(0).contains(new EpisodeBackendWrapper(s1e2).getSearchTerms().get(0)));
-
-		assertTrue(testTorrentSource.searches.get(1).contains("name"));
-		assertTrue(testTorrentSource.searches.get(1).contains(new EpisodeBackendWrapper(s1e3).getSearchTerms().get(0)));
+		assertEquals(2, testTorrentSource.searchesDone);
 	}
 }

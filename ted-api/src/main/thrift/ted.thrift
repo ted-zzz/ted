@@ -89,7 +89,14 @@ struct TedConfig
 
 	# Where to save them when found
 	5: string		savePath,
+
+	# Default keywords. Values include:
+	# %S = season  %E = episode (zero extended)
+	# %s = season  %e = episode (non-extended)
+	# (Default: S%SE%E, %sx%e, %sx%E (ex: S01E02, 1x2, 1x02))
+	6: list<string>		episodeKeywords,
 }
+
 
 struct UidCache
 {

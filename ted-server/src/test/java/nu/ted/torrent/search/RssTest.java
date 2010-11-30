@@ -8,6 +8,7 @@ import java.util.List;
 
 import nu.ted.DataRetrievalException;
 import nu.ted.torrent.TorrentRef;
+import nu.ted.torrent.TorrentTitleMatcher;
 import nu.ted.torrent.search.Rss.RomeRssSource;
 import nu.ted.torrent.search.Rss.RssSource;
 
@@ -35,6 +36,21 @@ public class RssTest {
 		}
 	}
 
+	private static class SimpleStringMatcher implements TorrentTitleMatcher {
+
+		String term;
+
+		SimpleStringMatcher(String term) {
+			this.term = term;
+		}
+
+		@Override
+		public boolean matchTitle(String title) {
+			return title.contains(term);
+		}
+
+	}
+
 	@Test
 	public void ensureSimpleSearchReturnsResult() throws DataRetrievalException {
 		TestRssSource testRssSource = new TestRssSource();
@@ -47,51 +63,14 @@ public class RssTest {
 
 		Rss rss = new Rss(testRssSource);
 
-		torrents = rss.search(Arrays.asList("A-name"));
+		List<TorrentTitleMatcher> testMatcher = new LinkedList<TorrentTitleMatcher>();
+		testMatcher.add(new SimpleStringMatcher("A-name"));
+		torrents = rss.search(testMatcher);
 		assertNotNull(torrents);
 		assertEquals(2, torrents.size());
 
 		assertEquals("A-name1" , torrents.get(0).getTitle());
 		assertEquals("A-name2" , torrents.get(1).getTitle());
-	}
-
-	@Test
-	public void ensureSearchEpisodeWorks() throws DataRetrievalException {
-		TestRssSource testRssSource = new TestRssSource();
-		List<TorrentRef> torrents = new LinkedList<TorrentRef>();
-		torrents.add(new TorrentRef("Show That Matches S01E01", "link1", 100));
-		torrents.add(new TorrentRef("Show That Matches S01E02", "link2", 100));
-		torrents.add(new TorrentRef("Show That Matches S01E02", "link3", 100));
-		torrents.add(new TorrentRef("Show No Match S01E01", "link4", 100));
-		torrents.add(new TorrentRef("Show No Match S01E02", "link5", 100));
-		testRssSource.addTorrens(torrents);
-
-		Rss rss = new Rss(testRssSource);
-
-		List<String> searchTerms = new LinkedList<String>();
-		searchTerms.add("Show");
-		searchTerms.add("That");
-		searchTerms.add("Matches");
-		searchTerms.add("S01E02");
-
-		torrents = rss.search(searchTerms);
-
-		assertEquals(2, torrents.size());
-
-		TorrentRef one = torrents.get(0);
-		TorrentRef two = torrents.get(1);
-		if (one.getLink().equals("link2")) {
-			if (!two.getLink().equals("link3")) {
-				fail("Didn't return correct results");
-			}
-		} else if (one.getLink().equals("link3")) {
-			if (!two.getLink().equals("link2")) {
-				fail("Didn't return correct results");
-			}
-		} else {
-			fail("First torrent didn't have either link correct");
-		}
-
 	}
 
 	// Set location and a breakpoint to test Rome's processing.

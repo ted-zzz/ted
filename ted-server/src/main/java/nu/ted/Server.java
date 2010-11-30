@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -135,6 +136,12 @@ public class Server {
 
 		File saveLocation = new File(System.getProperty("user.dir") + "/download/");
 		config.setSavePath(saveLocation.getPath());
+
+		List<String> epKeywords = new LinkedList<String>();
+		epKeywords.add("S%SE%E");
+		epKeywords.add("%sx%E");
+		epKeywords.add("%sx%e");
+		config.setEpisodeKeywords(epKeywords);
 
 		// TODO: will probably want to create some default TorrentSources around here or in TedConfig()
 		ted.setConfig(config);

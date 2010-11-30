@@ -6,27 +6,39 @@ import java.util.LinkedList;
 import java.util.List;
 
 import nu.ted.generated.Episode;
+import nu.ted.torrent.TorrentTitleMatcher;
 
-public class EpisodeBackendWrapper
+public class EpisodeBackendWrapper implements TorrentTitleMatcher
 {
 	Episode episode;
+	List<String> terms;
 
-	public EpisodeBackendWrapper(Episode episode) {
+	public EpisodeBackendWrapper(Episode episode, List<String> defaultTerms) {
+		NumberFormat formatter = new DecimalFormat("00");
+
 		this.episode = episode;
+		terms = new LinkedList<String>();
+
+		if (defaultTerms != null) {
+			for (String term : defaultTerms) {
+				term = term.replaceAll("%s", String.valueOf(episode.getSeason()));
+				term = term.replaceAll("%e", String.valueOf(episode.getNumber()));
+
+				term = term.replaceAll("%s", formatter.format(episode.getSeason()));
+				term = term.replaceAll("%e", formatter.format(episode.getNumber()));
+				terms.add(term);
+			}
+		}
 	}
 
-	/* For now this just returns S01E01 format. Later we may want
-	 * to support other formats in an 'OR' structure. Currently
-	 * all search terms are 'AND'd.
+	/**
+	 * Match any episode number format in the title
 	 */
-	public List<String> getSearchTerms() {
-		List<String> terms = new LinkedList<String>();
-
-		NumberFormat formatter = new DecimalFormat("00");
-		terms.add("S" + formatter.format(episode.getSeason()) +
-				"E" + formatter.format(episode.getNumber()));
-
-		return terms;
-
+	public boolean matchTitle(String title) {
+		for (String searchTerm : terms) {
+			if (title.contains(searchTerm))
+				return true;
+		}
+		return false;
 	}
 }

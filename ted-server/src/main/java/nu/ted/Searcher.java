@@ -23,6 +23,7 @@ import nu.ted.generated.Series;
 import nu.ted.generated.Ted;
 import nu.ted.generated.TorrentSource;
 import nu.ted.torrent.TorrentRef;
+import nu.ted.torrent.TorrentTitleMatcher;
 import nu.ted.torrent.search.TorrentSourceIndex;
 import nu.ted.torrent.search.TorrentSourceType;
 import nu.ted.www.DirectPageLoader;
@@ -63,9 +64,10 @@ class Searcher implements Runnable {
 		for (Series series : missingSeries) {
 			List<Episode> missingEpisodes = new SeriesBackendWrapper(series).getMissingEpisodes();
 			for (Episode episode : missingEpisodes) {
-				List<String> searchTerms = new LinkedList<String>();
-				searchTerms.addAll(new SeriesBackendWrapper(series).getSearchTerms());
-				searchTerms.addAll(new EpisodeBackendWrapper(episode).getSearchTerms());
+
+				List<TorrentTitleMatcher> matchers = new LinkedList<TorrentTitleMatcher>();
+				matchers.add(new SeriesBackendWrapper(series));
+				matchers.add(new EpisodeBackendWrapper(episode, ted.getConfig().getEpisodeKeywords()));
 
 				List<TorrentSource> sources = ted.getConfig().getTorrentSources();
 				List<TorrentRef> torrents = new LinkedList<TorrentRef>();
@@ -74,7 +76,7 @@ class Searcher implements Runnable {
 						TorrentSourceIndex.getTorrentSourceType(source);
 
 					try {
-						torrents.addAll(torrentSourceType.search(searchTerms));
+						torrents.addAll(torrentSourceType.search(matchers));
 					} catch (DataRetrievalException e) {
 						logger.warn("Unable to retrieve torrents from {}", source.getLocation(), e);
 					}

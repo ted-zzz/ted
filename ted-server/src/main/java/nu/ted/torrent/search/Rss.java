@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.sun.syndication.feed.rss.Enclosure;
+import com.sun.syndication.feed.synd.SyndEnclosure;
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.FeedException;
@@ -15,6 +15,7 @@ import com.sun.syndication.io.SyndFeedInput;
 import nu.ted.DataRetrievalException;
 import nu.ted.generated.TorrentSource;
 import nu.ted.torrent.TorrentRef;
+import nu.ted.torrent.TorrentTitleMatcher;
 import nu.ted.www.DirectPageLoader;
 import nu.ted.www.PageLoader;
 
@@ -63,8 +64,8 @@ public class Rss implements TorrentSourceType {
 				Iterator iter = feed.getEntries().iterator();
 				while (iter.hasNext()) {
 					SyndEntry entry = (SyndEntry) iter.next();
-					for (Enclosure enclosure : getEnclosures(entry)) {
-						if (enclosure.getType() == "application/x-bittorrent") {
+					for (SyndEnclosure enclosure : getEnclosures(entry)) {
+						if (enclosure.getType().equals("application/x-bittorrent")) {
 							results.add(new TorrentRef(entry.getTitle(), entry.getLink(), enclosure.getLength()));
 							break;
 						}
@@ -81,8 +82,8 @@ public class Rss implements TorrentSourceType {
 
 
 		@SuppressWarnings("unchecked")
-		private List<Enclosure> getEnclosures(SyndEntry entry) {
-			return (List<Enclosure>)entry.getEnclosures();
+		private List<SyndEnclosure> getEnclosures(SyndEntry entry) {
+			return (List<SyndEnclosure>)entry.getEnclosures();
 		}
 
 		@Override
@@ -97,22 +98,18 @@ public class Rss implements TorrentSourceType {
 		this.source = source;
 	}
 
-	private boolean titleContainsTerms(TorrentRef torrent, List<String> terms) {
-		for (String term : terms) {
-			if (!torrent.getTitle().contains(term)) {
-				return false;
-			}
-		}
-		return true;
-	}
-
 	@Override
-	public List<TorrentRef> search(List<String> terms) throws DataRetrievalException {
+	public List<TorrentRef> search(List<TorrentTitleMatcher> matchers) throws DataRetrievalException {
 		List<TorrentRef> torrents = source.getTorrents();
 		List<TorrentRef> results = new LinkedList<TorrentRef>();
 
 		for (TorrentRef torrent : torrents) {
-			if (titleContainsTerms(torrent, terms)) {
+			boolean validTorrent = true;
+			for (TorrentTitleMatcher matcher : matchers) {
+				if (!matcher.matchTitle(torrent.getTitle()))
+					validTorrent = false;
+			}
+			if (validTorrent == true) {
 				results.add(torrent);
 			}
 		}
@@ -129,6 +126,4 @@ public class Rss implements TorrentSourceType {
 	public String getLocation() {
 		return source.getLocation();
 	}
-
-
 }

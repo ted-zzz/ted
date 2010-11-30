@@ -54,7 +54,8 @@ public class SeriesBackendWrapperTest {
 		Series series = new Series((short) 0, "name with lots of spaces", null, null, null, null);
 		SeriesBackendWrapper wrapper = new SeriesBackendWrapper(series);
 
-		assertArrayEquals(new String[] {"name", "with", "lots", "of", "spaces"}, wrapper.getSearchTerms().toArray(new String[] {}));
+		assertTrue(wrapper.matchTitle("with lots of spaces name and other stuff"));
+		assertFalse(wrapper.matchTitle("name with lots of words but is missing one"));
 	}
 
 	@Test
