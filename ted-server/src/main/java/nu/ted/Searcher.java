@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -35,27 +36,33 @@ class Searcher implements Runnable {
 
 	private static boolean scheduled = false;
 	private static Object scheduledLock = new Object();
+	private static ScheduledFuture<?> future = null;
 	private static ScheduledExecutorService executor;
 	private static Ted ted;
 
 	public void run() {
 		logger.debug("Running Searcher");
+		scheduled = false;
 
-		if (executor == null) {
-			throw new RuntimeException("Unable to schedule Searcher without it being setup.");
-		}
+		try {
 
-		if (new TedBackendWrapper(ted).hasMissingEpisodes()) {
-			searchForMissingEpisodes();
-		}
+			if (executor == null) {
+				throw new RuntimeException("Unable to schedule Searcher without it being setup.");
+			}
 
-		if (new TedBackendWrapper(ted).hasMissingEpisodes()) {
-			// Reschedule for an hour later
-			// TODO: config?
-			scheduleRun(1, TimeUnit.HOURS);
+			if (new TedBackendWrapper(ted).hasMissingEpisodes()) {
+				searchForMissingEpisodes();
+			}
+
+			if (new TedBackendWrapper(ted).hasMissingEpisodes()) {
+				// Reschedule for an hour later
+				// TODO: config?
+				scheduleRun(1, TimeUnit.HOURS);
+			}
+		} catch (Throwable ex) {
+			LoggerFactory.getLogger(Server.class).warn("TorrentSearcher crashed", ex);
 		}
 	}
-
 
 	public void searchForMissingEpisodes() {
 
@@ -146,8 +153,16 @@ class Searcher implements Runnable {
 		}
 		synchronized (scheduledLock) {
 			if (scheduled == false) {
-				executor.schedule(new Searcher(), delay, timeUnit);
+				future = executor.schedule(new Searcher(), delay, timeUnit);
 				scheduled = true;
+			} else {
+				long origDelay = future.getDelay(timeUnit);
+
+				// Use the sooner of the two delays for the next time.
+				if (delay < origDelay) {
+					if (future.cancel(false))
+						future = executor.schedule(new Searcher(), delay, timeUnit);
+				}
 			}
 		}
 	}

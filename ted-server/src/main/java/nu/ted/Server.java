@@ -224,6 +224,7 @@ public class Server {
 	private static class EpisodeUpdater implements Runnable {
 
 		public void run() {
+			LoggerFactory.getLogger(EpisodeUpdater.class).debug("Episode Updater running");
 			// TODO: subscribe to events for new series, and changes to series.
 			try {
 				if (new TedBackendWrapper(ted).updateSeries(Calendar.getInstance()) == true) {
@@ -231,7 +232,7 @@ public class Server {
 				}
 
 			} catch (Throwable ex) {
-				LoggerFactory.getLogger(Server.class).warn("EpisodeUpdater crashed", ex);
+				LoggerFactory.getLogger(EpisodeUpdater.class).warn("EpisodeUpdater crashed", ex);
 			}
 		}
 	}
