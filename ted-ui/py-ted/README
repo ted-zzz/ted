@@ -7,28 +7,31 @@ To run make sure thrift and ted are in your PYTHONPATH, you man need to run:
 $ export PYTHONPATH=$PYTHONPATH:<ted_location>ted-api/target/generated-sources/gen-py/
 
 To use the UI run in and you'll see a prompt '>'. From here you can
-type commands. 'help' and '?' will show the list of commands supported.
+type commands. 'help()' will show the list of commands supported.
 They are generated directly from the thrift objects, so there is no
 need to change anything when the objects change.
 
 Before these thrift commands can be run a connection to the ted-server
-is required. With the server running type the command 'connect' to
+is required. With the server running type the command 'connect()' to
 connect to the server on the localhost. This command will later be
 updated to accept a server, but for now will only connect locally.
 
 Here is a quick example commands:
 
-> connect
-> getVersion
-> search "multi word show name"
-> search showname
-> startWatching "12345"
-> getWatching
-> getSeries 1
+> connect()
 
-Notice that startWatching expects a string, and so the ID must be
-quoted, whereas getSeries expects an int. This is because other guides
-might not use ints for their show IDs.
+> import ted
+> t = ted.ttypes.TorrentSource()
+> t.uid = 1
+> t.type = "RSS"
+> t.name = "test"
+> t.location = "http://url.invalid"
+
+> addTorrentSource(t)
+
+> search("showname")
+
+> startWatching('11111')
 
 Currently incorrect types will crash the UI. This will be fixed in
 later versions.
