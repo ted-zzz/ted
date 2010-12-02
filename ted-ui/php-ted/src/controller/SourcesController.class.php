@@ -10,13 +10,14 @@
 		public function create() {
 			$source = new TorrentSource();
 			$source->type = "RSS";
-			$this->setupFormParameters("Create New Source", "add", $source);
+			$source->location="http://";
+			$this->setupFormParameters("Add Source", "add", "Add", "add.png", $source);
 			$this->registry->template->show("edit_source");
 		}
 
 		public function edit($id) {
 			$source = $this->registry->client->getTorrentSource($id);
-			$this->setupFormParameters("Edit Source", "update/" . $id, $source);
+			$this->setupFormParameters("Edit Source", "update/" . $id, "Edit", "pencil.png", $source);
 			$this->registry->template->show("edit_source");
 		}
 
@@ -106,9 +107,11 @@
 			return $source;
 		}
 
-		private function setupFormParameters($title, $action, $source) {
+		private function setupFormParameters($title, $action, $buttonName, $buttonIcon, $source) {
 			$this->registry->template->view_title = $title;
 			$this->registry->template->action = $action;
+			$this->registry->template->button_name = $buttonName;
+			$this->registry->template->button_icon = $buttonIcon;
 			$this->registry->template->source = $source;
 		}
 

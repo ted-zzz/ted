@@ -88,7 +88,13 @@
 				<div id="location-error-message"  style="display: none;">Error message goes here.</div>
 			</td>
 		</tr>
+		<tr>
+			<td class="ted-form-button-bar" colspan="4">
+				<a class="button" onclick="processForm();">
+					<img src="<?php echo '/' . __SITE_ROOT . '/img/famfam/' . $button_icon;?>" alt="" />
+					<?php echo $button_name; ?>
+				</a>
+			</td>
+		</tr>
 	</table>
-	<input class="ted-form-submit" type="button" value="Create" onclick="processForm();"/><br />
 </form>
-<div id="data"></div>

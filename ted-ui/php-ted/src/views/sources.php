@@ -37,7 +37,7 @@
 			<?php
 					echo "<a href='/" . __SITE_ROOT . "/sources/create' class='button'>\n";
 						echo "<img src='" . "/" . __SITE_ROOT . "/img/famfam/add.png' alt='' />\n";
-						echo "New";
+						echo "Add";
 					echo "</a>";
 			?>
 			</td>

@@ -79,6 +79,12 @@ a:hover.button {
 	color: red;
 }
 
+.ted-form tr td.ted-form-button-bar {
+	padding-left: 0px;
+	margin-left: 0px;
+	padding-top: 10px;
+}
+
 #container {
 	margin: 0px auto;
 	width: 1024px;
@@ -205,8 +211,7 @@ a:hover.button {
 	padding-bottom: 10px;
 }
 
-.search_result_details h1,
-.search_result_details h2 {
+.search_result_details h1 {
 	font-size: medium;
 	margin: 0px;
 	padding: 0px;
@@ -214,10 +219,6 @@ a:hover.button {
 
 .search_result_details h1 {
 	font-size: large;
-}
-
-.search_result_details h2 {
-	font-size: medium;
 }
 
 .search_result_img {
