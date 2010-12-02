@@ -48,7 +48,6 @@ a:hover.button {
 
 }
 
-
 .ted-form table {
 	border: none;
 	margin-top: 10px;
@@ -103,8 +102,7 @@ a:hover.button {
 	display: block;
 	width: 98px;
 	height: 85px;
-	background-image: url(../img/header/header_logo.png);
-
+	background: url(../img/header/header_logo.png) no-repeat;
 }
 
 
@@ -128,7 +126,7 @@ a:hover.button {
 	height: 16px;
 	margin-top: 6px;
 	cursor: pointer;
-	background-image: url(../img/zoom.png);
+	background: url(../img/zoom.png) no-repeat;
 }
 
 #search-box {
@@ -256,6 +254,34 @@ a:hover.button {
 
 #sources_table th.location {
 	width: 600px;
+}
+
+#sources_table th.actions {
+	width: 44px;
+}
+
+#sources_table a.edit,
+#sources_table a.remove {
+	float: left;
+	display: block;
+	width: 16px;
+	height: 16px;
+	margin: 1px 1px 1px 1px;
+}
+
+#sources_table a.edit {
+	background: url(../img/famfam/pencil.png) no-repeat;
+}
+
+#sources_table a.remove {
+	background: url(../img/famfam/cancel.png) no-repeat;
+}
+
+#sources_table tr td.sources-new-button {
+	border: none;
+	padding-top: 10px;
+	padding-left: 0px;
+	margin-left: 0px;
 }
 
 .watching-table {

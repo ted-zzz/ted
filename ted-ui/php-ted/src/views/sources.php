@@ -1,16 +1,3 @@
-<?php
-
-	function createNewLink() {
-		return "<a href='/" . __SITE_ROOT . "/sources/create'>New</a>";
-	}
-
-	if (sizeof($sources) == 0) {
-		echo "No Sources Exist.";
-		echo "<p>" . createNewLink() . "</p>";
-		return;
-	}
-?>
-
 <table id='sources_table'>
 	<thead>
 		<tr>
@@ -22,20 +9,38 @@
 	</thead>
 	<tbody>
 		<?php
-			foreach ($sources as $source) {
+			if (sizeof($sources) == 0) {
 				echo "<tr>";
-					echo "<td class='type'>" . $source->type . "</td>";
-					echo "<td class='name'>" . $source->name . "</td>";
-					echo "<td class='location'>" . $source->location . "</td>";
-					echo "<td class='actions'>";
-					echo "<a href='/" . __SITE_ROOT . "/sources/edit/" . $source->uid . "'>E</a>";
-					echo "&nbsp;";
-					echo "<a href='/" . __SITE_ROOT . "/sources/remove/" . $source->uid . "'>X</a>";
+					echo "<td colspan='4'>";
+						echo "No Sources Exist.";
 					echo "</td>";
-				echo "</tr>";
+			}
+			else {
+
+				foreach ($sources as $source) {
+					echo "<tr>";
+						echo "<td class='type'>" . $source->type . "</td>";
+						echo "<td class='name'>" . $source->name . "</td>";
+						echo "<td class='location'>" . $source->location . "</td>";
+						echo "<td class='actions'>";
+						echo "<a class='edit' href='/" . __SITE_ROOT . "/sources/edit/" . $source->uid .
+								"' title='Edit this source.'></a>";
+						echo "<a class='remove' href='/" . __SITE_ROOT . "/sources/remove/" . $source->uid .
+								"' title='Remove this source.'></a>";
+						echo "</td>";
+					echo "</tr>";
+				}
 			}
 		?>
+		<tr>
+			<td class="sources-new-button" colspan="4">
+			<?php
+					echo "<a href='/" . __SITE_ROOT . "/sources/create' class='button'>\n";
+						echo "<img src='" . "/" . __SITE_ROOT . "/img/famfam/add.png' alt='' />\n";
+						echo "New";
+					echo "</a>";
+			?>
+			</td>
+		</tr>
 	</tbody>
 </table>
-
-<?php echo "<p>" . createNewLink() . "</p>"; ?>
