@@ -1,5 +1,10 @@
 package nu.ted.service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.ByteBuffer;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -8,6 +13,8 @@ import java.util.List;
 import org.apache.thrift.TException;
 
 import nu.ted.DataRetrievalException;
+import nu.ted.DataTransferException;
+import nu.ted.DataUnavailableException;
 import nu.ted.client.Client;
 import nu.ted.client.ClientIdGenerator;
 import nu.ted.domain.SeriesBackendWrapper;
@@ -26,6 +33,7 @@ import nu.ted.generated.TedConfig;
 import nu.ted.generated.TedService.Iface;
 import nu.ted.generated.TorrentSource;
 import nu.ted.guide.GuideDB;
+import nu.ted.image.ImageLoader;
 
 public class TedServiceImpl implements Iface
 {
@@ -131,7 +139,7 @@ public class TedServiceImpl implements Iface
 		try {
 			return seriesSource.getImage(guideId, type);
 		} catch (DataRetrievalException e) {
-			throw new TException(e);
+			return getImageUnavailable();
 		}
 	}
 
@@ -140,13 +148,13 @@ public class TedServiceImpl implements Iface
 		throws TException {
 		Series series = findWatched(uID);
 		if (series == null) {
-			return new ImageFile();
+			return getImageUnavailable();
 		}
 
 		try {
 			return seriesSource.getImage(series.getGuideId(), type);
 		} catch (DataRetrievalException e) {
-			throw new TException(e);
+			return getImageUnavailable();
 		}
 	}
 
@@ -302,5 +310,11 @@ public class TedServiceImpl implements Iface
 		return true;
 	}
 
-
+	private ImageFile getImageUnavailable() throws TException {
+		try {
+			return ImageLoader.getImageUnavailableImage();
+		} catch (DataUnavailableException e) {
+			throw new TException(e);
+		}
+	}
 }

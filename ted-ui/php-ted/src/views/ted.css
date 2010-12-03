@@ -224,6 +224,7 @@ a:hover.button {
 .search_result_img {
 	float: left;
 	width: 300px;
+	border: 1px solid black;
 }
 
 #sources_table {
