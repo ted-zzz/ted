@@ -11,15 +11,37 @@
 				}
 				else {
 					foreach ($series->episodes as $episode) {
-						echo "<LI>Season " . $episode->season . " - Episode ". $episode->number . " [";
+						echo "<LI class='watching-episode'>Season " . $episode->season . " - Episode ". $episode->number . " [";
 						$date_string = $episode->aired->value;
-	
+
 						// TODO This needs to be part of a date lib.
 						date_default_timezone_set('America/Halifax');
 						$date = new DateTime();
 						$date->setTimestamp($episode->aired->value / 1000);
-						echo $date->format('Y-m-d H:i:s');
+						echo $date->format('Y-m-d');
 						echo "]";
+
+						if (EpisodeStatus::UNKNOWN == $episode->status) {
+							$image_dir = "";
+							$image = "question.gif";
+							$desc = "Unknown";
+						}
+						else if (EpisodeStatus::SEARCHING == $episode->status) {
+							$image_dir = "famfam/";
+							$image = "find.png";
+							$desc = "Searching";
+						}
+						else if (EpisodeStatus::FOUND == $episode->status) {
+							$image_dir = "famfam/";
+							$image = "accept.png";
+							$desc = "Found";
+						}
+						else if (EpisodeStatus::OLD == $episode->status) {
+							$image_dir = "famfam/";
+							$image = "accept_gray.png";
+							$desc = "Old Episode";
+						}
+						echo "<img class='watching-status-img' src='/" . __SITE_ROOT . "/img/" . $image_dir . $image . "' title='". $desc . "' />";
 					}
 
 				}

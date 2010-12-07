@@ -304,3 +304,11 @@ a:hover.button {
 	margin: 0;
 	padding: 0;
 }
+
+li.watching-episode {
+	list-style-image: url(../img/famfam/bullet_television.png);
+}
+
+.watching-status-img {
+	margin-left: 10px;
+}
